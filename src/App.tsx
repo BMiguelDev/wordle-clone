@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
-import "./App6.scss";
+import "./App.scss";
 
-const NUMBER_STAGES: number = 6;
-const WORD_LENGTH: number = 5;
+const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
 export default function App5() {
-    const [randomWordAndArray, setRandomWordAndArray] = useState<randomWordAndArrayType>({randomWord: "", randomWordArray: []});
-    const [stageWordArray, setStageWordArray] = useState<string[]>(Array(NUMBER_STAGES).fill(""));
+    // Variable <gameSettings> is an objeting holding the dynamic settings of the game: number of stages and word lenght
+    const [gameSettings, setGameSettings] = useState<gameSettingsType>({ numberStages: 6, wordLength: 5 });
+
+    const [randomWordAndArray, setRandomWordAndArray] = useState<randomWordAndArrayType>({
+        randomWord: "",
+        randomWordArray: [],
+    });
+    const [stageWordArray, setStageWordArray] = useState<string[]>(Array(gameSettings.numberStages).fill(""));
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [currentStage, setCurrentStage] = useState<number>(0);
     const [lineClassNames, setLineClassNames] = useState<string[][]>(
-        Array(NUMBER_STAGES).fill(Array(WORD_LENGTH).fill("tile"))
+        Array(gameSettings.numberStages).fill(Array(gameSettings.wordLength).fill("tile"))
     );
 
     interface randomWordAndArrayType {
@@ -18,24 +23,51 @@ export default function App5() {
         randomWordArray: string[];
     }
 
+    interface gameSettingsType {
+        numberStages: number;
+        wordLength: number;
+    }
+
     useEffect(() => {
         const fetchData = async () => {
+            // Get 4 random letters that can't be part of the random words, because API doesn't return random words.
+            let randomLettersArray: string[] = [];
+            for (let i = 0; i < 4; i++) {
+                randomLettersArray.push(
+                    ALPHABET_LETTERS.split("")[Math.floor(Math.random() * ALPHABET_LETTERS.length)]
+                );
+            }
+            const randomLettersString = randomLettersArray.toString().replaceAll(",", "");
+
             // Get 75 words from API that may include "a"
-            const randomWordsData1 = await fetch(`https://api.datamuse.com/words?sp=${'?'.repeat(WORD_LENGTH)}-1234567890&max=75`);
+            const randomWordsData1 = await fetch(
+                `https://api.datamuse.com/words?sp=${"?".repeat(
+                    gameSettings.wordLength
+                )}-1234567890${randomLettersString}&max=75`
+            );
             const randomWordsArray1 = await randomWordsData1.json();
 
             // Get 425 words from API that don't include "a" (due to most words gotten from default API call including and starting with "a")
-            const randomWordsData2 = await fetch(`https://api.datamuse.com/words?sp=${'?'.repeat(WORD_LENGTH)}-1234567890aA&max=425`);
+            const randomWordsData2 = await fetch(
+                `https://api.datamuse.com/words?sp=${"?".repeat(gameSettings.wordLength)}-1234567890aA&max=425`
+            );
             const randomWordsArray2 = await randomWordsData2.json();
 
             // Join both arrays and keep only the words
             const jointRandomWordsArray = [...randomWordsArray1, ...randomWordsArray2];
-            const newJointRandomWordsArray: string[] = jointRandomWordsArray.map(element => {
+            const newJointRandomWordsArray: string[] = jointRandomWordsArray.map((element) => {
+                const elementWord: string = element.word;
+                if (elementWord.includes(" ")) {
+                    return undefined;
+                }
                 return element.word;
             });
-            const randomWord = newJointRandomWordsArray[Math.floor(Math.random() * newJointRandomWordsArray.length)].toLowerCase();
-            setRandomWordAndArray({randomWord: randomWord, randomWordArray: newJointRandomWordsArray})
-        }
+            const newnew = newJointRandomWordsArray.filter((element) => element != null);
+            console.log(newnew);
+            const randomWord =
+                newJointRandomWordsArray[Math.floor(Math.random() * newJointRandomWordsArray.length)].toLowerCase();
+            setRandomWordAndArray({ randomWord: randomWord, randomWordArray: newJointRandomWordsArray });
+        };
         fetchData();
     }, []);
 
@@ -70,7 +102,7 @@ export default function App5() {
                 return newStageWordArray;
             });
 
-            if (currentStage < 5) {
+            if (currentStage < gameSettings.numberStages - 1) {
                 if (currentGuess === randomWordAndArray.randomWord) {
                     alert("you win");
                 }
@@ -80,10 +112,10 @@ export default function App5() {
         }
 
         const handleKeydown = (event: KeyboardEvent) => {
-            if (currentGuess.length < 5 && event.key.length === 1 && /[a-zA-Z]/.test(event.key))
+            if (currentGuess.length < gameSettings.wordLength && event.key.length === 1 && /[a-zA-Z]/.test(event.key))
                 setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + event.key);
             else if (event.key === "Enter") {
-                if (currentGuess.length === 5) {
+                if (currentGuess.length === gameSettings.wordLength) {
                     fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                         .then((response) => {
                             if (response.ok) handleStageChange();
@@ -108,17 +140,46 @@ export default function App5() {
         return () => {
             window.removeEventListener("keydown", handleKeydown);
         };
-    }, [currentGuess, currentStage, randomWordAndArray]);
+    }, [currentGuess, currentStage, randomWordAndArray, gameSettings]);
 
     function resetGame() {
-        const newRandomWord = randomWordAndArray.randomWordArray[Math.floor(Math.random() * randomWordAndArray.randomWordArray.length)].toLowerCase();
-        setRandomWordAndArray({ ...randomWordAndArray, randomWord: newRandomWord })
-        const newStageWordArray: string[] = Array(NUMBER_STAGES).fill("");
+        const newRandomWord =
+            randomWordAndArray.randomWordArray[
+                Math.floor(Math.random() * randomWordAndArray.randomWordArray.length)
+            ].toLowerCase();
+        setRandomWordAndArray({ ...randomWordAndArray, randomWord: newRandomWord });
+        const newStageWordArray: string[] = Array(gameSettings.numberStages).fill("");
         setStageWordArray(newStageWordArray);
-        const newLineClassNames: string[][] = Array(NUMBER_STAGES).fill(Array(WORD_LENGTH).fill("tile"));
+        const newLineClassNames: string[][] = Array(gameSettings.numberStages).fill(
+            Array(gameSettings.wordLength).fill("tile")
+        );
         setLineClassNames(newLineClassNames);
         setCurrentGuess("");
         setCurrentStage(0);
+    }
+
+    function handleChangeStages(type: string) {
+        if (gameSettings.numberStages > 12 || gameSettings.numberStages < 2) return;
+        if (type === "increment")
+            setGameSettings((prevGameSettings) => ({
+                ...gameSettings,
+                numberStages: prevGameSettings.numberStages + 1,
+            }));
+        else if (type === "decrement")
+            setGameSettings((prevGameSettings) => ({
+                ...gameSettings,
+                numberStages: prevGameSettings.numberStages - 1,
+            }));
+        else return;
+    }
+
+    function handleChangeWordLength(type: string) {
+        if (gameSettings.wordLength > 10 || gameSettings.wordLength < 2) return;
+        if (type === "increment")
+            setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength + 1 }));
+        else if (type === "decrement")
+            setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength - 1 }));
+        else return;
     }
 
     return (
@@ -131,10 +192,23 @@ export default function App5() {
                         line={isCurrentStage ? currentGuess : line ?? ""}
                         lineClassNames={lineClassNames}
                         index={index}
+                        wordLength={gameSettings.wordLength}
                     />
                 );
             })}
             <button onClick={resetGame}>Reset</button>
+            <div>
+                <p>Word Lenght</p>
+                <button onClick={() => handleChangeWordLength("increment")}>+</button>
+                {gameSettings.wordLength}
+                <button onClick={() => handleChangeWordLength("decrement")}>-</button>
+            </div>
+            <div>
+                <p>Number of Stages</p>
+                <button onClick={() => handleChangeStages("increment")}>+</button>
+                {gameSettings.numberStages}
+                <button onClick={() => handleChangeStages("decrement")}>-</button>
+            </div>
         </div>
     );
 }
@@ -143,12 +217,13 @@ interface LineProps {
     line: string;
     lineClassNames: string[][];
     index: number;
+    wordLength: number;
 }
 
-function Line({ line, lineClassNames, index }: LineProps) {
+function Line({ line, lineClassNames, index, wordLength }: LineProps) {
     let tileArray = [];
 
-    for (let i = 0; i < WORD_LENGTH; i++) {
+    for (let i = 0; i < wordLength; i++) {
         tileArray.push(
             <div className={lineClassNames[index][i]} key={i}>
                 {line[i]}
