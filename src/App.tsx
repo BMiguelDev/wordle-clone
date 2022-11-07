@@ -18,8 +18,9 @@ export default function App5() {
         Array(gameSettings.numberStages).fill(Array(gameSettings.wordLength).fill("tile"))
     );
 
-
+    // Ref variable to access reset button
     const resetButtonRef = useRef<HTMLButtonElement>(null);
+
     interface randomWordAndArrayType {
         randomWord: string;
         randomWordArray: string[];
@@ -66,11 +67,10 @@ export default function App5() {
                 }
                 return element.word;
             });
-            const newnew = newJointRandomWordsArray.filter((element) => element != null);
-            console.log(newnew);
+            const newJointRandomWordsArrayNoWhiteSpaces = newJointRandomWordsArray.filter((element) => element != null);
             const randomWord =
-                newJointRandomWordsArray[Math.floor(Math.random() * newJointRandomWordsArray.length)].toLowerCase();
-            setRandomWordAndArray({ randomWord: randomWord, randomWordArray: newJointRandomWordsArray });
+            newJointRandomWordsArrayNoWhiteSpaces[Math.floor(Math.random() * newJointRandomWordsArrayNoWhiteSpaces.length)].toLowerCase();
+            setRandomWordAndArray({ randomWord: randomWord, randomWordArray: newJointRandomWordsArrayNoWhiteSpaces });
         };
         fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,8 +115,6 @@ export default function App5() {
                 setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
             } else return;
         }
-
-        console.log(randomWordAndArray.randomWord);
 
         const handleKeydown = (event: KeyboardEvent) => {
             if (currentGuess.length < gameSettings.wordLength && event.key.length === 1 && /[a-zA-Z]/.test(event.key))
@@ -192,6 +190,13 @@ export default function App5() {
             setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength - 1 }));
         else return;
     }
+
+
+    // TODO:
+    // - refactor code components
+    // - make game settings work
+    // - Make keyboard (maybe with dependency?)
+    // - Add Footer and Header (header is just to look like the target website)
 
     return (
         <div className="app">
