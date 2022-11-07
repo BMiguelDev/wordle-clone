@@ -123,24 +123,24 @@ export default function App5() {
                 setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + event.key);
             else if (event.key === "Enter") {
                 if (currentGuess.length === gameSettings.wordLength) {
-                    fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
+                    /*fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                         .then((response) => {
-                            if (response.ok) handleStageChange();
-                            else {
-                                let classArray: string[] = "tile shake,".repeat(5).split(",");
-                                classArray.pop();
-                                setLineClassNames((prevLineClassNames) => {
-                                    let newLineClassNames = [...prevLineClassNames];
-                                    newLineClassNames[currentStage] = classArray;
-                                    return newLineClassNames;
-                                });
+                            if (response.ok)*/ handleStageChange();
+                            // else {
+                            //     let classArray: string[] = "tile shake,".repeat(5).split(",");
+                            //     classArray.pop();
+                            //     setLineClassNames((prevLineClassNames) => {
+                            //         let newLineClassNames = [...prevLineClassNames];
+                            //         newLineClassNames[currentStage] = classArray;
+                            //         return newLineClassNames;
+                            //     });
 
-                                //alert("Word doesn't exist");
-                            }
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
+                            //     //alert("Word doesn't exist");
+                            // }
+                        // })
+                        // .catch((error) => {
+                        //     console.log(error);
+                        // });
                 }
             } else if (event.key === "Backspace") {
                 setCurrentGuess((prevCurrentGuess) => {
@@ -201,30 +201,138 @@ export default function App5() {
         else return;
     }
 
+    function handleLetterClick(letter: string) {
+        if (letter === "Enter") {
+            if (currentGuess.length === gameSettings.wordLength) {
+                // fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
+                //     .then((response) => {
+                        /*if (response.ok)*/ console.log("handleStateChange"); //handleStageChange();
+                    //     else {
+                    //         let classArray: string[] = "tile shake,".repeat(5).split(",");
+                    //         classArray.pop();
+                    //         setLineClassNames((prevLineClassNames) => {
+                    //             let newLineClassNames = [...prevLineClassNames];
+                    //             newLineClassNames[currentStage] = classArray;
+                    //             return newLineClassNames;
+                    //         });
+                    //     }
+                    // })
+                    // .catch((error) => {
+                    //     console.log(error);
+                    // });
+            }
+        } else if (letter === "Backspace") {
+            setCurrentGuess((prevCurrentGuess) => {
+                if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
+                else return prevCurrentGuess;
+            });
+        } else if (currentGuess.length < gameSettings.wordLength)
+            setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + letter);
+        else return;
+    }
+
     // TODO:
     // - refactor code components
     // - make game settings work
-    // - Make keyboard (maybe with dependency?)
     // - Add Footer and Header (header is just to look like the target website)
-    // - Add animation to each tile uppon hitting enter (either tremble when word doesn't exist or flip(?) when word exists)
+    // - Add animation to each tile uppon hitting enter (either tremble when word doesn't exist or flip(?) when word exists)~
+    // - Fix handleEnter (both Api call and function being only iniside useEffect)
 
     return (
         <div className="app">
-            {stageWordArray.map((line, index) => {
-                const isCurrentStage = index === currentStage;
-                return (
-                    <Line
-                        key={index}
-                        line={isCurrentStage ? currentGuess : line ?? ""}
-                        lineClassNames={lineClassNames}
-                        index={index}
-                        wordLength={gameSettings.wordLength}
-                    />
-                );
-            })}
+            <div className="gameboard_container">
+                {stageWordArray.map((line, index) => {
+                    const isCurrentStage = index === currentStage;
+                    return (
+                        <Line
+                            key={index}
+                            line={isCurrentStage ? currentGuess : line ?? ""}
+                            lineClassNames={lineClassNames}
+                            index={index}
+                            wordLength={gameSettings.wordLength}
+                        />
+                    );
+                })}
+            </div>
             <button ref={resetButtonRef} onClick={resetGame}>
                 Reset
             </button>
+            <div className="keyboard_container">
+                <div className="keyboard_row">
+                    {ALPHABET_LETTERS.substring(0, ALPHABET_LETTERS.search("p") + 1)
+                        .split("")
+                        .map((letter, index) => {
+                            let letterClassName: string = "letter";
+                            stageWordArray.forEach((word, index) => {
+                                const letterIndexInStageWord = word.search(letter);
+                                if(letterIndexInStageWord!==-1) {
+                                    if(lineClassNames[index][letterIndexInStageWord].includes("green")) letterClassName="letter letter_green";
+                                    else if(lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
+                                        if(!letterClassName.includes("letter_green")) letterClassName="letter letter_yellow";
+                                    }
+                                    else if(lineClassNames[index][letterIndexInStageWord].includes("grey")) {
+                                        if(!letterClassName.includes("letter_green") && !letterClassName.includes("letter_yellow")) letterClassName="letter letter_grey";
+                                    }
+                                }
+                            })
+                            return (
+                                <p onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
+                                    {letter}
+                                </p>
+                            );
+                        })}
+                </div>
+                <div className="keyboard_row">
+                    {ALPHABET_LETTERS.substring(ALPHABET_LETTERS.search("p") + 1, ALPHABET_LETTERS.search("l") + 1)
+                        .split("")
+                        .map((letter, index) => {
+                            let letterClassName: string = "letter";
+                            stageWordArray.forEach((word, index) => {
+                                const letterIndexInStageWord = word.search(letter);
+                                if(letterIndexInStageWord!==-1) {
+                                    if(lineClassNames[index][letterIndexInStageWord].includes("green")) letterClassName="letter letter_green";
+                                    else if(lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
+                                        if(!letterClassName.includes("letter_green")) letterClassName="letter letter_yellow";
+                                    }
+                                    else if(lineClassNames[index][letterIndexInStageWord].includes("grey")) {
+                                        if(!letterClassName.includes("letter_green") && !letterClassName.includes("letter_yellow")) letterClassName="letter letter_grey";
+                                    }
+                                }
+                            })
+                            return (
+                                <p onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
+                                    {letter}
+                                </p>
+                            );
+                        })}
+                </div>
+                <div className="keyboard_row">
+                    <p onClick={() => handleLetterClick("Enter")}>Enter</p>
+                    {ALPHABET_LETTERS.substring(ALPHABET_LETTERS.search("l") + 1, ALPHABET_LETTERS.length)
+                        .split("")
+                        .map((letter, index) => {
+                            let letterClassName: string = "letter";
+                            stageWordArray.forEach((word, index) => {
+                                const letterIndexInStageWord = word.search(letter);
+                                if(letterIndexInStageWord!==-1) {
+                                    if(lineClassNames[index][letterIndexInStageWord].includes("green")) letterClassName="letter letter_green";
+                                    else if(lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
+                                        if(!letterClassName.includes("letter_green")) letterClassName="letter letter_yellow";
+                                    }
+                                    else if(lineClassNames[index][letterIndexInStageWord].includes("grey")) {
+                                        if(!letterClassName.includes("letter_green") && !letterClassName.includes("letter_yellow")) letterClassName="letter letter_grey";
+                                    }
+                                }
+                            })
+                            return (
+                                <p onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
+                                    {letter}
+                                </p>
+                            );
+                        })}
+                    <p onClick={() => handleLetterClick("Backspace")}>Backspace</p>
+                </div>
+            </div>
             <div className="game_settings_container">
                 <div>
                     <p>Word Lenght</p>
