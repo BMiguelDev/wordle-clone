@@ -43,13 +43,15 @@ export default function App5() {
             const randomWordsData1 = await fetch(
                 `https://api.datamuse.com/words?sp=${"?".repeat(
                     gameSettings.wordLength
-                )}-1234567890${randomLettersString}&max=75`
+                )}-1234567890${randomLettersString}&max=25`
             );
             const randomWordsArray1 = await randomWordsData1.json();
 
             // Get 425 words from API that don't include "a" (due to most words gotten from default API call including and starting with "a")
             const randomWordsData2 = await fetch(
-                `https://api.datamuse.com/words?sp=${"?".repeat(gameSettings.wordLength)}-1234567890aA&max=425`
+                `https://api.datamuse.com/words?sp=${"?".repeat(
+                    gameSettings.wordLength
+                )}-1234567890aA${randomLettersString}&max=75`
             );
             const randomWordsArray2 = await randomWordsData2.json();
 
@@ -73,43 +75,45 @@ export default function App5() {
 
     useEffect(() => {
         function handleStageChange() {
-            //Make checks
-            let colorArray: string[] = [];
-            currentGuess
-                .toLowerCase()
-                .split("")
-                .forEach((currentGuessChar, currentGuessIndex) => {
-                    let color: string = "tile grey";
-                    randomWordAndArray.randomWord.split("").forEach((randomWordChar, randomWordIndex) => {
-                        if (currentGuessChar === randomWordChar) {
-                            if (color !== "tile green") color = "tile yellow";
-                        }
-                        if (currentGuessChar === randomWordChar && currentGuessIndex === randomWordIndex)
-                            color = "tile green";
+            if (currentStage < gameSettings.numberStages) {
+                //Make checks
+                let colorArray: string[] = [];
+                currentGuess
+                    .toLowerCase()
+                    .split("")
+                    .forEach((currentGuessChar, currentGuessIndex) => {
+                        let color: string = "tile grey";
+                        randomWordAndArray.randomWord.split("").forEach((randomWordChar, randomWordIndex) => {
+                            if (currentGuessChar === randomWordChar) {
+                                if (color !== "tile green") color = "tile yellow";
+                            }
+                            if (currentGuessChar === randomWordChar && currentGuessIndex === randomWordIndex)
+                                color = "tile green";
+                        });
+                        colorArray.push(color);
                     });
-                    colorArray.push(color);
+
+                setLineClassNames((prevLineClassNames) => {
+                    let newLineClassNames = [...prevLineClassNames];
+                    newLineClassNames[currentStage] = colorArray;
+                    return newLineClassNames;
                 });
 
-            setLineClassNames((prevLineClassNames) => {
-                let newLineClassNames = [...prevLineClassNames];
-                newLineClassNames[currentStage] = colorArray;
-                return newLineClassNames;
-            });
+                setStageWordArray((prevStageWordArray) => {
+                    let newStageWordArray = [...prevStageWordArray];
+                    newStageWordArray[currentStage] = currentGuess;
+                    return newStageWordArray;
+                });
 
-            setStageWordArray((prevStageWordArray) => {
-                let newStageWordArray = [...prevStageWordArray];
-                newStageWordArray[currentStage] = currentGuess;
-                return newStageWordArray;
-            });
-
-            if (currentStage < gameSettings.numberStages - 1) {
                 if (currentGuess === randomWordAndArray.randomWord) {
                     alert("you win");
                 }
                 setCurrentGuess("");
                 setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
-            } else alert(`Game over, random word was ${randomWordAndArray.randomWord}`);
+            } else return;
         }
+
+        console.log(randomWordAndArray.randomWord);
 
         const handleKeydown = (event: KeyboardEvent) => {
             if (currentGuess.length < gameSettings.wordLength && event.key.length === 1 && /[a-zA-Z]/.test(event.key))
@@ -121,7 +125,6 @@ export default function App5() {
                             if (response.ok) handleStageChange();
                             else {
                                 alert("Word doesn't exist");
-                                throw new Error("Error");
                             }
                         })
                         .catch((error) => {
@@ -135,12 +138,16 @@ export default function App5() {
                 });
             }
         };
-        window.addEventListener("keydown", handleKeydown);
+        if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
+            if (currentStage < gameSettings.numberStages) {
+                window.addEventListener("keydown", handleKeydown);
+            } else alert(`Game over, random word was ${randomWordAndArray.randomWord}`);
+        }
 
         return () => {
             window.removeEventListener("keydown", handleKeydown);
         };
-    }, [currentGuess, currentStage, randomWordAndArray, gameSettings]);
+    }, [currentGuess, currentStage, randomWordAndArray, gameSettings, stageWordArray]);
 
     function resetGame() {
         const newRandomWord =
