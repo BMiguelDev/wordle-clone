@@ -127,7 +127,7 @@ export default function App5() {
                         .then((response) => {
                             if (response.ok) handleStageChange();
                             else {
-                                let classArray: string[] = "tile shake,".repeat(5).split(',');
+                                let classArray: string[] = "tile shake,".repeat(5).split(",");
                                 classArray.pop();
                                 setLineClassNames((prevLineClassNames) => {
                                     let newLineClassNames = [...prevLineClassNames];
@@ -225,17 +225,19 @@ export default function App5() {
             <button ref={resetButtonRef} onClick={resetGame}>
                 Reset
             </button>
-            <div>
-                <p>Word Lenght</p>
-                <button onClick={() => handleChangeWordLength("increment")}>+</button>
-                {gameSettings.wordLength}
-                <button onClick={() => handleChangeWordLength("decrement")}>-</button>
-            </div>
-            <div>
-                <p>Number of Stages</p>
-                <button onClick={() => handleChangeStages("increment")}>+</button>
-                {gameSettings.numberStages}
-                <button onClick={() => handleChangeStages("decrement")}>-</button>
+            <div className="game_settings_container">
+                <div>
+                    <p>Word Lenght</p>
+                    <button onClick={() => handleChangeWordLength("increment")}>+</button>
+                    {gameSettings.wordLength}
+                    <button onClick={() => handleChangeWordLength("decrement")}>-</button>
+                </div>
+                <div>
+                    <p>Number of Stages</p>
+                    <button onClick={() => handleChangeStages("increment")}>+</button>
+                    {gameSettings.numberStages}
+                    <button onClick={() => handleChangeStages("decrement")}>-</button>
+                </div>
             </div>
         </div>
     );
@@ -254,7 +256,7 @@ function Line({ line, lineClassNames, index, wordLength }: LineProps) {
     for (let i = 0; i < wordLength; i++) {
         tileArray.push(
             <div className={lineClassNames[index][i]} key={i}>
-                {line[i]}
+                {<p className="letter">{line[i]}</p>}
             </div>
         );
     }

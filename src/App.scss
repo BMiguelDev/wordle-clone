@@ -39,11 +39,9 @@ html, body {
     font-size: 2rem;
     font-weight: bold;
     border: .05rem solid rgb(112, 112, 112);
-    transition: all .75s ease-in-out;
 
-    &.flip {
-        rotate: x 180deg;
-        transform-style: preserve-3d;
+    .letter {
+        z-index: 3;
     }
 
     &.shake {
@@ -60,13 +58,79 @@ html, body {
 }
 
 .green {
-    background-color: green;
+    position: relative;
+
+    &.flip {
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background-color: inherit;
+    
+            @keyframes flip {
+                0% {opacity: 0; background-color: inherit;}
+                100% {opacity: 1; rotate: x 180deg;}
+            }
+            animation: flip 1s ease;
+            background-color: green;
+        }
+    }
 }
 
 .yellow {
-    background-color: yellow;
+    position: relative;
+
+    &.flip {
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+    
+            @keyframes flip {
+                0% {scale: 1;}
+                100% {rotate: x 180deg;}
+            }
+            animation: flip 1s ease 0s;
+            background-color: yellow;
+        }
+    }
 }
 
 .grey {
-    background-color: rgb(56, 56, 56);
+    position: relative;
+    
+    &.flip {
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+    
+            @keyframes flip {
+                0% {scale: 1;}
+                100% {rotate: x 180deg;}
+            }
+            animation: flip 1s ease 0s;
+            background-color: grey;
+        }
+    }
+}
+
+
+.game_settings_container {
+    display: none;
 }
