@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.scss";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
@@ -18,6 +18,8 @@ export default function App5() {
         Array(gameSettings.numberStages).fill(Array(gameSettings.wordLength).fill("tile"))
     );
 
+
+    const resetButtonRef = useRef<HTMLButtonElement>(null);
     interface randomWordAndArrayType {
         randomWord: string;
         randomWordArray: string[];
@@ -71,6 +73,7 @@ export default function App5() {
             setRandomWordAndArray({ randomWord: randomWord, randomWordArray: newJointRandomWordsArray });
         };
         fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -150,6 +153,7 @@ export default function App5() {
     }, [currentGuess, currentStage, randomWordAndArray, gameSettings, stageWordArray]);
 
     function resetGame() {
+        resetButtonRef.current?.blur();
         const newRandomWord =
             randomWordAndArray.randomWordArray[
                 Math.floor(Math.random() * randomWordAndArray.randomWordArray.length)
@@ -203,7 +207,7 @@ export default function App5() {
                     />
                 );
             })}
-            <button onClick={resetGame}>Reset</button>
+            <button ref={resetButtonRef} onClick={resetGame}>Reset</button>
             <div>
                 <p>Word Lenght</p>
                 <button onClick={() => handleChangeWordLength("increment")}>+</button>
