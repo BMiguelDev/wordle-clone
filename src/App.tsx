@@ -69,11 +69,13 @@ export default function App5() {
             });
             const newJointRandomWordsArrayNoWhiteSpaces = newJointRandomWordsArray.filter((element) => element != null);
             const randomWord =
-            newJointRandomWordsArrayNoWhiteSpaces[Math.floor(Math.random() * newJointRandomWordsArrayNoWhiteSpaces.length)].toLowerCase();
+                newJointRandomWordsArrayNoWhiteSpaces[
+                    Math.floor(Math.random() * newJointRandomWordsArrayNoWhiteSpaces.length)
+                ].toLowerCase();
             setRandomWordAndArray({ randomWord: randomWord, randomWordArray: newJointRandomWordsArrayNoWhiteSpaces });
         };
         fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -85,13 +87,13 @@ export default function App5() {
                     .toLowerCase()
                     .split("")
                     .forEach((currentGuessChar, currentGuessIndex) => {
-                        let color: string = "tile grey";
+                        let color: string = "tile flip grey";
                         randomWordAndArray.randomWord.split("").forEach((randomWordChar, randomWordIndex) => {
                             if (currentGuessChar === randomWordChar) {
-                                if (color !== "tile green") color = "tile yellow";
+                                if (color !== "tile flip green") color = "tile flip yellow";
                             }
                             if (currentGuessChar === randomWordChar && currentGuessIndex === randomWordIndex)
-                                color = "tile green";
+                                color = "tile flip green";
                         });
                         colorArray.push(color);
                     });
@@ -125,7 +127,15 @@ export default function App5() {
                         .then((response) => {
                             if (response.ok) handleStageChange();
                             else {
-                                alert("Word doesn't exist");
+                                let classArray: string[] = "tile shake,".repeat(5).split(',');
+                                classArray.pop();
+                                setLineClassNames((prevLineClassNames) => {
+                                    let newLineClassNames = [...prevLineClassNames];
+                                    newLineClassNames[currentStage] = classArray;
+                                    return newLineClassNames;
+                                });
+
+                                //alert("Word doesn't exist");
                             }
                         })
                         .catch((error) => {
@@ -191,12 +201,12 @@ export default function App5() {
         else return;
     }
 
-
     // TODO:
     // - refactor code components
     // - make game settings work
     // - Make keyboard (maybe with dependency?)
     // - Add Footer and Header (header is just to look like the target website)
+    // - Add animation to each tile uppon hitting enter (either tremble when word doesn't exist or flip(?) when word exists)
 
     return (
         <div className="app">
@@ -212,7 +222,9 @@ export default function App5() {
                     />
                 );
             })}
-            <button ref={resetButtonRef} onClick={resetGame}>Reset</button>
+            <button ref={resetButtonRef} onClick={resetGame}>
+                Reset
+            </button>
             <div>
                 <p>Word Lenght</p>
                 <button onClick={() => handleChangeWordLength("increment")}>+</button>
