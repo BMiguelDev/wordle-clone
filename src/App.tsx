@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 
 import "./App.scss";
 import { WordData } from "./data/WordData";
+import { Line } from "./Line";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
-export default function App5() {
+export default function App() {
     // Variable <gameSettings> is an object holding the dynamic settings of the game: number of stages and word lenght
     const [gameSettings, setGameSettings] = useState<gameSettingsType>({ numberStages: 6, wordLength: 5 });
 
@@ -433,25 +434,4 @@ export default function App5() {
             }
         </div>
     );
-}
-
-interface LineProps {
-    line: string;
-    lineClassNames: string[][];
-    index: number;
-    wordLength: number;
-}
-
-function Line({ line, lineClassNames, index, wordLength }: LineProps) {
-    let tileArray = [];
-
-    for (let i = 0; i < wordLength; i++) {
-        tileArray.push(
-            <div className={lineClassNames[index][i]} key={i}>
-                {<p className="letter">{line[i]}</p>}
-            </div>
-        );
-    }
-
-    return <div className="tile_row">{tileArray}</div>;
 }
