@@ -174,7 +174,7 @@ export default function App() {
                                         newLineClassNames[currentStage] = classArray;
                                         return newLineClassNames;
                                     });
-
+                                    if(notificationsDivRef.current?.className.includes('notification_container_animate')) resetAnimation();
                                   
                                     //alert("Word doesn't exist");
                                 }
@@ -270,6 +270,7 @@ export default function App() {
                             newLineClassNames[currentStage] = classArray;
                             return newLineClassNames;
                         });
+                        if(notificationsDivRef.current?.className.includes('notification_container_animate')) resetAnimation();
                     }
                 })
                 .catch((error) => {
@@ -286,6 +287,37 @@ export default function App() {
         else return;
     }
 
+    const notificationsDivRef = useRef<HTMLDivElement>(null);
+
+    function resetAnimation() {
+        // var el = document.getElementById('.notification_container');
+        // if(el) {
+        //     el.style.animation = 'none';
+        //     const hi = () => {if(el) el.offsetHeight; /* trigger reflow */}
+        //     const hello = () => el.style.animation = null; 
+        // }
+        // var me = this;
+        // if(notificationsDivRef.current)
+        // { 
+            //notificationsDivRef.current.style.animation = 'none';
+
+            if(notificationsDivRef.current) notificationsDivRef.current.className='notification_container notification_container_invisible';
+            setTimeout(() => {
+                if(notificationsDivRef.current) notificationsDivRef.current.className="notification_container notification_container_animate";
+            }, 100)
+            
+            // setTimeout(() => {
+            //     if(notificationsDivRef.current) notificationsDivRef.current.style.animation = '';
+        //     // }, 10);
+        // }
+
+        // if(notificationsDivRef.current?.style.animation) {
+        //     //notificationsDivRef.current?.style.animation='none';
+        //     notificationsDivRef.current.offsetHeight;
+        // }
+        
+
+    }
     // TODO:
     // - refactor code components
     // - make game settings work
@@ -428,7 +460,7 @@ export default function App() {
                 {isApiAvailable.isWordApiAvailable ? <p>WordApi is available</p> : <p>WordApi is not available</p>}
             </div>
 
-            <div className={(lineClassNames[currentStage] != null && lineClassNames[currentStage][0].includes('shake')) ? "notification_container" : "notification_container invisible" }>
+            <div ref={notificationsDivRef} className={(lineClassNames[currentStage] != null && lineClassNames[currentStage][0].includes('shake')) ? "notification_container notification_container_animate" : "notification_container notification_container_invisible" }>
                     Word doesn't exist
             </div>
 
@@ -436,6 +468,8 @@ export default function App() {
                 lineClassNames[currentStage] != null &&
                 (lineClassNames[currentStage][0].includes("shake") && <div className="notification_container">Word doesn't exist</div>)
             } */}
+
+            <button onClick={resetAnimation}>Reset Notification Animation</button>
         </div>
     );
 }

@@ -220,28 +220,30 @@ body {
     width: fit-content;
     z-index: 4;
 
-    @keyframes popInAndOut {
-        0% {
-            opacity: .25;
+
+        @keyframes popInAndOut {
+            0% {
+                opacity: .25;
+            }
+    
+            25% {
+                opacity: 1;
+            }
+    
+            75% {
+                opacity: 1;
+            }
+    
+            100% {
+                opacity: 0;
+            }
         }
-
-        25% {
-            opacity: 1;
-        }
-
-        75% {
-            opacity: 1;
-        }
-
-        100% {
-            opacity: 0;
-        }
-    }
-
-    animation: popInAndOut 3s ease 0s;
-    animation-fill-mode: forwards;
-
-    &.invisible {
+        animation: popInAndOut 2s ease 0s;
+        animation-fill-mode: forwards;
+    
+    
+    &.notification_container_invisible {
         display: none;
     }
 }
+
