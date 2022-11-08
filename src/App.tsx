@@ -270,6 +270,7 @@ export default function App() {
                             newLineClassNames[currentStage] = classArray;
                             return newLineClassNames;
                         });
+                        
                         if(notificationsDivRef.current?.className.includes('notification_container_animate')) resetAnimation();
                     }
                 })
@@ -290,33 +291,10 @@ export default function App() {
     const notificationsDivRef = useRef<HTMLDivElement>(null);
 
     function resetAnimation() {
-        // var el = document.getElementById('.notification_container');
-        // if(el) {
-        //     el.style.animation = 'none';
-        //     const hi = () => {if(el) el.offsetHeight; /* trigger reflow */}
-        //     const hello = () => el.style.animation = null; 
-        // }
-        // var me = this;
-        // if(notificationsDivRef.current)
-        // { 
-            //notificationsDivRef.current.style.animation = 'none';
-
-            if(notificationsDivRef.current) notificationsDivRef.current.className='notification_container notification_container_invisible';
-            setTimeout(() => {
-                if(notificationsDivRef.current) notificationsDivRef.current.className="notification_container notification_container_animate";
-            }, 100)
-            
-            // setTimeout(() => {
-            //     if(notificationsDivRef.current) notificationsDivRef.current.style.animation = '';
-        //     // }, 10);
-        // }
-
-        // if(notificationsDivRef.current?.style.animation) {
-        //     //notificationsDivRef.current?.style.animation='none';
-        //     notificationsDivRef.current.offsetHeight;
-        // }
-        
-
+        if(notificationsDivRef.current) notificationsDivRef.current.className='notification_container notification_container_invisible';
+        setTimeout(() => {
+            if(notificationsDivRef.current) notificationsDivRef.current.className="notification_container notification_container_animate";
+        }, 100)
     }
     // TODO:
     // - refactor code components
@@ -349,28 +327,28 @@ export default function App() {
                     {ALPHABET_LETTERS.substring(0, ALPHABET_LETTERS.search("p") + 1)
                         .split("")
                         .map((letter, index) => {
-                            let letterClassName: string = "letter";
+                            let letterClassName: string = "keyboard_letter_tile";
                             stageWordArray.forEach((word, index) => {
                                 const letterIndexInStageWord = word.search(letter);
                                 if (letterIndexInStageWord !== -1) {
                                     if (lineClassNames[index][letterIndexInStageWord].includes("green"))
-                                        letterClassName = "letter letter_green";
+                                        letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
                                     else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
-                                        if (!letterClassName.includes("letter_green"))
-                                            letterClassName = "letter letter_yellow";
+                                        if (!letterClassName.includes("keyboard_letter_tile_green"))
+                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_yellow";
                                     } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
                                         if (
-                                            !letterClassName.includes("letter_green") &&
-                                            !letterClassName.includes("letter_yellow")
+                                            !letterClassName.includes("keyboard_letter_tile_green") &&
+                                            !letterClassName.includes("keyboard_letter_tile_yellow")
                                         )
-                                            letterClassName = "letter letter_grey";
+                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_grey";
                                     }
                                 }
                             });
                             return (
-                                <p onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
-                                    {letter}
-                                </p>
+                                <div onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
+                                    <p className="keyboard_letter_text">{letter}</p>
+                                </div>
                             );
                         })}
                 </div>
@@ -378,21 +356,21 @@ export default function App() {
                     {ALPHABET_LETTERS.substring(ALPHABET_LETTERS.search("p") + 1, ALPHABET_LETTERS.search("l") + 1)
                         .split("")
                         .map((letter, index) => {
-                            let letterClassName: string = "letter";
+                            let letterClassName: string = "keyboard_letter_tile";
                             stageWordArray.forEach((word, index) => {
                                 const letterIndexInStageWord = word.search(letter);
                                 if (letterIndexInStageWord !== -1) {
                                     if (lineClassNames[index][letterIndexInStageWord].includes("green"))
-                                        letterClassName = "letter letter_green";
+                                        letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
                                     else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
-                                        if (!letterClassName.includes("letter_green"))
-                                            letterClassName = "letter letter_yellow";
+                                        if (!letterClassName.includes("keyboard_letter_tile_green"))
+                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_yellow";
                                     } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
                                         if (
-                                            !letterClassName.includes("letter_green") &&
-                                            !letterClassName.includes("letter_yellow")
+                                            !letterClassName.includes("keyboard_letter_tile_green") &&
+                                            !letterClassName.includes("keyboard_letter_tile_yellow")
                                         )
-                                            letterClassName = "letter letter_grey";
+                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_grey";
                                     }
                                 }
                             });
@@ -404,25 +382,25 @@ export default function App() {
                         })}
                 </div>
                 <div className="keyboard_row">
-                    <p className={ currentGuess.length===5 && !lineClassNames[currentStage][0].includes("shake") ? "highlight" : ""} onClick={() => handleLetterClick("Enter")}>Enter</p>
+                    <p className={ currentGuess.length===5 && !lineClassNames[currentStage][0].includes("shake") ? "keyboard_letter_tile keyboard_letter_tile_special keyboard_letter_tile_highlight" : "keyboard_letter_tile keyboard_letter_tile_special"} onClick={() => handleLetterClick("Enter")}>Enter</p>
                     {ALPHABET_LETTERS.substring(ALPHABET_LETTERS.search("l") + 1, ALPHABET_LETTERS.length)
                         .split("")
                         .map((letter, index) => {
-                            let letterClassName: string = "letter";
+                            let letterClassName: string = "keyboard_letter_tile";
                             stageWordArray.forEach((word, index) => {
                                 const letterIndexInStageWord = word.search(letter);
                                 if (letterIndexInStageWord !== -1) {
                                     if (lineClassNames[index][letterIndexInStageWord].includes("green"))
-                                        letterClassName = "letter letter_green";
+                                        letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
                                     else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
-                                        if (!letterClassName.includes("letter_green"))
-                                            letterClassName = "letter letter_yellow";
+                                        if (!letterClassName.includes("keyboard_letter_tile_green"))
+                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_yellow";
                                     } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
                                         if (
-                                            !letterClassName.includes("letter_green") &&
-                                            !letterClassName.includes("letter_yellow")
+                                            !letterClassName.includes("keyboard_letter_tile_green") &&
+                                            !letterClassName.includes("keyboard_letter_tile_yellow")
                                         )
-                                            letterClassName = "letter letter_grey";
+                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_grey";
                                     }
                                 }
                             });
@@ -432,7 +410,9 @@ export default function App() {
                                 </p>
                             );
                         })}
-                    <p className={ currentGuess.length===5 && lineClassNames[currentStage][0].includes("shake") ? "highlight" : ""} onClick={() => handleLetterClick("Backspace")}>Backspace</p>
+                    <p className={ currentGuess.length===5 && lineClassNames[currentStage][0].includes("shake") ? "keyboard_letter_tile keyboard_letter_tile_special keyboard_letter_tile_highlight" : "keyboard_letter_tile keyboard_letter_tile_special"} onClick={() => handleLetterClick("Backspace")}>
+                        <i className="fa-solid fa-delete-left"></i>
+                    </p>
                 </div>
             </div>
             <div className="game_settings_container">
@@ -463,13 +443,6 @@ export default function App() {
             <div ref={notificationsDivRef} className={(lineClassNames[currentStage] != null && lineClassNames[currentStage][0].includes('shake')) ? "notification_container notification_container_animate" : "notification_container notification_container_invisible" }>
                     Word doesn't exist
             </div>
-
-            {/* {
-                lineClassNames[currentStage] != null &&
-                (lineClassNames[currentStage][0].includes("shake") && <div className="notification_container">Word doesn't exist</div>)
-            } */}
-
-            <button onClick={resetAnimation}>Reset Notification Animation</button>
         </div>
     );
 }
