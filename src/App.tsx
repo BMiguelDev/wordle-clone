@@ -428,10 +428,14 @@ export default function App() {
                 {isApiAvailable.isWordApiAvailable ? <p>WordApi is available</p> : <p>WordApi is not available</p>}
             </div>
 
-            {
+            <div className={(lineClassNames[currentStage] != null && lineClassNames[currentStage][0].includes('shake')) ? "notification_container" : "notification_container invisible" }>
+                    Word doesn't exist
+            </div>
+
+            {/* {
                 lineClassNames[currentStage] != null &&
                 (lineClassNames[currentStage][0].includes("shake") && <div className="notification_container">Word doesn't exist</div>)
-            }
+            } */}
         </div>
     );
 }

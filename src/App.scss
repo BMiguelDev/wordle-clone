@@ -10,6 +10,15 @@ body {
 }
 
 
+:root {
+    --tile-correct-color: #538d4e;
+    --tile-present-color: #b59f3b;
+    --tile-wrong-color: #3a3a3c;
+    --keyboard-letter-highlight-color: #5c8d78;
+    --app-background-color: #121213;
+}
+
+
 // App content
 .app {
 
@@ -21,7 +30,7 @@ body {
     justify-content: space-evenly;
     //gap: .3rem;
     color: white;
-    background-color: rgb(28, 28, 28);
+    background-color: var(--app-background-color);
 }
 
 .gameboard_container {
@@ -84,7 +93,6 @@ body {
                 scale: 1;
             }
         }
-
         animation: shake .5s linear alternate-reverse;
     }
 
@@ -121,24 +129,24 @@ body {
                     rotate: x 180deg;
                 }
             }
-            animation: flip 1s ease-in-out 2s;
+            animation: flip 1s ease-in-out;
         }
 
         &.green {
             &::before {
-                background-color: green;
+                background-color: var(--tile-correct-color);
             }
         }
 
         &.yellow {
             &::before {
-                background-color: yellow;
+                background-color: var(--tile-present-color);
             }
         }
 
         &.grey {
             &::before {
-                background-color: grey;
+                background-color: var(--tile-incorrect-color);
             }
         }
     }
@@ -164,15 +172,15 @@ body {
             cursor: pointer;
 
             &.letter_green {
-                background-color: green;
+                background-color: var(--tile-correct-color);
             }
 
             &.letter_yellow {
-                background-color: yellow;
+                background-color: var(--tile-present-color);
             }
 
             &.letter_grey {
-                background-color: grey;
+                background-color: var(--tile-incorrect-color);
             }
 
             &.highlight {
@@ -183,7 +191,7 @@ body {
 
                     50% {
                         scale: 1.1;
-                        background-color: rgb(178, 226, 107);
+                        background-color: var(--keyboard-letter-highlight-color);
                     }
 
                     100% {
@@ -226,10 +234,14 @@ body {
         }
 
         100% {
-            opacity: 1;
+            opacity: 0;
         }
     }
 
     animation: popInAndOut 3s ease 0s;
     animation-fill-mode: forwards;
+
+    &.invisible {
+        display: none;
+    }
 }
