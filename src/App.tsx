@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import "./App.scss";
+import { WordData } from "./data/WordData";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
 export default function App5() {
-    // Variable <gameSettings> is an objeting holding the dynamic settings of the game: number of stages and word lenght
+    // Variable <gameSettings> is an object holding the dynamic settings of the game: number of stages and word lenght
     const [gameSettings, setGameSettings] = useState<gameSettingsType>({ numberStages: 6, wordLength: 5 });
 
     const [randomWordAndArray, setRandomWordAndArray] = useState<randomWordAndArrayType>({
@@ -17,10 +19,19 @@ export default function App5() {
     const [lineClassNames, setLineClassNames] = useState<string[][]>(
         Array(gameSettings.numberStages).fill(Array(gameSettings.wordLength).fill("tile"))
     );
+    // Object variable holding a boolean for each api used, true is the api is available and false if it's not available
+    const [isApiAvailable, setIsApiAvailable] = useState<isApiAvailableType>({
+        isDictionaryApiAvailable: false,
+        isWordApiAvailable: false,
+    });
 
     // Ref variable to access reset button
     const resetButtonRef = useRef<HTMLButtonElement>(null);
 
+    interface isApiAvailableType {
+        isDictionaryApiAvailable: boolean;
+        isWordApiAvailable: boolean;
+    }
     interface randomWordAndArrayType {
         randomWord: string;
         randomWordArray: string[];
@@ -33,48 +44,75 @@ export default function App5() {
 
     useEffect(() => {
         const fetchData = async () => {
-            // Get 4 random letters that can't be part of the random words, because API doesn't return random words.
-            let randomLettersArray: string[] = [];
-            for (let i = 0; i < 4; i++) {
-                randomLettersArray.push(
-                    ALPHABET_LETTERS.split("")[Math.floor(Math.random() * ALPHABET_LETTERS.length)]
-                );
-            }
-            const randomLettersString = randomLettersArray.toString().replaceAll(",", "");
+            // Check if words Api is available
+            const checkWordsApi = await fetch("https://api.datamuse.com/words?sp=?????");
+            if (checkWordsApi.ok)
+                setIsApiAvailable((prevIsApiAvailable) => ({ ...prevIsApiAvailable, isWordApiAvailable: true }));
 
-            // Get 75 words from API that may include "a"
-            const randomWordsData1 = await fetch(
-                `https://api.datamuse.com/words?sp=${"?".repeat(
-                    gameSettings.wordLength
-                )}-1234567890${randomLettersString}&max=25`
-            );
-            const randomWordsArray1 = await randomWordsData1.json();
-
-            // Get 425 words from API that don't include "a" (due to most words gotten from default API call including and starting with "a")
-            const randomWordsData2 = await fetch(
-                `https://api.datamuse.com/words?sp=${"?".repeat(
-                    gameSettings.wordLength
-                )}-1234567890aA${randomLettersString}&max=75`
-            );
-            const randomWordsArray2 = await randomWordsData2.json();
-
-            // Join both arrays and keep only the words
-            const jointRandomWordsArray = [...randomWordsArray1, ...randomWordsArray2];
-            const newJointRandomWordsArray: string[] = jointRandomWordsArray.map((element) => {
-                const elementWord: string = element.word;
-                if (elementWord.includes(" ")) {
-                    return undefined;
+            if (!checkWordsApi.ok) {
+                const randomWord = WordData[Math.floor(Math.random() * WordData.length)].toLowerCase();
+                setRandomWordAndArray({ randomWord: randomWord, randomWordArray: WordData });
+            } else {
+                // Get 4 random letters that can't be part of the retrieved words, because API doesn't return random words.
+                let randomLettersArray: string[] = [];
+                for (let i = 0; i < 4; i++) {
+                    randomLettersArray.push(
+                        ALPHABET_LETTERS.split("")[Math.floor(Math.random() * ALPHABET_LETTERS.length)]
+                    );
                 }
-                return element.word;
-            });
-            const newJointRandomWordsArrayNoWhiteSpaces = newJointRandomWordsArray.filter((element) => element != null);
-            const randomWord =
-                newJointRandomWordsArrayNoWhiteSpaces[
-                    Math.floor(Math.random() * newJointRandomWordsArrayNoWhiteSpaces.length)
-                ].toLowerCase();
-            setRandomWordAndArray({ randomWord: randomWord, randomWordArray: newJointRandomWordsArrayNoWhiteSpaces });
+                const randomLettersString = randomLettersArray.toString().replaceAll(",", "");
+
+                // Get 75 words from API that may include "a"
+                const randomWordsData1 = await fetch(
+                    `https://api.datamuse.com/words?sp=${"?".repeat(
+                        gameSettings.wordLength
+                    )}-1234567890${randomLettersString}&max=25`
+                );
+                console.log("HEY1", randomWordsData1);
+                const randomWordsArray1 = await randomWordsData1.json();
+
+                // Get 425 words from API that don't include "a" (due to most words gotten from API call including and starting with "a")
+                const randomWordsData2 = await fetch(
+                    `https://api.datamuse.com/words?sp=${"?".repeat(
+                        gameSettings.wordLength
+                    )}-1234567890aA${randomLettersString}&max=75`
+                );
+                console.log("HEYY2", randomWordsData2);
+                const randomWordsArray2 = await randomWordsData2.json();
+
+                // Join both arrays and keep only the words
+                const jointRandomWordsArray = [...randomWordsArray1, ...randomWordsArray2];
+                const newJointRandomWordsArray: string[] = jointRandomWordsArray.map((element) => {
+                    const elementWord: string = element.word;
+                    if (elementWord.includes(" ")) {
+                        return undefined;
+                    }
+                    return element.word;
+                });
+                const newJointRandomWordsArrayNoWhiteSpaces = newJointRandomWordsArray.filter(
+                    (element) => element != null
+                );
+                const randomWord =
+                    newJointRandomWordsArrayNoWhiteSpaces[
+                        Math.floor(Math.random() * newJointRandomWordsArrayNoWhiteSpaces.length)
+                    ].toLowerCase();
+                setRandomWordAndArray({
+                    randomWord: randomWord,
+                    randomWordArray: newJointRandomWordsArrayNoWhiteSpaces,
+                });
+            }
         };
         fetchData();
+
+        // Check if dictionary Api is available
+        const checkDictionaryApi = async () => {
+            const dictionaryTestData = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/hello");
+            if (dictionaryTestData.ok)
+                setIsApiAvailable((prevIsApiAvailable) => ({ ...prevIsApiAvailable, isDictionaryApiAvailable: true }));
+            console.log(dictionaryTestData);
+        };
+        checkDictionaryApi();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -123,32 +161,48 @@ export default function App5() {
                 setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + event.key);
             else if (event.key === "Enter") {
                 if (currentGuess.length === gameSettings.wordLength) {
-                    /*fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
-                        .then((response) => {
-                            if (response.ok)*/ handleStageChange();
-                            // else {
-                            //     let classArray: string[] = "tile shake,".repeat(5).split(",");
-                            //     classArray.pop();
-                            //     setLineClassNames((prevLineClassNames) => {
-                            //         let newLineClassNames = [...prevLineClassNames];
-                            //         newLineClassNames[currentStage] = classArray;
-                            //         return newLineClassNames;
-                            //     });
+                    if (isApiAvailable.isDictionaryApiAvailable) {
+                        fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
+                            .then((response) => {
+                                if (response.ok) handleStageChange();
+                                else {
+                                    let classArray: string[] = "tile shake,".repeat(gameSettings.wordLength).split(",");
+                                    classArray.pop();
+                                    setLineClassNames((prevLineClassNames) => {
+                                        let newLineClassNames = [...prevLineClassNames];
+                                        newLineClassNames[currentStage] = classArray;
+                                        return newLineClassNames;
+                                    });
 
-                            //     //alert("Word doesn't exist");
-                            // }
-                        // })
-                        // .catch((error) => {
-                        //     console.log(error);
-                        // });
+                                  
+                                    //alert("Word doesn't exist");
+                                }
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    } else { // if dictionary Api is not available, don't check if word exists and allow any word
+                        handleStageChange();
+                    }
                 }
             } else if (event.key === "Backspace") {
+                // After hitting backspace, if current row had className "shake", remove it (so that it can be 
+                // added again if word doesn't exist and trigger the shaking animation again)
+                if(lineClassNames[currentStage][0]==="tile shake") {
+                    const newLineClassNamesRow: string[] = Array(gameSettings.wordLength).fill("tile");
+                    setLineClassNames((prevLineClassNames) => {
+                        let newLineClassNames = [...prevLineClassNames];
+                        newLineClassNames[currentStage] = newLineClassNamesRow;
+                        return newLineClassNames;
+                    });
+                }
                 setCurrentGuess((prevCurrentGuess) => {
                     if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
                     else return prevCurrentGuess;
                 });
             }
         };
+        // If random word hasn't been correctly guessed yet and if last stage hasn't been reached, let user keep typing guessess
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
             if (currentStage < gameSettings.numberStages) {
                 window.addEventListener("keydown", handleKeydown);
@@ -158,7 +212,7 @@ export default function App5() {
         return () => {
             window.removeEventListener("keydown", handleKeydown);
         };
-    }, [currentGuess, currentStage, randomWordAndArray, gameSettings, stageWordArray]);
+    }, [currentGuess, currentStage, randomWordAndArray, gameSettings, stageWordArray, isApiAvailable, lineClassNames]);
 
     function resetGame() {
         resetButtonRef.current?.blur();
@@ -204,22 +258,22 @@ export default function App5() {
     function handleLetterClick(letter: string) {
         if (letter === "Enter") {
             if (currentGuess.length === gameSettings.wordLength) {
-                // fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
-                //     .then((response) => {
-                        /*if (response.ok)*/ console.log("handleStateChange"); //handleStageChange();
-                    //     else {
-                    //         let classArray: string[] = "tile shake,".repeat(5).split(",");
-                    //         classArray.pop();
-                    //         setLineClassNames((prevLineClassNames) => {
-                    //             let newLineClassNames = [...prevLineClassNames];
-                    //             newLineClassNames[currentStage] = classArray;
-                    //             return newLineClassNames;
-                    //         });
-                    //     }
-                    // })
-                    // .catch((error) => {
-                    //     console.log(error);
-                    // });
+                fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
+                    .then((response) => {
+                if (response.ok) console.log("handleStateChange"); //handleStageChange();
+                    else {
+                        let classArray: string[] = "tile shake,".repeat(5).split(",");
+                        classArray.pop();
+                        setLineClassNames((prevLineClassNames) => {
+                            let newLineClassNames = [...prevLineClassNames];
+                            newLineClassNames[currentStage] = classArray;
+                            return newLineClassNames;
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
             }
         } else if (letter === "Backspace") {
             setCurrentGuess((prevCurrentGuess) => {
@@ -235,8 +289,8 @@ export default function App5() {
     // - refactor code components
     // - make game settings work
     // - Add Footer and Header (header is just to look like the target website)
-    // - Add animation to each tile uppon hitting enter (either tremble when word doesn't exist or flip(?) when word exists)~
     // - Fix handleEnter (both Api call and function being only iniside useEffect)
+    // - Fix notification div not reshowing when user enters the same currentGuess
 
     return (
         <div className="app">
@@ -265,16 +319,21 @@ export default function App5() {
                             let letterClassName: string = "letter";
                             stageWordArray.forEach((word, index) => {
                                 const letterIndexInStageWord = word.search(letter);
-                                if(letterIndexInStageWord!==-1) {
-                                    if(lineClassNames[index][letterIndexInStageWord].includes("green")) letterClassName="letter letter_green";
-                                    else if(lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
-                                        if(!letterClassName.includes("letter_green")) letterClassName="letter letter_yellow";
-                                    }
-                                    else if(lineClassNames[index][letterIndexInStageWord].includes("grey")) {
-                                        if(!letterClassName.includes("letter_green") && !letterClassName.includes("letter_yellow")) letterClassName="letter letter_grey";
+                                if (letterIndexInStageWord !== -1) {
+                                    if (lineClassNames[index][letterIndexInStageWord].includes("green"))
+                                        letterClassName = "letter letter_green";
+                                    else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
+                                        if (!letterClassName.includes("letter_green"))
+                                            letterClassName = "letter letter_yellow";
+                                    } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
+                                        if (
+                                            !letterClassName.includes("letter_green") &&
+                                            !letterClassName.includes("letter_yellow")
+                                        )
+                                            letterClassName = "letter letter_grey";
                                     }
                                 }
-                            })
+                            });
                             return (
                                 <p onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
                                     {letter}
@@ -289,16 +348,21 @@ export default function App5() {
                             let letterClassName: string = "letter";
                             stageWordArray.forEach((word, index) => {
                                 const letterIndexInStageWord = word.search(letter);
-                                if(letterIndexInStageWord!==-1) {
-                                    if(lineClassNames[index][letterIndexInStageWord].includes("green")) letterClassName="letter letter_green";
-                                    else if(lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
-                                        if(!letterClassName.includes("letter_green")) letterClassName="letter letter_yellow";
-                                    }
-                                    else if(lineClassNames[index][letterIndexInStageWord].includes("grey")) {
-                                        if(!letterClassName.includes("letter_green") && !letterClassName.includes("letter_yellow")) letterClassName="letter letter_grey";
+                                if (letterIndexInStageWord !== -1) {
+                                    if (lineClassNames[index][letterIndexInStageWord].includes("green"))
+                                        letterClassName = "letter letter_green";
+                                    else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
+                                        if (!letterClassName.includes("letter_green"))
+                                            letterClassName = "letter letter_yellow";
+                                    } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
+                                        if (
+                                            !letterClassName.includes("letter_green") &&
+                                            !letterClassName.includes("letter_yellow")
+                                        )
+                                            letterClassName = "letter letter_grey";
                                     }
                                 }
-                            })
+                            });
                             return (
                                 <p onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
                                     {letter}
@@ -307,30 +371,35 @@ export default function App5() {
                         })}
                 </div>
                 <div className="keyboard_row">
-                    <p onClick={() => handleLetterClick("Enter")}>Enter</p>
+                    <p className={ currentGuess.length===5 && !lineClassNames[currentStage][0].includes("shake") ? "highlight" : ""} onClick={() => handleLetterClick("Enter")}>Enter</p>
                     {ALPHABET_LETTERS.substring(ALPHABET_LETTERS.search("l") + 1, ALPHABET_LETTERS.length)
                         .split("")
                         .map((letter, index) => {
                             let letterClassName: string = "letter";
                             stageWordArray.forEach((word, index) => {
                                 const letterIndexInStageWord = word.search(letter);
-                                if(letterIndexInStageWord!==-1) {
-                                    if(lineClassNames[index][letterIndexInStageWord].includes("green")) letterClassName="letter letter_green";
-                                    else if(lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
-                                        if(!letterClassName.includes("letter_green")) letterClassName="letter letter_yellow";
-                                    }
-                                    else if(lineClassNames[index][letterIndexInStageWord].includes("grey")) {
-                                        if(!letterClassName.includes("letter_green") && !letterClassName.includes("letter_yellow")) letterClassName="letter letter_grey";
+                                if (letterIndexInStageWord !== -1) {
+                                    if (lineClassNames[index][letterIndexInStageWord].includes("green"))
+                                        letterClassName = "letter letter_green";
+                                    else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
+                                        if (!letterClassName.includes("letter_green"))
+                                            letterClassName = "letter letter_yellow";
+                                    } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
+                                        if (
+                                            !letterClassName.includes("letter_green") &&
+                                            !letterClassName.includes("letter_yellow")
+                                        )
+                                            letterClassName = "letter letter_grey";
                                     }
                                 }
-                            })
+                            });
                             return (
                                 <p onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
                                     {letter}
                                 </p>
                             );
                         })}
-                    <p onClick={() => handleLetterClick("Backspace")}>Backspace</p>
+                    <p className={ currentGuess.length===5 && lineClassNames[currentStage][0].includes("shake") ? "highlight" : ""} onClick={() => handleLetterClick("Backspace")}>Backspace</p>
                 </div>
             </div>
             <div className="game_settings_container">
@@ -347,6 +416,21 @@ export default function App5() {
                     <button onClick={() => handleChangeStages("decrement")}>-</button>
                 </div>
             </div>
+
+            <div className="api_warnings">
+                {isApiAvailable.isDictionaryApiAvailable ? (
+                    <p>DictionaryApi is available</p>
+                ) : (
+                    <p>DictionaryApi is not available</p>
+                )}
+
+                {isApiAvailable.isWordApiAvailable ? <p>WordApi is available</p> : <p>WordApi is not available</p>}
+            </div>
+
+            {
+                lineClassNames[currentStage] != null &&
+                (lineClassNames[currentStage][0].includes("shake") && <div className="notification_container">Word doesn't exist</div>)
+            }
         </div>
     );
 }
