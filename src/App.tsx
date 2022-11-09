@@ -339,19 +339,16 @@ export default function App() {
     // - Fix handleEnter/ handleKeyDown (both Api call and function being only iniside useEffect):
     //     - make tick animation work in both keys and keyboard
     //     - Make enter functionality work in both keys and keyboard
-    //      - Make sure all logic present in game board is also present when the handleEnter/handleKeyDown/handleWhatever functions are called in keyboard
-    // - Make tiles shake again when user enters the same currentGuess
+    //     - Make sure all logic present in game board is also present when the handleEnter/handleKeyDown/handleWhatever functions are called in keyboard
     // - Do HardMode game setting
     // - Dark Mode
 
-    function getAlphabetKeyboardLetterRows() {
-        const keyboardLetterRowsArray: string[] = [
-            ALPHABET_LETTERS.split("a")[0],
-            ALPHABET_LETTERS.split("p")[1].split("z")[0],
-            ALPHABET_LETTERS.split("l")[1],
-        ];
-        return keyboardLetterRowsArray;
-    }
+    
+    const keyboardLetterRowsArray: string[] = [
+        ALPHABET_LETTERS.split("a")[0],
+        ALPHABET_LETTERS.split("p")[1].split("z")[0],
+        ALPHABET_LETTERS.split("l")[1],
+    ];
 
     console.log("dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
     console.log("words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
@@ -377,13 +374,15 @@ export default function App() {
                                         lineClassNames={lineClassNames}
                                         index={index}
                                         wordLength={gameSettings.wordLength}
+                                        setLineClassNames={setLineClassNames}
                                     />
                                 );
                             })}
                         </div>
                         <div className="keyboard_container">
-                            {getAlphabetKeyboardLetterRows().map((keyboardRowString) => (
+                            {keyboardLetterRowsArray.map((keyboardRowString, index) => (
                                 <KeyboardRow
+                                    key={index}
                                     keyboardRowString={keyboardRowString}
                                     stageWordArray={stageWordArray}
                                     lineClassNames={lineClassNames}
