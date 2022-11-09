@@ -5,6 +5,7 @@ import { WordData } from "./data/WordData";
 import { Line } from "./components/Line/Line";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
+import KeyboardRow from "./components/KeyboardRow/KeyboardRow";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
@@ -184,8 +185,7 @@ export default function App() {
                     if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
                     // TODO: Add Hard mode logic here
                     // else if (gameSettings.hardMode && currentStage!==0) {
-                        
-                    // } 
+                    // }
                     else if (isApiAvailable.isDictionaryApiAvailable) {
                         fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                             .then((response) => {
@@ -279,7 +279,7 @@ export default function App() {
 
     function handleChangeWordLength(type: string) {
         if (gameSettings.wordLength > 10 || gameSettings.wordLength < 2) return;
-        if (type === "increment"  && gameSettings.numberStages < 10)
+        if (type === "increment" && gameSettings.numberStages < 10)
             setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength + 1 }));
         else if (type === "decrement" && gameSettings.numberStages > 2)
             setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength - 1 }));
@@ -335,7 +335,6 @@ export default function App() {
     }
 
     // TODO:
-    // - refactor code components
     // - make game settings work
     // - Fix handleEnter/ handleKeyDown (both Api call and function being only iniside useEffect):
     //     - make tick animation work in both keys and keyboard
@@ -344,6 +343,18 @@ export default function App() {
     // - Make tiles shake again when user enters the same currentGuess
     // - Do HardMode game setting
     // - Dark Mode
+
+    function getAlphabetKeyboardLetterRows() {
+        const keyboardLetterRowsArray: string[] = [
+            ALPHABET_LETTERS.split("a")[0],
+            ALPHABET_LETTERS.split("p")[1].split("z")[0],
+            ALPHABET_LETTERS.split("l")[1],
+        ];
+        return keyboardLetterRowsArray;
+    }
+
+    console.log("dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
+    console.log("words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
 
     return (
         <div className="app_container">
@@ -370,151 +381,21 @@ export default function App() {
                                 );
                             })}
                         </div>
-
                         <div className="keyboard_container">
-                            <div className="keyboard_row">
-                                {ALPHABET_LETTERS.substring(0, ALPHABET_LETTERS.search("p") + 1)
-                                    .split("")
-                                    .map((letter, index) => {
-                                        let letterClassName: string = "keyboard_letter_tile";
-                                        stageWordArray.forEach((word, index) => {
-                                            const letterIndexInStageWord = word.search(letter);
-                                            if (letterIndexInStageWord !== -1) {
-                                                if (lineClassNames[index][letterIndexInStageWord].includes("green"))
-                                                    letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
-                                                else if (
-                                                    lineClassNames[index][letterIndexInStageWord].includes("yellow")
-                                                ) {
-                                                    if (!letterClassName.includes("keyboard_letter_tile_green"))
-                                                        letterClassName =
-                                                            "keyboard_letter_tile keyboard_letter_tile_yellow";
-                                                } else if (
-                                                    lineClassNames[index][letterIndexInStageWord].includes("grey")
-                                                ) {
-                                                    if (
-                                                        !letterClassName.includes("keyboard_letter_tile_green") &&
-                                                        !letterClassName.includes("keyboard_letter_tile_yellow")
-                                                    )
-                                                        letterClassName =
-                                                            "keyboard_letter_tile keyboard_letter_tile_grey";
-                                                }
-                                            }
-                                        });
-                                        return (
-                                            <div
-                                                onClick={() => handleLetterClick(letter)}
-                                                key={index}
-                                                className={letterClassName}
-                                            >
-                                                <p className="keyboard_letter_text">{letter}</p>
-                                            </div>
-                                        );
-                                    })}
-                            </div>
-                            <div className="keyboard_row">
-                                {ALPHABET_LETTERS.substring(
-                                    ALPHABET_LETTERS.search("p") + 1,
-                                    ALPHABET_LETTERS.search("l") + 1
-                                )
-                                    .split("")
-                                    .map((letter, index) => {
-                                        let letterClassName: string = "keyboard_letter_tile";
-                                        stageWordArray.forEach((word, index) => {
-                                            const letterIndexInStageWord = word.search(letter);
-                                            if (letterIndexInStageWord !== -1) {
-                                                if (lineClassNames[index][letterIndexInStageWord].includes("green"))
-                                                    letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
-                                                else if (
-                                                    lineClassNames[index][letterIndexInStageWord].includes("yellow")
-                                                ) {
-                                                    if (!letterClassName.includes("keyboard_letter_tile_green"))
-                                                        letterClassName =
-                                                            "keyboard_letter_tile keyboard_letter_tile_yellow";
-                                                } else if (
-                                                    lineClassNames[index][letterIndexInStageWord].includes("grey")
-                                                ) {
-                                                    if (
-                                                        !letterClassName.includes("keyboard_letter_tile_green") &&
-                                                        !letterClassName.includes("keyboard_letter_tile_yellow")
-                                                    )
-                                                        letterClassName =
-                                                            "keyboard_letter_tile keyboard_letter_tile_grey";
-                                                }
-                                            }
-                                        });
-                                        return (
-                                            <div
-                                                onClick={() => handleLetterClick(letter)}
-                                                key={index}
-                                                className={letterClassName}
-                                            >
-                                                <p className="keyboard_letter_text">{letter}</p>
-                                            </div>
-                                        );
-                                    })}
-                            </div>
-                            <div className="keyboard_row">
-                                <p
-                                    className={
-                                        currentGuess.length === 5 && !lineClassNames[currentStage][0].includes("shake")
-                                            ? "keyboard_letter_tile keyboard_letter_tile_enter keyboard_letter_tile_highlight"
-                                            : "keyboard_letter_tile keyboard_letter_tile_enter"
-                                    }
-                                    onClick={() => handleLetterClick("Enter")}
-                                >
-                                    Enter
-                                </p>
-                                {ALPHABET_LETTERS.substring(ALPHABET_LETTERS.search("l") + 1, ALPHABET_LETTERS.length)
-                                    .split("")
-                                    .map((letter, index) => {
-                                        let letterClassName: string = "keyboard_letter_tile";
-                                        stageWordArray.forEach((word, index) => {
-                                            const letterIndexInStageWord = word.search(letter);
-                                            if (letterIndexInStageWord !== -1) {
-                                                if (lineClassNames[index][letterIndexInStageWord].includes("green"))
-                                                    letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
-                                                else if (
-                                                    lineClassNames[index][letterIndexInStageWord].includes("yellow")
-                                                ) {
-                                                    if (!letterClassName.includes("keyboard_letter_tile_green"))
-                                                        letterClassName =
-                                                            "keyboard_letter_tile keyboard_letter_tile_yellow";
-                                                } else if (
-                                                    lineClassNames[index][letterIndexInStageWord].includes("grey")
-                                                ) {
-                                                    if (
-                                                        !letterClassName.includes("keyboard_letter_tile_green") &&
-                                                        !letterClassName.includes("keyboard_letter_tile_yellow")
-                                                    )
-                                                        letterClassName =
-                                                            "keyboard_letter_tile keyboard_letter_tile_grey";
-                                                }
-                                            }
-                                        });
-                                        return (
-                                            <div
-                                                onClick={() => handleLetterClick(letter)}
-                                                key={index}
-                                                className={letterClassName}
-                                            >
-                                                <p className="keyboard_letter_text">{letter}</p>
-                                            </div>
-                                        );
-                                    })}
-                                <p
-                                    className={
-                                        currentGuess.length === 5 && lineClassNames[currentStage][0].includes("shake")
-                                            ? "keyboard_letter_tile keyboard_letter_tile_backspace keyboard_letter_tile_highlight"
-                                            : "keyboard_letter_tile keyboard_letter_tile_backspace"
-                                    }
-                                    onClick={() => handleLetterClick("Backspace")}
-                                >
-                                    <i className="fa-solid fa-delete-left"></i>
-                                </p>
-                            </div>
+                            {getAlphabetKeyboardLetterRows().map((keyboardRowString) => (
+                                <KeyboardRow
+                                    keyboardRowString={keyboardRowString}
+                                    stageWordArray={stageWordArray}
+                                    lineClassNames={lineClassNames}
+                                    handleLetterClick={handleLetterClick}
+                                    currentGuess={currentGuess}
+                                    currentStage={currentStage}
+                                />
+                            ))}
                         </div>
                     </div>
 
+                    {/* TODO: probably move reset button and gamsettings options to the settings option inside navbar */}
                     <button className="reset_button" ref={resetButtonRef} onClick={resetGame}>
                         New Game
                     </button>
@@ -543,8 +424,9 @@ export default function App() {
                         </div>
                     </div>
 
+                    {/* TODO: Remove this (if words API isnt available, use dummy data; if dictionary API isnt available, dont use it) */}
                     <div className="api_warnings">
-                        {isApiAvailable.isDictionaryApiAvailable ? (
+                        {/* {isApiAvailable.isDictionaryApiAvailable ? (
                             <p>DictionaryApi is available</p>
                         ) : (
                             <p>DictionaryApi is not available</p>
@@ -554,7 +436,7 @@ export default function App() {
                             <p>WordApi is available</p>
                         ) : (
                             <p>WordApi is not available</p>
-                        )}
+                        )} */}
                     </div>
 
                     <div
