@@ -33,6 +33,7 @@
                     scale: 1;
                 }
             }
+
             animation: tick .5s ease 0s;
         }
 
@@ -71,66 +72,158 @@
             animation: shake .5s linear alternate-reverse;
         }
 
-        &.flip {
-            position: relative;
-
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 2;
-                background-color: inherit;
-
-                @keyframes flip {
-                    0% {
-                        opacity: 0;
-                        background-color: var(--tile-wrong-color);
-                    }
-
-                    25% {
-                        opacity: 0;
-                        background-color: var(--tile-wrong-color);
-                    }
-
-                    50% {
-                        opacity: 1;
-                    }
-
-                    100% {
-                        opacity: 1;
-                        rotate: x 180deg;
-                    }
-                }
-
-                animation: flip 1s ease-in-out;
+        @keyframes flipBoardTile {
+            0% {
+                rotate: x 0deg;
             }
 
-            &.green {
-                border: none;
+            47.5% {
+                rotate: x 90deg;
+            }
 
-                &::before {
+            52.5% {
+                rotate: x 90deg;
+            }
+
+            100% {
+                rotate: x 0deg;
+            }
+        }
+
+        &.green {
+            border: none;
+
+            @keyframes turnToGreen {
+                0% {
+                    background-color: var(--app-bg-color);
+                }
+
+                25% {
+                    background-color: var(--app-bg-color);
+                }
+
+                50% {
+                    background-color: var(--tile-correct-color);
+                }
+
+                100% {
                     background-color: var(--tile-correct-color);
                 }
             }
+            animation: flipBoardTile 1s ease-in-out, turnToGreen 1.25s ease-in-out;
+            animation-fill-mode: forwards;
+        }
 
-            &.yellow {
-                border: none;
+        &.yellow {
+            border: none;
 
-                &::before {
+            @keyframes turnToYellow {
+                0% {
+                    background-color: var(--app-bg-color);
+                }
+
+                25% {
+                    background-color: var(--app-bg-color);
+                }
+
+                50% {
+                    background-color: var(--tile-present-color);
+                }
+
+                100% {
                     background-color: var(--tile-present-color);
                 }
             }
+            animation: flipBoardTile 1s ease-in-out, turnToYellow 1.25s ease-in-out;
+            animation-fill-mode: forwards;
+        }
 
-            &.grey {
-                border: none;
+        &.grey {
+            border: none;
 
-                &::before {
+            @keyframes turnToGrey {
+                0% {
+                    background-color: var(--app-bg-color);
+                }
+
+                25% {
+                    background-color: var(--app-bg-color);
+                }
+
+                50% {
+                    background-color: var(--tile-wrong-color);
+                }
+
+                100% {
                     background-color: var(--tile-wrong-color);
                 }
             }
+            animation: flipBoardTile 1s ease-in-out, turnToGrey 1.25s ease-in-out;
+            animation-fill-mode: forwards;
         }
+
+        &.flip {
+            //text-transform: lowercase;
+            //position: relative;
+
+            // &::before {
+            //     content: '';
+            //     position: absolute;
+            //     top: 0;
+            //     left: 0;
+            //     width: 100%;
+            //     height: 100%;
+            //     z-index: 2;
+            //     background-color: inherit;
+
+
+
+            // @keyframes flip {
+            //     0% {
+            //         opacity: 0;
+            //         background-color: var(--tile-wrong-color);
+            //     }
+
+            //     25% {
+            //         opacity: 0;
+            //         background-color: var(--tile-wrong-color);
+            //     }
+
+            //     50% {
+            //         opacity: 1;
+            //     }
+
+            //     100% {
+            //         opacity: 1;
+            //         rotate: x 180deg;
+            //     }
+            // }
+
+            //animation: flipBoardTile 1s ease-in-out;
+        }
+
+        // &.green {
+        //     border: none;
+
+        //     &::before {
+        //         background-color: var(--tile-correct-color);
+        //     }
+        // }
+
+        // &.yellow {
+        //     border: none;
+
+        //     &::before {
+        //         background-color: var(--tile-present-color);
+        //     }
+        // }
+
+        // &.grey {
+        //     border: none;
+
+        //     &::before {
+        //         background-color: var(--tile-wrong-color);
+        //     }
+        // }
     }
 }

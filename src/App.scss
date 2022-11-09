@@ -41,227 +41,255 @@ body {
     background-color: var(--app-bg-color);
 }
 
-
-.game_container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-
-    .gameboard_container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: .35rem;
+.main_container_loading {
+    i {
+        font-size: 5rem;
+        color: var(--tile-text-color);
     }
+}
 
-    .keyboard_container {
+.main_container {
+
+    .game_container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: .5rem;
+        justify-content: space-between;
+        gap: 2rem;
 
-        .keyboard_row {
+        .gameboard_container {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: .4rem;
+            justify-content: center;
+            gap: .35rem;
+        }
 
-            .keyboard_letter_tile {
-                margin: 0;
-                padding: 1.15rem 1rem;
-                width: 2.75rem;
-                height: 3.7rem;
+        .keyboard_container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .5rem;
+
+            .keyboard_row {
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                background-color: var(--keyboard-letter-tile-bg-color);
-                border-radius: .25rem;
-                text-transform: uppercase;
-                font-size: .85rem;
-                font-weight: bold;
-                cursor: pointer;
-                transition: all 1s ease-in-out;
-                position: relative;
+                gap: .4rem;
 
-                .keyboard_letter_text {
+                .keyboard_letter_tile {
                     margin: 0;
-                    z-index: 3;
-                    color: var(--keyboard-letter-text-color);
-                }
+                    padding: 1.15rem 1rem;
+                    width: 2.7rem;
+                    height: 3.55rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: var(--keyboard-letter-tile-bg-color);
+                    border-radius: .25rem;
+                    text-transform: uppercase;
+                    font-size: .85rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    position: relative;
 
-                @keyframes flipKeyboardTile {
-                    0% {
-                        rotate: x 0deg;
-                        //background-color: var(--keyboard-letter-tile-bg-color);
+                    .keyboard_letter_text {
+                        margin: 0;
+                        z-index: 3;
+                        color: var(--keyboard-letter-text-color);
                     }
 
-                    25% {
-                        //background-color: var(--keyboard-letter-tile-bg-color);
-                    }
-
-                    50% {
-                        rotate: x 90deg;
-                        //background-color: var(--tile-wrong-color);
-                    }
-
-                    100% {
-                        rotate: x 0deg;
-                        //background-color: var(--tile-wrong-color);
-                    }
-                }
-
-                &.keyboard_letter_tile_green {
-                    @keyframes turnToGreen {
+                    @keyframes flipKeyboardTile {
                         0% {
-                            background-color: var(--keyboard-letter-tile-bg-color);
+                            rotate: x 0deg;
                         }
 
-                        25% {
-                            background-color: var(--keyboard-letter-tile-bg-color);
+                        47.5% {
+                            rotate: x 90deg;
                         }
 
-                        50% {
-                            background-color: var(--tile-correct-color);
+                        52.5% {
+                            rotate: x 90deg;
                         }
 
                         100% {
-                            background-color: var(--tile-correct-color);
-                        }
-                    }
-                    animation: flipKeyboardTile 1s ease-in-out, turnToGreen 1s ease-in-out;
-                    animation-fill-mode: forwards;
-                }
-
-                &.keyboard_letter_tile_yellow {
-                    @keyframes turnToYellow {
-                        0% {
-                            background-color: var(--keyboard-letter-tile-bg-color);
-                        }
-
-                        25% {
-                            background-color: var(--keyboard-letter-tile-bg-color);
-                        }
-
-                        50% {
-                            background-color: var(--tile-present-color);
-                        }
-
-                        100% {
-                            background-color: var(--tile-present-color);
-                        }
-                    }
-                    animation: flipKeyboardTile 1s ease-in-out, turnToYellow 1s ease-in-out;
-                    animation-fill-mode: forwards;
-                }
-
-                &.keyboard_letter_tile_grey {
-                     @keyframes turnToGrey {
-                        0% {
-                            background-color: var(--keyboard-letter-tile-bg-color);
-                        }
-
-                        25% {
-                            background-color: var(--keyboard-letter-tile-bg-color);
-                        }
-
-                        50% {
-                            background-color: var(--tile-wrong-color);
-                        }
-
-                        100% {
-                            background-color: var(--tile-wrong-color);
-                        }
-                    }
-                    animation: flipKeyboardTile 1s ease-in-out, turnToGrey 1s ease-in-out;
-                    animation-fill-mode: forwards;
-                }
-
-                &.keyboard_letter_tile_special {
-                    width: fit-content;
-                    color: var(--tile-text-color);
-                }
-
-                &.keyboard_letter_tile_highlight {
-                    @keyframes scaleUpAndDown {
-                        0% {
-                            scale: 1;
-                        }
-
-                        50% {
-                            scale: 1.1;
-                            background-color: var(--keyboard-letter-highlight-color);
-                        }
-
-                        100% {
-                            scale: 1;
+                            rotate: x 0deg;
                         }
                     }
 
-                    animation: scaleUpAndDown 1s ease-in-out 0s alternate-reverse infinite;
+                    &.keyboard_letter_tile_green {
+                        @keyframes turnToGreen {
+                            0% {
+                                background-color: var(--keyboard-letter-tile-bg-color);
+                            }
+
+                            25% {
+                                background-color: var(--keyboard-letter-tile-bg-color);
+                            }
+
+                            50% {
+                                background-color: var(--tile-correct-color);
+                            }
+
+                            100% {
+                                background-color: var(--tile-correct-color);
+                            }
+                        }
+
+                        animation: flipKeyboardTile 1s ease-in-out,
+                        turnToGreen 1.25s ease-in-out;
+                        animation-fill-mode: forwards;
+                    }
+
+                    &.keyboard_letter_tile_yellow {
+                        @keyframes turnToYellow {
+                            0% {
+                                background-color: var(--keyboard-letter-tile-bg-color);
+                            }
+
+                            25% {
+                                background-color: var(--keyboard-letter-tile-bg-color);
+                            }
+
+                            50% {
+                                background-color: var(--tile-present-color);
+                            }
+
+                            100% {
+                                background-color: var(--tile-present-color);
+                            }
+                        }
+
+                        animation: flipKeyboardTile 1s ease-in-out,
+                        turnToYellow 1.25s ease-in-out;
+                        animation-fill-mode: forwards;
+                    }
+
+                    &.keyboard_letter_tile_grey {
+                        @keyframes turnToGrey {
+                            0% {
+                                background-color: var(--keyboard-letter-tile-bg-color);
+                            }
+
+                            25% {
+                                background-color: var(--keyboard-letter-tile-bg-color);
+                            }
+
+                            50% {
+                                background-color: var(--tile-wrong-color);
+                            }
+
+                            100% {
+                                background-color: var(--tile-wrong-color);
+                            }
+                        }
+
+                        animation: flipKeyboardTile 1s ease-in-out,
+                        turnToGrey 1.25s ease-in-out;
+                        animation-fill-mode: forwards;
+                    }
+
+                    &.keyboard_letter_tile_enter {
+                        width: 4rem;
+                        color: var(--tile-text-color);
+                        letter-spacing: .05rem;
+                        font-size: .8rem;
+                    }
+
+                    &.keyboard_letter_tile_backspace {
+                        width: 4rem;
+                        color: var(--tile-text-color);
+                        font-size: 1.3rem;
+                    }
+
+                    &.keyboard_letter_tile_highlight {
+                        @keyframes scaleUpAndDown {
+                            0% {
+                                scale: 1;
+                            }
+
+                            50% {
+                                scale: 1.1;
+                                background-color: var(--keyboard-letter-highlight-color);
+                            }
+
+                            100% {
+                                scale: 1;
+                            }
+                        }
+
+                        animation: scaleUpAndDown 1s ease-in-out 0s alternate-reverse infinite;
+                    }
                 }
             }
         }
     }
-}
 
 
-.reset_button {
-    position: absolute;
-    top: 80%;
-    right: 20%;
-}
+    .reset_button {
+        position: absolute;
+        top: 80%;
+        right: 20%;
+    }
 
-.game_settings_container {
-    position: absolute;
-    top: 20%;
-    right: 20%;
-    display: none;
-    color: var(--tile-text-color);
-}
+    .game_settings_container {
+        position: absolute;
+        top: 20%;
+        right: 20%;
+        //display: none;
+        color: var(--tile-text-color);
 
-.api_warnings {
-    position: absolute;
-    top: 30%;
-    left: 20%;
-    color: var(--tile-text-color);
-}
+        .game_settings_container_words {
+            color: blue;
 
-.notification_container {
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    padding: 1rem;
-    background-color: var(--tile-text-color);
-    color: var(--app-bg-color);
-    width: fit-content;
-    z-index: 4;
-
-
-    @keyframes popInAndOut {
-        0% {
-            opacity: .25;
-        }
-
-        25% {
-            opacity: 1;
-        }
-
-        75% {
-            opacity: 1;
-        }
-
-        100% {
-            opacity: 0;
+            &.game_settings_container_words_invisible {
+                display: none;
+            }
         }
     }
 
-    animation: popInAndOut 2s ease 0s;
-    animation-fill-mode: forwards;
-
-
-    &.notification_container_invisible {
-        display: none;
+    .api_warnings {
+        position: absolute;
+        top: 30%;
+        left: 20%;
+        color: var(--tile-text-color);
     }
+
+    .notification_container {
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        padding: 1rem;
+        background-color: var(--tile-text-color);
+        color: var(--app-bg-color);
+        width: fit-content;
+        z-index: 4;
+
+
+        @keyframes popInAndOut {
+            0% {
+                opacity: .25;
+            }
+
+            25% {
+                opacity: 1;
+            }
+
+            75% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        animation: popInAndOut 2s ease 0s;
+        animation-fill-mode: forwards;
+
+
+        &.notification_container_invisible {
+            display: none;
+        }
+    }
+
 }
