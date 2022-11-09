@@ -173,7 +173,8 @@ export default function App() {
             }
             else if (event.key === "Enter") {
                 if (currentGuess.length === gameSettings.wordLength) {
-                    if (isApiAvailable.isDictionaryApiAvailable) {
+                    if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
+                    else if (isApiAvailable.isDictionaryApiAvailable) {
                         fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                             .then((response) => {
                                 if (response.ok) handleStageChange();
@@ -327,6 +328,7 @@ export default function App() {
     // - Dark Mode
     // - Fix game tiles animation to match keyboard tiles animation
     // - make flip animation global for keyboard tiles and make another animation for the color change
+    // - make it so that if currentGuess is correct, skip dictionary check
 
     return (
         <div className="app_container">
