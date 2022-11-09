@@ -238,10 +238,10 @@ body {
         //display: none;
         color: var(--tile-text-color);
 
-        .game_settings_container_words {
+        .game_settings_words {
             color: blue;
 
-            &.game_settings_container_words_invisible {
+            &.game_settings_words_invisible {
                 display: none;
             }
         }

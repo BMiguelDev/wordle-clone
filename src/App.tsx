@@ -10,7 +10,11 @@ const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
 export default function App() {
     // Variable <gameSettings> is an object holding the dynamic settings of the game: number of stages and word lenght
-    const [gameSettings, setGameSettings] = useState<gameSettingsType>({ numberStages: 6, wordLength: 5 });
+    const [gameSettings, setGameSettings] = useState<gameSettingsType>({
+        numberStages: 6,
+        wordLength: 5,
+        hardMode: false,
+    });
 
     const [randomWordAndArray, setRandomWordAndArray] = useState<randomWordAndArrayType>({
         randomWord: "",
@@ -45,6 +49,7 @@ export default function App() {
     interface gameSettingsType {
         numberStages: number;
         wordLength: number;
+        hardMode: boolean;
     }
 
     useEffect(() => {
@@ -177,6 +182,10 @@ export default function App() {
             } else if (event.key === "Enter") {
                 if (currentGuess.length === gameSettings.wordLength) {
                     if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
+                    // TODO: Add Hard mode logic here
+                    // else if (gameSettings.hardMode && currentStage!==0) {
+                        
+                    // } 
                     else if (isApiAvailable.isDictionaryApiAvailable) {
                         fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                             .then((response) => {
@@ -254,13 +263,13 @@ export default function App() {
     }
 
     function handleChangeStages(type: string) {
-        if (gameSettings.numberStages > 12 || gameSettings.numberStages < 2) return;
-        if (type === "increment")
+        if (gameSettings.numberStages > 13 || gameSettings.numberStages < 1) return;
+        if (type === "increment" && gameSettings.numberStages < 13)
             setGameSettings((prevGameSettings) => ({
                 ...gameSettings,
                 numberStages: prevGameSettings.numberStages + 1,
             }));
-        else if (type === "decrement")
+        else if (type === "decrement" && gameSettings.numberStages > 1)
             setGameSettings((prevGameSettings) => ({
                 ...gameSettings,
                 numberStages: prevGameSettings.numberStages - 1,
@@ -270,9 +279,9 @@ export default function App() {
 
     function handleChangeWordLength(type: string) {
         if (gameSettings.wordLength > 10 || gameSettings.wordLength < 2) return;
-        if (type === "increment")
+        if (type === "increment"  && gameSettings.numberStages < 10)
             setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength + 1 }));
-        else if (type === "decrement")
+        else if (type === "decrement" && gameSettings.numberStages > 2)
             setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength - 1 }));
         else return;
     }
@@ -320,16 +329,21 @@ export default function App() {
                 notificationsDivRef.current.className = "notification_container notification_container_animate";
         }, 100);
     }
+
+    function handleChangeHardMode(option: boolean) {
+        setGameSettings({ ...gameSettings, hardMode: option });
+    }
+
     // TODO:
     // - refactor code components
     // - make game settings work
     // - Fix handleEnter/ handleKeyDown (both Api call and function being only iniside useEffect):
     //     - make tick animation work in both keys and keyboard
     //     - Make enter functionality work in both keys and keyboard
+    //      - Make sure all logic present in game board is also present when the handleEnter/handleKeyDown/handleWhatever functions are called in keyboard
     // - Make tiles shake again when user enters the same currentGuess
     // - Do HardMode game setting
     // - Dark Mode
-
 
     return (
         <div className="app_container">
@@ -507,8 +521,8 @@ export default function App() {
 
                     <div className="game_settings_container">
                         <div
-                            className={`game_settings_container_words ${
-                                isApiAvailable.isWordApiAvailable ? "" : "game_settings_container_words_invisible"
+                            className={`game_settings_words ${
+                                isApiAvailable.isWordApiAvailable ? "" : "game_settings_words_invisible"
                             }`}
                         >
                             <p>Word Lenght</p>
@@ -521,6 +535,11 @@ export default function App() {
                             <button onClick={() => handleChangeStages("increment")}>+</button>
                             {gameSettings.numberStages}
                             <button onClick={() => handleChangeStages("decrement")}>-</button>
+                        </div>
+                        <div className="game_settings_hard_mode">
+                            <p>Hard Mode</p>
+                            <button onClick={() => handleChangeHardMode(true)}>Yes</button>
+                            <button onClick={() => handleChangeHardMode(false)}>No</button>
                         </div>
                     </div>
 
