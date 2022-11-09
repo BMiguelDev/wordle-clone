@@ -1,0 +1,92 @@
+// Footer content
+.footer_container {
+    width: 100%;
+    background-color: var(--footer-bg-color);
+    border-top-left-radius: .15rem;
+    border-top-right-radius: .15rem;
+    color: var(--footer-color);
+    padding: .125rem 1.5rem;
+    padding-left: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1;
+    font-size: .85rem;
+
+    .footer_api_description {
+
+        p {
+            color: var(--tile-text-color);
+            margin: 0;
+
+            a {
+                color: var(--tile-text-color);
+            }
+        }
+    }
+
+    .footer_design_description {
+
+        p {
+            color: var(--tile-text-color);
+            margin: 0;
+
+            a {
+                color: var(--tile-text-color);
+            }
+        }
+    }
+
+    .footer_text_description {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        .footer_text {
+            p {
+                margin: 0;
+                letter-spacing: .025rem;
+                word-spacing: .05rem;
+                font-size: .85rem;
+                color: var(--tile-text-color);
+            }
+        }
+
+        .footer_icon_container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .75rem;
+
+            a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--tile-text-color);
+                width: 2rem;
+                height: 2rem;
+                padding: 1rem;
+                transition: all .2s ease-in-out;
+                border-radius: 2rem;
+                text-decoration: none;
+
+                i {
+                    font-size: 1.25rem;
+                    color: var(--tile-text-color);
+                    transition: all .2s ease;
+                }
+
+                &:hover {
+
+                    i {
+                        color: var(--tile-present-color);
+                        translate: 0 -12.5%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@import './media';

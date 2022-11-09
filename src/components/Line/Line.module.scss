@@ -1,0 +1,136 @@
+.tile_row {
+    display: flex;
+    gap: .35rem;
+
+    .tile {
+        background-color: var(--app-bg-color);
+        width: 3.85rem;
+        height: 3.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        font-size: 2rem;
+        border: .1rem solid var(--tile-border-color);
+        font-weight: bold;
+
+        .letter {
+            z-index: 3;
+            color: var(--tile-text-color);
+        }
+
+        &.tick {
+            @keyframes tick {
+                0% {
+                    scale: 1;
+                }
+
+                50% {
+                    scale: 1.15;
+                }
+
+                100% {
+                    scale: 1;
+                }
+            }
+            animation: tick .5s ease 0s;
+        }
+
+        &.shake {
+            @keyframes shake {
+                16% {
+                    scale: .95;
+                }
+
+                32% {
+                    rotate: z 4deg;
+                    scale: .95;
+                }
+
+                48% {
+                    rotate: z -8deg;
+                    scale: .9;
+                }
+
+                65% {
+                    rotate: z 4deg;
+                    scale: .95;
+                }
+
+                82% {
+                    rotate: z -8deg;
+                    scale: .925;
+                }
+
+                100% {
+                    rotate: z 4deg;
+                    scale: 1;
+                }
+            }
+
+            animation: shake .5s linear alternate-reverse;
+        }
+
+        &.flip {
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 2;
+                background-color: inherit;
+
+                @keyframes flip {
+                    0% {
+                        opacity: 0;
+                        background-color: var(--tile-wrong-color);
+                    }
+
+                    25% {
+                        opacity: 0;
+                        background-color: var(--tile-wrong-color);
+                    }
+
+                    50% {
+                        opacity: 1;
+                    }
+
+                    100% {
+                        opacity: 1;
+                        rotate: x 180deg;
+                    }
+                }
+
+                animation: flip 1s ease-in-out;
+            }
+
+            &.green {
+                border: none;
+
+                &::before {
+                    background-color: var(--tile-correct-color);
+                }
+            }
+
+            &.yellow {
+                border: none;
+
+                &::before {
+                    background-color: var(--tile-present-color);
+                }
+            }
+
+            &.grey {
+                border: none;
+
+                &::before {
+                    background-color: var(--tile-wrong-color);
+                }
+            }
+        }
+    }
+}

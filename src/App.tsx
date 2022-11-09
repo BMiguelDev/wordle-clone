@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 
 import "./App.scss";
 import { WordData } from "./data/WordData";
-import { Line } from "./Line";
+import { Line } from "./components/Line/Line";
+import Footer from "./components/Footer/Footer";
+import Navbar from "./components/Navbar/Navbar";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
@@ -158,8 +160,17 @@ export default function App() {
         }
 
         const handleKeydown = (event: KeyboardEvent) => {
-            if (currentGuess.length < gameSettings.wordLength && event.key.length === 1 && /[a-zA-Z]/.test(event.key))
+            if (currentGuess.length < gameSettings.wordLength && event.key.length === 1 && /[a-zA-Z]/.test(event.key)) {
+                setLineClassNames(prevLineClassNames => {
+                    let newLineClassNames = [...prevLineClassNames];
+                    newLineClassNames[currentStage] = newLineClassNames[currentStage].map((className, index) => {
+                        if(index===currentGuess.length) return "tile tick";
+                        else return "tile";
+                    })
+                    return newLineClassNames;
+                });
                 setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + event.key);
+            }
             else if (event.key === "Enter") {
                 if (currentGuess.length === gameSettings.wordLength) {
                     if (isApiAvailable.isDictionaryApiAvailable) {
@@ -174,22 +185,28 @@ export default function App() {
                                         newLineClassNames[currentStage] = classArray;
                                         return newLineClassNames;
                                     });
-                                    if(notificationsDivRef.current?.className.includes('notification_container_animate')) resetAnimation();
-                                  
+                                    if (
+                                        notificationsDivRef.current?.className.includes(
+                                            "notification_container_animate"
+                                        )
+                                    )
+                                        resetAnimation();
+
                                     //alert("Word doesn't exist");
                                 }
                             })
                             .catch((error) => {
                                 console.log(error);
                             });
-                    } else { // if dictionary Api is not available, don't check if word exists and allow any word
+                    } else {
+                        // if dictionary Api is not available, don't check if word exists and allow any word
                         handleStageChange();
                     }
                 }
             } else if (event.key === "Backspace") {
-                // After hitting backspace, if current row had className "shake", remove it (so that it can be 
+                // After hitting backspace, if current row had className "shake", remove it (so that it can be
                 // added again if word doesn't exist and trigger the shaking animation again)
-                if(lineClassNames[currentStage][0]==="tile shake") {
+                if (lineClassNames[currentStage][0] === "tile shake") {
                     const newLineClassNamesRow: string[] = Array(gameSettings.wordLength).fill("tile");
                     setLineClassNames((prevLineClassNames) => {
                         let newLineClassNames = [...prevLineClassNames];
@@ -261,22 +278,23 @@ export default function App() {
             if (currentGuess.length === gameSettings.wordLength) {
                 fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                     .then((response) => {
-                if (response.ok) console.log("handleStateChange"); //handleStageChange();
-                    else {
-                        let classArray: string[] = "tile shake,".repeat(5).split(",");
-                        classArray.pop();
-                        setLineClassNames((prevLineClassNames) => {
-                            let newLineClassNames = [...prevLineClassNames];
-                            newLineClassNames[currentStage] = classArray;
-                            return newLineClassNames;
-                        });
-                        
-                        if(notificationsDivRef.current?.className.includes('notification_container_animate')) resetAnimation();
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+                        if (response.ok) console.log("handleStateChange"); //handleStageChange();
+                        else {
+                            let classArray: string[] = "tile shake,".repeat(5).split(",");
+                            classArray.pop();
+                            setLineClassNames((prevLineClassNames) => {
+                                let newLineClassNames = [...prevLineClassNames];
+                                newLineClassNames[currentStage] = classArray;
+                                return newLineClassNames;
+                            });
+
+                            if (notificationsDivRef.current?.className.includes("notification_container_animate"))
+                                resetAnimation();
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
             }
         } else if (letter === "Backspace") {
             setCurrentGuess((prevCurrentGuess) => {
@@ -291,158 +309,217 @@ export default function App() {
     const notificationsDivRef = useRef<HTMLDivElement>(null);
 
     function resetAnimation() {
-        if(notificationsDivRef.current) notificationsDivRef.current.className='notification_container notification_container_invisible';
+        if (notificationsDivRef.current)
+            notificationsDivRef.current.className = "notification_container notification_container_invisible";
         setTimeout(() => {
-            if(notificationsDivRef.current) notificationsDivRef.current.className="notification_container notification_container_animate";
-        }, 100)
+            if (notificationsDivRef.current)
+                notificationsDivRef.current.className = "notification_container notification_container_animate";
+        }, 100);
     }
     // TODO:
     // - refactor code components
     // - make game settings work
-    // - Add Footer and Header (header is just to look like the target website)
-    // - Fix handleEnter (both Api call and function being only iniside useEffect)
-    // - Fix notification div not reshowing when user enters the same currentGuess
+    // - Fix handleEnter/ handleKeyDown (both Api call and function being only iniside useEffect):
+    //     - make tick animation work in both keys and keyboard
+    //     - Make enter functionality work in both keys and keyboard
+    // - Make tiles shake again when user enters the same currentGuess
+    // - Do HardMode game setting
+    // - Dark Mode
+    // - Fix game tiles animation to match keyboard tiles animation
+    // - make flip animation global for keyboard tiles and make another animation for the color change
 
     return (
-        <div className="app">
-            <div className="gameboard_container">
-                {stageWordArray.map((line, index) => {
-                    const isCurrentStage = index === currentStage;
-                    return (
-                        <Line
-                            key={index}
-                            line={isCurrentStage ? currentGuess : line ?? ""}
-                            lineClassNames={lineClassNames}
-                            index={index}
-                            wordLength={gameSettings.wordLength}
-                        />
-                    );
-                })}
-            </div>
-            <button ref={resetButtonRef} onClick={resetGame}>
-                Reset
-            </button>
-            <div className="keyboard_container">
-                <div className="keyboard_row">
-                    {ALPHABET_LETTERS.substring(0, ALPHABET_LETTERS.search("p") + 1)
-                        .split("")
-                        .map((letter, index) => {
-                            let letterClassName: string = "keyboard_letter_tile";
-                            stageWordArray.forEach((word, index) => {
-                                const letterIndexInStageWord = word.search(letter);
-                                if (letterIndexInStageWord !== -1) {
-                                    if (lineClassNames[index][letterIndexInStageWord].includes("green"))
-                                        letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
-                                    else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
-                                        if (!letterClassName.includes("keyboard_letter_tile_green"))
-                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_yellow";
-                                    } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
-                                        if (
-                                            !letterClassName.includes("keyboard_letter_tile_green") &&
-                                            !letterClassName.includes("keyboard_letter_tile_yellow")
-                                        )
-                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_grey";
-                                    }
-                                }
-                            });
+        <div className="app_container">
+            <Navbar />
+
+            <main className="main_container">
+                <div className="game_container">
+                    <div className="gameboard_container">
+                        {stageWordArray.map((line, index) => {
+                            const isCurrentStage = index === currentStage;
                             return (
-                                <div onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
-                                    <p className="keyboard_letter_text">{letter}</p>
-                                </div>
+                                <Line
+                                    key={index}
+                                    line={isCurrentStage ? currentGuess : line ?? ""}
+                                    lineClassNames={lineClassNames}
+                                    index={index}
+                                    wordLength={gameSettings.wordLength}
+                                />
                             );
                         })}
-                </div>
-                <div className="keyboard_row">
-                    {ALPHABET_LETTERS.substring(ALPHABET_LETTERS.search("p") + 1, ALPHABET_LETTERS.search("l") + 1)
-                        .split("")
-                        .map((letter, index) => {
-                            let letterClassName: string = "keyboard_letter_tile";
-                            stageWordArray.forEach((word, index) => {
-                                const letterIndexInStageWord = word.search(letter);
-                                if (letterIndexInStageWord !== -1) {
-                                    if (lineClassNames[index][letterIndexInStageWord].includes("green"))
-                                        letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
-                                    else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
-                                        if (!letterClassName.includes("keyboard_letter_tile_green"))
-                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_yellow";
-                                    } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
-                                        if (
-                                            !letterClassName.includes("keyboard_letter_tile_green") &&
-                                            !letterClassName.includes("keyboard_letter_tile_yellow")
-                                        )
-                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_grey";
-                                    }
+                    </div>
+
+                    <div className="keyboard_container">
+                        <div className="keyboard_row">
+                            {ALPHABET_LETTERS.substring(0, ALPHABET_LETTERS.search("p") + 1)
+                                .split("")
+                                .map((letter, index) => {
+                                    let letterClassName: string = "keyboard_letter_tile";
+                                    stageWordArray.forEach((word, index) => {
+                                        const letterIndexInStageWord = word.search(letter);
+                                        if (letterIndexInStageWord !== -1) {
+                                            if (lineClassNames[index][letterIndexInStageWord].includes("green"))
+                                                letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
+                                            else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
+                                                if (!letterClassName.includes("keyboard_letter_tile_green"))
+                                                    letterClassName =
+                                                        "keyboard_letter_tile keyboard_letter_tile_yellow";
+                                            } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
+                                                if (
+                                                    !letterClassName.includes("keyboard_letter_tile_green") &&
+                                                    !letterClassName.includes("keyboard_letter_tile_yellow")
+                                                )
+                                                    letterClassName = "keyboard_letter_tile keyboard_letter_tile_grey";
+                                            }
+                                        }
+                                    });
+                                    return (
+                                        <div
+                                            onClick={() => handleLetterClick(letter)}
+                                            key={index}
+                                            className={letterClassName}
+                                        >
+                                            <p className="keyboard_letter_text">{letter}</p>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                        <div className="keyboard_row">
+                            {ALPHABET_LETTERS.substring(
+                                ALPHABET_LETTERS.search("p") + 1,
+                                ALPHABET_LETTERS.search("l") + 1
+                            )
+                                .split("")
+                                .map((letter, index) => {
+                                    let letterClassName: string = "keyboard_letter_tile";
+                                    stageWordArray.forEach((word, index) => {
+                                        const letterIndexInStageWord = word.search(letter);
+                                        if (letterIndexInStageWord !== -1) {
+                                            if (lineClassNames[index][letterIndexInStageWord].includes("green"))
+                                                letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
+                                            else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
+                                                if (!letterClassName.includes("keyboard_letter_tile_green"))
+                                                    letterClassName =
+                                                        "keyboard_letter_tile keyboard_letter_tile_yellow";
+                                            } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
+                                                if (
+                                                    !letterClassName.includes("keyboard_letter_tile_green") &&
+                                                    !letterClassName.includes("keyboard_letter_tile_yellow")
+                                                )
+                                                    letterClassName = "keyboard_letter_tile keyboard_letter_tile_grey";
+                                            }
+                                        }
+                                    });
+                                    return (
+                                        <div
+                                            onClick={() => handleLetterClick(letter)}
+                                            key={index}
+                                            className={letterClassName}
+                                        >
+                                            <p className="keyboard_letter_text">{letter}</p>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                        <div className="keyboard_row">
+                            <p
+                                className={
+                                    currentGuess.length === 5 && !lineClassNames[currentStage][0].includes("shake")
+                                        ? "keyboard_letter_tile keyboard_letter_tile_special keyboard_letter_tile_highlight"
+                                        : "keyboard_letter_tile keyboard_letter_tile_special"
                                 }
-                            });
-                            return (
-                                <p onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
-                                    {letter}
-                                </p>
-                            );
-                        })}
-                </div>
-                <div className="keyboard_row">
-                    <p className={ currentGuess.length===5 && !lineClassNames[currentStage][0].includes("shake") ? "keyboard_letter_tile keyboard_letter_tile_special keyboard_letter_tile_highlight" : "keyboard_letter_tile keyboard_letter_tile_special"} onClick={() => handleLetterClick("Enter")}>Enter</p>
-                    {ALPHABET_LETTERS.substring(ALPHABET_LETTERS.search("l") + 1, ALPHABET_LETTERS.length)
-                        .split("")
-                        .map((letter, index) => {
-                            let letterClassName: string = "keyboard_letter_tile";
-                            stageWordArray.forEach((word, index) => {
-                                const letterIndexInStageWord = word.search(letter);
-                                if (letterIndexInStageWord !== -1) {
-                                    if (lineClassNames[index][letterIndexInStageWord].includes("green"))
-                                        letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
-                                    else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
-                                        if (!letterClassName.includes("keyboard_letter_tile_green"))
-                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_yellow";
-                                    } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
-                                        if (
-                                            !letterClassName.includes("keyboard_letter_tile_green") &&
-                                            !letterClassName.includes("keyboard_letter_tile_yellow")
-                                        )
-                                            letterClassName = "keyboard_letter_tile keyboard_letter_tile_grey";
-                                    }
+                                onClick={() => handleLetterClick("Enter")}
+                            >
+                                Enter
+                            </p>
+                            {ALPHABET_LETTERS.substring(ALPHABET_LETTERS.search("l") + 1, ALPHABET_LETTERS.length)
+                                .split("")
+                                .map((letter, index) => {
+                                    let letterClassName: string = "keyboard_letter_tile";
+                                    stageWordArray.forEach((word, index) => {
+                                        const letterIndexInStageWord = word.search(letter);
+                                        if (letterIndexInStageWord !== -1) {
+                                            if (lineClassNames[index][letterIndexInStageWord].includes("green"))
+                                                letterClassName = "keyboard_letter_tile keyboard_letter_tile_green";
+                                            else if (lineClassNames[index][letterIndexInStageWord].includes("yellow")) {
+                                                if (!letterClassName.includes("keyboard_letter_tile_green"))
+                                                    letterClassName =
+                                                        "keyboard_letter_tile keyboard_letter_tile_yellow";
+                                            } else if (lineClassNames[index][letterIndexInStageWord].includes("grey")) {
+                                                if (
+                                                    !letterClassName.includes("keyboard_letter_tile_green") &&
+                                                    !letterClassName.includes("keyboard_letter_tile_yellow")
+                                                )
+                                                    letterClassName = "keyboard_letter_tile keyboard_letter_tile_grey";
+                                            }
+                                        }
+                                    });
+                                    return (
+                                        <div
+                                            onClick={() => handleLetterClick(letter)}
+                                            key={index}
+                                            className={letterClassName}
+                                        >
+                                            <p className="keyboard_letter_text">{letter}</p>
+                                        </div>
+                                    );
+                                })}
+                            <p
+                                className={
+                                    currentGuess.length === 5 && lineClassNames[currentStage][0].includes("shake")
+                                        ? "keyboard_letter_tile keyboard_letter_tile_special keyboard_letter_tile_highlight"
+                                        : "keyboard_letter_tile keyboard_letter_tile_special"
                                 }
-                            });
-                            return (
-                                <p onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
-                                    {letter}
-                                </p>
-                            );
-                        })}
-                    <p className={ currentGuess.length===5 && lineClassNames[currentStage][0].includes("shake") ? "keyboard_letter_tile keyboard_letter_tile_special keyboard_letter_tile_highlight" : "keyboard_letter_tile keyboard_letter_tile_special"} onClick={() => handleLetterClick("Backspace")}>
-                        <i className="fa-solid fa-delete-left"></i>
-                    </p>
+                                onClick={() => handleLetterClick("Backspace")}
+                            >
+                                <i className="fa-solid fa-delete-left"></i>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div className="game_settings_container">
-                <div>
-                    <p>Word Lenght</p>
-                    <button onClick={() => handleChangeWordLength("increment")}>+</button>
-                    {gameSettings.wordLength}
-                    <button onClick={() => handleChangeWordLength("decrement")}>-</button>
+
+                <button className="reset_button" ref={resetButtonRef} onClick={resetGame}>
+                    New Game
+                </button>
+
+                <div className="game_settings_container">
+                    <div>
+                        <p>Word Lenght</p>
+                        <button onClick={() => handleChangeWordLength("increment")}>+</button>
+                        {gameSettings.wordLength}
+                        <button onClick={() => handleChangeWordLength("decrement")}>-</button>
+                    </div>
+                    <div>
+                        <p>Number of Stages</p>
+                        <button onClick={() => handleChangeStages("increment")}>+</button>
+                        {gameSettings.numberStages}
+                        <button onClick={() => handleChangeStages("decrement")}>-</button>
+                    </div>
                 </div>
-                <div>
-                    <p>Number of Stages</p>
-                    <button onClick={() => handleChangeStages("increment")}>+</button>
-                    {gameSettings.numberStages}
-                    <button onClick={() => handleChangeStages("decrement")}>-</button>
+
+                <div className="api_warnings">
+                    {isApiAvailable.isDictionaryApiAvailable ? (
+                        <p>DictionaryApi is available</p>
+                    ) : (
+                        <p>DictionaryApi is not available</p>
+                    )}
+
+                    {isApiAvailable.isWordApiAvailable ? <p>WordApi is available</p> : <p>WordApi is not available</p>}
                 </div>
-            </div>
 
-            <div className="api_warnings">
-                {isApiAvailable.isDictionaryApiAvailable ? (
-                    <p>DictionaryApi is available</p>
-                ) : (
-                    <p>DictionaryApi is not available</p>
-                )}
-
-                {isApiAvailable.isWordApiAvailable ? <p>WordApi is available</p> : <p>WordApi is not available</p>}
-            </div>
-
-            <div ref={notificationsDivRef} className={(lineClassNames[currentStage] != null && lineClassNames[currentStage][0].includes('shake')) ? "notification_container notification_container_animate" : "notification_container notification_container_invisible" }>
+                <div
+                    ref={notificationsDivRef}
+                    className={
+                        lineClassNames[currentStage] != null && lineClassNames[currentStage][0].includes("shake")
+                            ? "notification_container notification_container_animate"
+                            : "notification_container notification_container_invisible"
+                    }
+                >
                     Word doesn't exist
-            </div>
+                </div>
+            </main>
+
+            <Footer />
         </div>
     );
 }

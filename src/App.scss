@@ -1,3 +1,7 @@
+// Font imports
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Volkhov:wght@700&display=swap');
+
 // General page content
 * {
     box-sizing: border-box;
@@ -7,259 +11,221 @@ html,
 body {
     margin: 0;
     padding: 0;
+    font-family: 'Open Sans', sans-serif;
 }
 
-
+// Style variables
 :root {
     --tile-correct-color: #538d4e;
     --tile-present-color: #b59f3b;
     --tile-wrong-color: #3a3a3c;
+    --tile-border-color: #363636;
+    --tile-text-color: #ffffff;
     --keyboard-letter-tile-bg-color: #818384;
     --keyboard-letter-highlight-color: #5c8d78;
+    --keyboard-letter-text-color: #ffffff;
     --app-bg-color: #121213;
+    --header-border-color: #3a3a3c;
+    --footer-bg-color: rgb(27, 27, 27);
 }
 
 
 // App content
-.app {
-
+.app_container {
     width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
-    //gap: .3rem;
-    color: white;
+    justify-content: space-between;
     background-color: var(--app-bg-color);
 }
 
-.gameboard_container {
+
+.game_container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: .3rem;
-}
+    justify-content: space-between;
+    gap: 2rem;
 
-.tile_row {
-    display: flex;
-    gap: .3rem;
-}
-
-.tile {
-    background-color: rgb(31, 31, 31);
-    width: 3.75rem;
-    height: 3.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-transform: uppercase;
-    font-size: 2rem;
-    border: .05rem solid rgb(112, 112, 112);
-    font-weight: bold;
-
-    .letter {
-        z-index: 3;
-    }
-
-    &.shake {
-        @keyframes shake {
-            16% {
-                scale: .95;
-            }
-
-            32% {
-                rotate: z 4deg;
-                scale: .95;
-            }
-
-            48% {
-                rotate: z -8deg;
-                scale: .9;
-            }
-
-            65% {
-                rotate: z 4deg;
-                scale: .95;
-            }
-
-            82% {
-                rotate: z -8deg;
-                scale: .925;
-            }
-
-            100% {
-                rotate: z 4deg;
-                scale: 1;
-            }
-        }
-        animation: shake .5s linear alternate-reverse;
-    }
-
-    &.flip {
-        position: relative;
-
-        &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            background-color: inherit;
-
-            @keyframes flip {
-                0% {
-                    opacity: 0;
-                    background-color: rgb(31, 31, 31);
-                }
-
-                25% {
-                    opacity: 0;
-                    background-color: rgb(37, 37, 37);
-                }
-
-                50% {
-                    opacity: 1;
-                }
-
-                100% {
-                    opacity: 1;
-                    rotate: x 180deg;
-                }
-            }
-            animation: flip 1s ease-in-out;
-        }
-
-        &.green {
-            border: none;
-            &::before {
-                background-color: var(--tile-correct-color);
-            }
-        }
-
-        &.yellow {
-            border: none;
-            &::before {
-                background-color: var(--tile-present-color);
-            }
-        }
-
-        &.grey {
-            border: none;
-            &::before {
-                background-color: var(--tile-wrong-color);
-            }
-        }
-    }
-}
-
-.keyboard_container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .5rem;
-
-    .keyboard_row {
+    .gameboard_container {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: .4rem;
+        justify-content: center;
+        gap: .35rem;
+    }
 
-        .keyboard_letter_tile {
-            margin: 0;
-            padding: 1.15rem 1rem;
-            width: 2.75rem;
-            background-color: var(--keyboard-letter-tile-bg-color);
-            border-radius: .25rem;
-            text-transform: uppercase;
-            font-size: 1rem;
-            cursor: pointer;
-            //transition: all 1s ease-in-out;
-            position: relative;
+    .keyboard_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: .5rem;
 
-            .keyboard_letter_text {
+        .keyboard_row {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+
+            .keyboard_letter_tile {
                 margin: 0;
-            }
+                padding: 1.15rem 1rem;
+                width: 2.75rem;
+                height: 3.7rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--keyboard-letter-tile-bg-color);
+                border-radius: .25rem;
+                text-transform: uppercase;
+                font-size: .85rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 1s ease-in-out;
+                position: relative;
 
-            &.keyboard_letter_tile_green, &.keyboard_letter_tile_yellow, &.keyboard_letter_tile_grey {
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    z-index: 2;
-                    border-radius: .25rem;
-                    background-color: inherit;
-        
-                    @keyframes flip {
-                        0% {
-                            opacity: 0;
-                            background-color: rgb(206, 206, 206);
-                        }
-        
-                        25% {
-                            opacity: 0;
-                            background-color: rgb(183, 183, 183);
-                        }
-        
-                        50% {
-                            opacity: 1;
-                        }
-        
-                        100% {
-                            opacity: 1;
-                            rotate: x 180deg;
-                        }
-                    }
-                    animation: flip 1s ease-in-out;
+                .keyboard_letter_text {
+                    margin: 0;
+                    z-index: 3;
+                    color: var(--keyboard-letter-text-color);
                 }
-            }
 
-            &.keyboard_letter_tile_green {
-                background-color: var(--tile-correct-color);
-            }
-
-            &.keyboard_letter_tile_yellow {
-                background-color: var(--tile-present-color);
-            }
-
-            &.keyboard_letter_tile_grey {
-                background-color: var(--tile-wrong-color);
-            }
-
-            &.keyboard_letter_tile_special {
-                width: fit-content;
-            }
-
-            &.keyboard_letter_tile_highlight {
-                @keyframes scaleUpAndDown {
+                @keyframes flipKeyboardTile {
                     0% {
-                        scale: 1;
+                        rotate: x 0deg;
+                        //background-color: var(--keyboard-letter-tile-bg-color);
+                    }
+
+                    25% {
+                        //background-color: var(--keyboard-letter-tile-bg-color);
                     }
 
                     50% {
-                        scale: 1.1;
-                        background-color: var(--keyboard-letter-highlight-color);
+                        rotate: x 90deg;
+                        //background-color: var(--tile-wrong-color);
                     }
 
                     100% {
-                        scale: 1;
+                        rotate: x 0deg;
+                        //background-color: var(--tile-wrong-color);
                     }
                 }
 
-                animation: scaleUpAndDown 1s ease-in-out 0s alternate-reverse infinite;
+                &.keyboard_letter_tile_green {
+                    @keyframes turnToGreen {
+                        0% {
+                            background-color: var(--keyboard-letter-tile-bg-color);
+                        }
+
+                        25% {
+                            background-color: var(--keyboard-letter-tile-bg-color);
+                        }
+
+                        50% {
+                            background-color: var(--tile-correct-color);
+                        }
+
+                        100% {
+                            background-color: var(--tile-correct-color);
+                        }
+                    }
+                    animation: flipKeyboardTile 1s ease-in-out, turnToGreen 1s ease-in-out;
+                    animation-fill-mode: forwards;
+                }
+
+                &.keyboard_letter_tile_yellow {
+                    @keyframes turnToYellow {
+                        0% {
+                            background-color: var(--keyboard-letter-tile-bg-color);
+                        }
+
+                        25% {
+                            background-color: var(--keyboard-letter-tile-bg-color);
+                        }
+
+                        50% {
+                            background-color: var(--tile-present-color);
+                        }
+
+                        100% {
+                            background-color: var(--tile-present-color);
+                        }
+                    }
+                    animation: flipKeyboardTile 1s ease-in-out, turnToYellow 1s ease-in-out;
+                    animation-fill-mode: forwards;
+                }
+
+                &.keyboard_letter_tile_grey {
+                     @keyframes turnToGrey {
+                        0% {
+                            background-color: var(--keyboard-letter-tile-bg-color);
+                        }
+
+                        25% {
+                            background-color: var(--keyboard-letter-tile-bg-color);
+                        }
+
+                        50% {
+                            background-color: var(--tile-wrong-color);
+                        }
+
+                        100% {
+                            background-color: var(--tile-wrong-color);
+                        }
+                    }
+                    animation: flipKeyboardTile 1s ease-in-out, turnToGrey 1s ease-in-out;
+                    animation-fill-mode: forwards;
+                }
+
+                &.keyboard_letter_tile_special {
+                    width: fit-content;
+                    color: var(--tile-text-color);
+                }
+
+                &.keyboard_letter_tile_highlight {
+                    @keyframes scaleUpAndDown {
+                        0% {
+                            scale: 1;
+                        }
+
+                        50% {
+                            scale: 1.1;
+                            background-color: var(--keyboard-letter-highlight-color);
+                        }
+
+                        100% {
+                            scale: 1;
+                        }
+                    }
+
+                    animation: scaleUpAndDown 1s ease-in-out 0s alternate-reverse infinite;
+                }
             }
         }
     }
 }
 
 
+.reset_button {
+    position: absolute;
+    top: 80%;
+    right: 20%;
+}
+
 .game_settings_container {
+    position: absolute;
+    top: 20%;
+    right: 20%;
     display: none;
+    color: var(--tile-text-color);
+}
+
+.api_warnings {
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    color: var(--tile-text-color);
 }
 
 .notification_container {
@@ -267,35 +233,35 @@ body {
     top: 10%;
     left: 50%;
     padding: 1rem;
-    background-color: white;
-    color: black;
+    background-color: var(--tile-text-color);
+    color: var(--app-bg-color);
     width: fit-content;
     z-index: 4;
 
 
-        @keyframes popInAndOut {
-            0% {
-                opacity: .25;
-            }
-    
-            25% {
-                opacity: 1;
-            }
-    
-            75% {
-                opacity: 1;
-            }
-    
-            100% {
-                opacity: 0;
-            }
+    @keyframes popInAndOut {
+        0% {
+            opacity: .25;
         }
-        animation: popInAndOut 2s ease 0s;
-        animation-fill-mode: forwards;
-    
-    
+
+        25% {
+            opacity: 1;
+        }
+
+        75% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    animation: popInAndOut 2s ease 0s;
+    animation-fill-mode: forwards;
+
+
     &.notification_container_invisible {
         display: none;
     }
 }
-
