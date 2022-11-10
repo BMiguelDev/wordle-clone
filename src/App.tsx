@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 
 import "./App.scss";
 import { WordData } from "./data/WordData";
-import { Line } from "./components/Line/Line";
+import { gameSettingsType, isApiAvailableType, randomWordAndArrayType } from "./models/model";
+import Line from "./components/Line/Line";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import KeyboardRow from "./components/KeyboardRow/KeyboardRow";
+import SettingsPopUp from "./components/SettingsPopUp/SettingsPopUp";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
@@ -34,24 +36,11 @@ export default function App() {
     });
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isSettingsPopUpOpen, setIsSettingsPopUpOpen] = useState<boolean>(false);
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
 
     // Ref variable to access reset button
     const resetButtonRef = useRef<HTMLButtonElement>(null);
-
-    interface isApiAvailableType {
-        isDictionaryApiAvailable: boolean;
-        isWordApiAvailable: boolean;
-    }
-    interface randomWordAndArrayType {
-        randomWord: string;
-        randomWordArray: string[];
-    }
-
-    interface gameSettingsType {
-        numberStages: number;
-        wordLength: number;
-        hardMode: boolean;
-    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -129,8 +118,46 @@ export default function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
+
+    useEffect(() => {
+        console.log("Changed CurrentGuess");
+    }, [currentGuess]);
+
+    useEffect(() => {
+        console.log("Changed currentStage");
+    }, [currentStage]);
+
+    useEffect(() => {
+        console.log("Changed randomWordAndArray");
+    }, [randomWordAndArray]);
+
+    useEffect(() => {
+        console.log("Changed gameSettings");
+    }, [gameSettings]);
+
+    useEffect(() => {
+        console.log("Changed stageWordArray");
+    }, [stageWordArray]);
+
+    useEffect(() => {
+        console.log("Changed isApiAvailable");
+    }, [isApiAvailable]);
+
+    useEffect(() => {
+        console.log("Changed isLoading");
+    }, [isLoading]);
+
+    useEffect(() => {
+        console.log("Changed lineClassNames");
+    }, [lineClassNames]);
+
+
+
+
     useEffect(() => {
         function handleStageChange() {
+            console.log(gameSettings.numberStages);
             if (currentStage < gameSettings.numberStages) {
                 //Make checks
                 let colorArray: string[] = [];
@@ -148,7 +175,6 @@ export default function App() {
                         });
                         colorArray.push(color);
                     });
-
                 setLineClassNames((prevLineClassNames) => {
                     let newLineClassNames = [...prevLineClassNames];
                     newLineClassNames[currentStage] = colorArray;
@@ -217,8 +243,7 @@ export default function App() {
                     }
                 }
             } else if (event.key === "Backspace") {
-                // After hitting backspace, if current row had className "shake", remove it (so that it can be
-                // added again if word doesn't exist and trigger the shaking animation again)
+                // After hitting backspace, if current row had className "shake", remove it so it can be added again to trigger animation
                 if (lineClassNames[currentStage][0] === "tile shake") {
                     const newLineClassNamesRow: string[] = Array(gameSettings.wordLength).fill("tile");
                     setLineClassNames((prevLineClassNames) => {
@@ -233,17 +258,24 @@ export default function App() {
                 });
             }
         };
+
+        console.log("Im in the big useEffect");
+
         // If random word hasn't been correctly guessed yet and if last stage hasn't been reached, let user keep typing guessess
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
+            console.log(gameSettings.numberStages)
             if (currentStage < gameSettings.numberStages) {
                 window.addEventListener("keydown", handleKeydown);
+                console.log("I created new event listener")
             } else alert(`Game over, random word was ${randomWordAndArray.randomWord}`);
         }
 
         return () => {
             window.removeEventListener("keydown", handleKeydown);
+            console.log("I removed event listener");
         };
-    }, [currentGuess, currentStage, randomWordAndArray, gameSettings, stageWordArray, isApiAvailable, lineClassNames]);
+    }, [currentGuess, currentStage, randomWordAndArray, stageWordArray, isApiAvailable, gameSettings, lineClassNames]);
+
 
     function resetGame() {
         resetButtonRef.current?.blur();
@@ -262,29 +294,68 @@ export default function App() {
         setCurrentStage(0);
     }
 
-    function handleChangeStages(type: string) {
-        if (gameSettings.numberStages > 13 || gameSettings.numberStages < 1) return;
-        if (type === "increment" && gameSettings.numberStages < 13)
-            setGameSettings((prevGameSettings) => ({
-                ...gameSettings,
-                numberStages: prevGameSettings.numberStages + 1,
-            }));
-        else if (type === "decrement" && gameSettings.numberStages > 1)
-            setGameSettings((prevGameSettings) => ({
-                ...gameSettings,
-                numberStages: prevGameSettings.numberStages - 1,
-            }));
-        else return;
+    // function handleChangeStages(type: string) {
+    //     if (gameSettings.numberStages > 13 || gameSettings.numberStages < 1) return;
+    //     if (type === "increment" && gameSettings.numberStages < 13)
+    //         setGameSettings((prevGameSettings) => ({
+    //             ...gameSettings,
+    //             numberStages: prevGameSettings.numberStages + 1,
+    //         }));
+    //     else if (type === "decrement" && gameSettings.numberStages > 1)
+    //         setGameSettings((prevGameSettings) => ({
+    //             ...gameSettings,
+    //             numberStages: prevGameSettings.numberStages - 1,
+    //         }));
+    //     else return;
+    // }
+
+    // function handleChangeWordLength(type: string) {
+    //     if (gameSettings.wordLength > 10 || gameSettings.wordLength < 2) return;
+    //     if (type === "increment" && gameSettings.wordLength < 10)
+    //         setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength + 1 }));
+    //     else if (type === "decrement" && gameSettings.wordLength > 2)
+    //         setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength - 1 }));
+    //     else return;
+    // }
+
+    // function handleChangeHardMode(option: boolean) {
+    //     setGameSettings({ ...gameSettings, hardMode: option });
+    //}
+
+
+    function handleChangeGameSettings(gameSetting: string, option: string) {
+        switch (gameSetting) {
+            case "word-length":
+                if (gameSettings.wordLength > 10 || gameSettings.wordLength < 2) return;
+                if (option === "increment" && gameSettings.wordLength < 10)
+                    setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength + 1 }));
+                else if (option === "decrement" && gameSettings.wordLength > 2)
+                    setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength - 1 }));
+                return;
+
+            case "stage-number":
+                if (gameSettings.numberStages > 13 || gameSettings.numberStages < 1) return;
+                if (option === "increment" && gameSettings.numberStages < 13)
+                    setGameSettings((prevGameSettings) => ({
+                        ...gameSettings,
+                        numberStages: prevGameSettings.numberStages + 1,
+                    }));
+                else if (option === "decrement" && gameSettings.numberStages > 1)
+                    setGameSettings((prevGameSettings) => ({
+                        ...gameSettings,
+                        numberStages: prevGameSettings.numberStages - 1,
+                    }));
+                return;
+
+            case "hard-mode":
+                setGameSettings(prevGameSettings => ({ ...gameSettings, hardMode: !prevGameSettings.hardMode }));
+                return;
+        
+            default:
+                return;
+        }
     }
 
-    function handleChangeWordLength(type: string) {
-        if (gameSettings.wordLength > 10 || gameSettings.wordLength < 2) return;
-        if (type === "increment" && gameSettings.numberStages < 10)
-            setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength + 1 }));
-        else if (type === "decrement" && gameSettings.numberStages > 2)
-            setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength - 1 }));
-        else return;
-    }
 
     function handleLetterClick(letter: string) {
         if (letter === "Enter") {
@@ -330,18 +401,23 @@ export default function App() {
         }, 100);
     }
 
-    function handleChangeHardMode(option: boolean) {
-        setGameSettings({ ...gameSettings, hardMode: option });
+    function toogleIsSettingsPopUpOpen() {
+        setIsSettingsPopUpOpen(prevIsSettingsPopUpOpen => !prevIsSettingsPopUpOpen);
     }
 
     // TODO:
-    // - make game settings work
+    // - make game settings work (Change gameSettings to object with prevGameSettings; only apply newGameSettings on gameReset; big 
+    //      useEffect should have prevGameSettings)
+    // - Fix gameSetting of word length (upon changing word length settings, also change size of lineClassNames array)
+    // - Make 2 functions inside big UseEffect as useCallBack and put only currentGuess and those two callback functions in the dependency array of big useEffect
     // - Fix handleEnter/ handleKeyDown (both Api call and function being only iniside useEffect):
     //     - make tick animation work in both keys and keyboard
     //     - Make enter functionality work in both keys and keyboard
     //     - Make sure all logic present in game board is also present when the handleEnter/handleKeyDown/handleWhatever functions are called in keyboard
     // - Do HardMode game setting
     // - Dark Mode
+    // - Make settings component (as pop up)
+    // - Make winning message component (as pop up) appear after tiles flip (maybe keep track of player wins, and how many guesses it took)
 
     
     const keyboardLetterRowsArray: string[] = [
@@ -350,12 +426,12 @@ export default function App() {
         ALPHABET_LETTERS.split("l")[1],
     ];
 
-    console.log("dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
-    console.log("words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
+    console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
+    console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
 
     return (
         <div className="app_container">
-            <Navbar />
+            <Navbar toogleIsSettingsPopUpOpen={toogleIsSettingsPopUpOpen}/>
 
             {isLoading ? (
                 <main className="main_container_loading">
@@ -406,20 +482,19 @@ export default function App() {
                             }`}
                         >
                             <p>Word Lenght</p>
-                            <button onClick={() => handleChangeWordLength("increment")}>+</button>
+                            <button onClick={() => handleChangeGameSettings("word-length", "increment")}>+</button>
                             {gameSettings.wordLength}
-                            <button onClick={() => handleChangeWordLength("decrement")}>-</button>
+                            <button onClick={() => handleChangeGameSettings("word-length", "decrement")}>-</button>
                         </div>
                         <div>
                             <p>Number of Stages</p>
-                            <button onClick={() => handleChangeStages("increment")}>+</button>
+                            <button onClick={() => handleChangeGameSettings("stage-number", "increment")}>+</button>
                             {gameSettings.numberStages}
-                            <button onClick={() => handleChangeStages("decrement")}>-</button>
+                            <button onClick={() => handleChangeGameSettings("stage-number", "decrement")}>-</button>
                         </div>
                         <div className="game_settings_hard_mode">
                             <p>Hard Mode</p>
-                            <button onClick={() => handleChangeHardMode(true)}>Yes</button>
-                            <button onClick={() => handleChangeHardMode(false)}>No</button>
+                            <button onClick={() => handleChangeGameSettings("hard-mode", "")}>Toggle</button>
                         </div>
                     </div>
 
@@ -448,6 +523,9 @@ export default function App() {
                     >
                         Word doesn't exist
                     </div>
+
+                    <SettingsPopUp isSettingsPopUpOpen={isSettingsPopUpOpen} toogleIsSettingsPopUpOpen={toogleIsSettingsPopUpOpen} handleChangeGameSettings={handleChangeGameSettings} gameSettings={gameSettings} isApiAvailable={isApiAvailable}/>
+
                 </main>
             )}
 

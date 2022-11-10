@@ -16,6 +16,9 @@ body {
 
 // Style variables
 :root {
+    --app-bg-color: #121213;
+    --header-border-color: #3a3a3c;
+    --footer-bg-color: rgb(27, 27, 27);
     --tile-correct-color: #538d4e;
     --tile-present-color: #b59f3b;
     --tile-wrong-color: #3a3a3c;
@@ -24,9 +27,10 @@ body {
     --keyboard-letter-tile-bg-color: #818384;
     --keyboard-letter-highlight-color: #5c8d78;
     --keyboard-letter-text-color: #ffffff;
-    --app-bg-color: #121213;
-    --header-border-color: #3a3a3c;
-    --footer-bg-color: rgb(27, 27, 27);
+    --settings-popup-bg-color: #121213;
+    --settings-popup-border-color: #1a1a1b;
+    --settings-popup-box-shadow-color: rgba(0, 0, 0, .5);
+    --settings-text-description-color: #818384;
 }
 
 
@@ -49,6 +53,8 @@ body {
 }
 
 .main_container {
+    position: relative;
+    width: 100%;
 
     .game_container {
         display: flex;
@@ -72,7 +78,6 @@ body {
             gap: .5rem;
         }
     }
-
 
     .reset_button {
         position: absolute;

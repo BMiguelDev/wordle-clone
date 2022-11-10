@@ -1,7 +1,12 @@
 import React from "react";
 import styles from "./Navbar.module.scss";
 
-function Navbar() {
+
+interface PropTypes {
+    toogleIsSettingsPopUpOpen: () => void;
+}
+
+function Navbar({ toogleIsSettingsPopUpOpen }: PropTypes) {
     return (
         <header className={styles.navbar_container}>
             <div className={styles.navbar_menu_container}>
@@ -15,7 +20,7 @@ function Navbar() {
                 <div className={styles.navbar_icon_container}>
                     <i className="fa-sharp fa-solid fa-chart-simple"></i>
                 </div>
-                <div className={styles.navbar_icon_container}>
+                <div className={styles.navbar_icon_container} onClick={toogleIsSettingsPopUpOpen}>
                     <i className="fa-solid fa-gear"></i>
                 </div>
             </div>

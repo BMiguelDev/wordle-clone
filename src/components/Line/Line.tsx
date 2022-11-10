@@ -10,7 +10,7 @@ interface LineProps {
     setLineClassNames: React.Dispatch<React.SetStateAction<string[][]>>;
 }
 
-export function Line({ line, lineClassNames, index, wordLength, setLineClassNames }: LineProps) {
+export default function Line({ line, lineClassNames, index, wordLength, setLineClassNames }: LineProps) {
 
     function handleAnimationEnd(i: number) {
         if (lineClassNames[index][i].includes('shake')) {
