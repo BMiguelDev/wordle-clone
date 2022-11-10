@@ -118,8 +118,6 @@ export default function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
-
     useEffect(() => {
         console.log("Changed CurrentGuess");
     }, [currentGuess]);
@@ -151,9 +149,6 @@ export default function App() {
     useEffect(() => {
         console.log("Changed lineClassNames");
     }, [lineClassNames]);
-
-
-
 
     useEffect(() => {
         function handleStageChange() {
@@ -263,10 +258,12 @@ export default function App() {
 
         // If random word hasn't been correctly guessed yet and if last stage hasn't been reached, let user keep typing guessess
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
-            console.log(gameSettings.numberStages)
+            console.log(gameSettings.numberStages);
             if (currentStage < gameSettings.numberStages) {
-                window.addEventListener("keydown", handleKeydown);
-                console.log("I created new event listener")
+                if(!isSettingsPopUpOpen){
+                    window.addEventListener("keydown", handleKeydown);
+                    console.log("I created new event listener");
+                }
             } else alert(`Game over, random word was ${randomWordAndArray.randomWord}`);
         }
 
@@ -274,8 +271,7 @@ export default function App() {
             window.removeEventListener("keydown", handleKeydown);
             console.log("I removed event listener");
         };
-    }, [currentGuess, currentStage, randomWordAndArray, stageWordArray, isApiAvailable, gameSettings, lineClassNames]);
-
+    }, [currentGuess, currentStage, randomWordAndArray, stageWordArray, isApiAvailable, gameSettings, lineClassNames, isSettingsPopUpOpen]);
 
     function resetGame() {
         resetButtonRef.current?.blur();
@@ -294,43 +290,20 @@ export default function App() {
         setCurrentStage(0);
     }
 
-    // function handleChangeStages(type: string) {
-    //     if (gameSettings.numberStages > 13 || gameSettings.numberStages < 1) return;
-    //     if (type === "increment" && gameSettings.numberStages < 13)
-    //         setGameSettings((prevGameSettings) => ({
-    //             ...gameSettings,
-    //             numberStages: prevGameSettings.numberStages + 1,
-    //         }));
-    //     else if (type === "decrement" && gameSettings.numberStages > 1)
-    //         setGameSettings((prevGameSettings) => ({
-    //             ...gameSettings,
-    //             numberStages: prevGameSettings.numberStages - 1,
-    //         }));
-    //     else return;
-    // }
-
-    // function handleChangeWordLength(type: string) {
-    //     if (gameSettings.wordLength > 10 || gameSettings.wordLength < 2) return;
-    //     if (type === "increment" && gameSettings.wordLength < 10)
-    //         setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength + 1 }));
-    //     else if (type === "decrement" && gameSettings.wordLength > 2)
-    //         setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength - 1 }));
-    //     else return;
-    // }
-
-    // function handleChangeHardMode(option: boolean) {
-    //     setGameSettings({ ...gameSettings, hardMode: option });
-    //}
-
-
     function handleChangeGameSettings(gameSetting: string, option: string) {
         switch (gameSetting) {
             case "word-length":
                 if (gameSettings.wordLength > 10 || gameSettings.wordLength < 2) return;
                 if (option === "increment" && gameSettings.wordLength < 10)
-                    setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength + 1 }));
+                    setGameSettings((prevGameSettings) => ({
+                        ...gameSettings,
+                        wordLength: prevGameSettings.wordLength + 1,
+                    }));
                 else if (option === "decrement" && gameSettings.wordLength > 2)
-                    setGameSettings((prevGameSettings) => ({ ...gameSettings, wordLength: prevGameSettings.wordLength - 1 }));
+                    setGameSettings((prevGameSettings) => ({
+                        ...gameSettings,
+                        wordLength: prevGameSettings.wordLength - 1,
+                    }));
                 return;
 
             case "stage-number":
@@ -348,14 +321,17 @@ export default function App() {
                 return;
 
             case "hard-mode":
-                setGameSettings(prevGameSettings => ({ ...gameSettings, hardMode: !prevGameSettings.hardMode }));
+                setGameSettings((prevGameSettings) => ({ ...gameSettings, hardMode: !prevGameSettings.hardMode }));
                 return;
-        
+
             default:
                 return;
         }
     }
 
+    function handleChangeDarkMode() {
+        setIsDarkMode((prevIsDarkMode) => !prevIsDarkMode);
+    }
 
     function handleLetterClick(letter: string) {
         if (letter === "Enter") {
@@ -402,11 +378,11 @@ export default function App() {
     }
 
     function toogleIsSettingsPopUpOpen() {
-        setIsSettingsPopUpOpen(prevIsSettingsPopUpOpen => !prevIsSettingsPopUpOpen);
+        setIsSettingsPopUpOpen((prevIsSettingsPopUpOpen) => !prevIsSettingsPopUpOpen);
     }
 
     // TODO:
-    // - make game settings work (Change gameSettings to object with prevGameSettings; only apply newGameSettings on gameReset; big 
+    // - make game settings work (Change gameSettings to object with prevGameSettings; only apply newGameSettings on gameReset; big
     //      useEffect should have prevGameSettings)
     // - Fix gameSetting of word length (upon changing word length settings, also change size of lineClassNames array)
     // - Make 2 functions inside big UseEffect as useCallBack and put only currentGuess and those two callback functions in the dependency array of big useEffect
@@ -419,7 +395,6 @@ export default function App() {
     // - Make settings component (as pop up)
     // - Make winning message component (as pop up) appear after tiles flip (maybe keep track of player wins, and how many guesses it took)
 
-    
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
         ALPHABET_LETTERS.split("p")[1].split("z")[0],
@@ -431,7 +406,7 @@ export default function App() {
 
     return (
         <div className="app_container">
-            <Navbar toogleIsSettingsPopUpOpen={toogleIsSettingsPopUpOpen}/>
+            <Navbar toogleIsSettingsPopUpOpen={toogleIsSettingsPopUpOpen} />
 
             {isLoading ? (
                 <main className="main_container_loading">
@@ -470,34 +445,6 @@ export default function App() {
                         </div>
                     </div>
 
-                    {/* TODO: probably move reset button and gamsettings options to the settings option inside navbar */}
-                    <button className="reset_button" ref={resetButtonRef} onClick={resetGame}>
-                        New Game
-                    </button>
-
-                    <div className="game_settings_container">
-                        <div
-                            className={`game_settings_words ${
-                                isApiAvailable.isWordApiAvailable ? "" : "game_settings_words_invisible"
-                            }`}
-                        >
-                            <p>Word Lenght</p>
-                            <button onClick={() => handleChangeGameSettings("word-length", "increment")}>+</button>
-                            {gameSettings.wordLength}
-                            <button onClick={() => handleChangeGameSettings("word-length", "decrement")}>-</button>
-                        </div>
-                        <div>
-                            <p>Number of Stages</p>
-                            <button onClick={() => handleChangeGameSettings("stage-number", "increment")}>+</button>
-                            {gameSettings.numberStages}
-                            <button onClick={() => handleChangeGameSettings("stage-number", "decrement")}>-</button>
-                        </div>
-                        <div className="game_settings_hard_mode">
-                            <p>Hard Mode</p>
-                            <button onClick={() => handleChangeGameSettings("hard-mode", "")}>Toggle</button>
-                        </div>
-                    </div>
-
                     {/* TODO: Remove this (if words API isnt available, use dummy data; if dictionary API isnt available, dont use it) */}
                     <div className="api_warnings">
                         {/* {isApiAvailable.isDictionaryApiAvailable ? (
@@ -524,8 +471,17 @@ export default function App() {
                         Word doesn't exist
                     </div>
 
-                    <SettingsPopUp isSettingsPopUpOpen={isSettingsPopUpOpen} toogleIsSettingsPopUpOpen={toogleIsSettingsPopUpOpen} handleChangeGameSettings={handleChangeGameSettings} gameSettings={gameSettings} isApiAvailable={isApiAvailable}/>
-
+                    <SettingsPopUp
+                        isSettingsPopUpOpen={isSettingsPopUpOpen}
+                        toogleIsSettingsPopUpOpen={toogleIsSettingsPopUpOpen}
+                        handleChangeGameSettings={handleChangeGameSettings}
+                        gameSettings={gameSettings}
+                        isApiAvailable={isApiAvailable}
+                        isDarkMode={isDarkMode}
+                        handleChangeDarkMode={handleChangeDarkMode}
+                        resetButtonRef={resetButtonRef}
+                        resetGame={resetGame}
+                    />
                 </main>
             )}
 

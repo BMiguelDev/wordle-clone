@@ -11,10 +11,23 @@ interface PropTypes {
     handleChangeGameSettings: (gameSetting: string, option: string) => void;
     gameSettings: gameSettingsType;
     isApiAvailable: isApiAvailableType;
-
+    isDarkMode: boolean;
+    handleChangeDarkMode: () => void;
+    resetButtonRef: React.RefObject<HTMLButtonElement>;
+    resetGame: () => void;
 }
 
-export default function SettingsPopUp({ isSettingsPopUpOpen, toogleIsSettingsPopUpOpen, handleChangeGameSettings, gameSettings, isApiAvailable }: PropTypes) {
+export default function SettingsPopUp({
+    isSettingsPopUpOpen,
+    toogleIsSettingsPopUpOpen,
+    handleChangeGameSettings,
+    gameSettings,
+    isApiAvailable,
+    isDarkMode,
+    handleChangeDarkMode,
+    resetButtonRef,
+    resetGame
+}: PropTypes) {
     return (
         <div
             className={`${styles.settings_popup_container} ${
@@ -28,10 +41,14 @@ export default function SettingsPopUp({ isSettingsPopUpOpen, toogleIsSettingsPop
                         <h4>Word Length</h4>
                         <p>Explanation of word Length (if necessary)</p>
                     </div>
-                    <div className={`${styles.singular_setting_toggler} ${isApiAvailable.isWordApiAvailable ? "" : styles.singular_setting_toggler_disabled}`}>
+                    <div
+                        className={`${styles.singular_setting_toggler} ${
+                            isApiAvailable.isWordApiAvailable ? "" : styles.singular_setting_toggler_disabled
+                        }`}
+                    >
                         {/* Toggler */}
                         <button onClick={() => handleChangeGameSettings("word-length", "increment")}>+</button>
-                            {gameSettings.wordLength}
+                        {gameSettings.wordLength}
                         <button onClick={() => handleChangeGameSettings("word-length", "decrement")}>-</button>
                     </div>
                 </div>
@@ -43,7 +60,7 @@ export default function SettingsPopUp({ isSettingsPopUpOpen, toogleIsSettingsPop
                     <div className={styles.singular_setting_toggler}>
                         {/* Toggler */}
                         <button onClick={() => handleChangeGameSettings("stage-number", "increment")}>+</button>
-                            {gameSettings.numberStages}
+                        {gameSettings.numberStages}
                         <button onClick={() => handleChangeGameSettings("stage-number", "decrement")}>-</button>
                     </div>
                 </div>
@@ -63,12 +80,19 @@ export default function SettingsPopUp({ isSettingsPopUpOpen, toogleIsSettingsPop
                     </div>
                     <div className={styles.singular_setting_toggler}>
                         {/* Toggler */}
+                        <button onClick={handleChangeDarkMode}>Toggle</button>
                     </div>
                 </div>
             </div>
-            <div className={styles.settings_popup_footer}>
-                <Footer />
+            <div className={styles.settings_popup_reset_button_container}>
+                <button ref={resetButtonRef} onClick={resetGame}>
+                    Restart Game
+                </button>
             </div>
+
+            {/* <div className={styles.settings_popup_footer}>
+                <Footer />
+            </div> */}
 
             <button className={styles.settings_popup_exit_button} onClick={toogleIsSettingsPopUpOpen}>
                 <i className="fa-solid fa-xmark"></i>

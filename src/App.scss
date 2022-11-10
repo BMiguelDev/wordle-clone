@@ -79,34 +79,13 @@ body {
         }
     }
 
-    .reset_button {
-        position: absolute;
-        top: 80%;
-        right: 20%;
-    }
-
-    .game_settings_container {
-        position: absolute;
-        top: 20%;
-        right: 20%;
-        //display: none;
-        color: var(--tile-text-color);
-
-        .game_settings_words {
-            color: blue;
-
-            &.game_settings_words_invisible {
-                display: none;
-            }
-        }
-    }
-
     .api_warnings {
         position: absolute;
         top: 30%;
         left: 20%;
         color: var(--tile-text-color);
     }
+
 
     .notification_container {
         position: absolute;

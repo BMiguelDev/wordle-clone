@@ -87,12 +87,11 @@
 
             100% {
                 rotate: x 0deg;
+                border: none;
             }
         }
 
         &.green {
-            border: none;
-
             @keyframes turnToGreen {
                 0% {
                     background-color: var(--app-bg-color);
@@ -115,8 +114,6 @@
         }
 
         &.yellow {
-            border: none;
-
             @keyframes turnToYellow {
                 0% {
                     background-color: var(--app-bg-color);
@@ -139,8 +136,6 @@
         }
 
         &.grey {
-            border: none;
-
             @keyframes turnToGrey {
                 0% {
                     background-color: var(--app-bg-color);
