@@ -493,8 +493,6 @@ export default function App() {
     ]);
 
     function resetGame() {
-        //resetButtonRef.current?.blur();
-
         // If word length setting has been changed, get new array of random words from api
         if (gameSettings2.futureGameSettings.wordLength !== gameSettings2.currentGameSettings.wordLength) {
             setIsLoading(true);
