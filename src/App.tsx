@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import "./App.scss";
 import { WordData } from "./data/WordData";
-import { gameSettingsType, isApiAvailableType, randomWordAndArrayType } from "./models/model";
+import { /*gameSettingsType,*/ gameSettings2Type, isApiAvailableType, randomWordAndArrayType } from "./models/model";
 import Line from "./components/Line/Line";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
@@ -13,21 +13,37 @@ const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
 export default function App() {
     // Variable <gameSettings> is an object holding the dynamic settings of the game: number of stages and word lenght
-    const [gameSettings, setGameSettings] = useState<gameSettingsType>({
-        numberStages: 6,
-        wordLength: 5,
-        hardMode: false,
+    // const [gameSettings, setGameSettings] = useState<gameSettingsType>({
+    //     numberStages: 6,
+    //     wordLength: 5,
+    //     hardMode: false,
+    // });
+
+    const [gameSettings2, setGameSettings2] = useState<gameSettings2Type>({
+        currentGameSettings: {
+            numberStages: 6,
+            wordLength: 5,
+            hardMode: false,
+        },
+        futureGameSettings: {
+            numberStages: 6,
+            wordLength: 5,
+        },
     });
 
     const [randomWordAndArray, setRandomWordAndArray] = useState<randomWordAndArrayType>({
         randomWord: "",
         randomWordArray: [],
     });
-    const [stageWordArray, setStageWordArray] = useState<string[]>(Array(gameSettings.numberStages).fill(""));
+    const [stageWordArray, setStageWordArray] = useState<string[]>(
+        Array(gameSettings2.currentGameSettings.numberStages).fill("")
+    );
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [currentStage, setCurrentStage] = useState<number>(0);
     const [lineClassNames, setLineClassNames] = useState<string[][]>(
-        Array(gameSettings.numberStages).fill(Array(gameSettings.wordLength).fill("tile"))
+        Array(gameSettings2.currentGameSettings.numberStages).fill(
+            Array(gameSettings2.currentGameSettings.wordLength).fill("tile")
+        )
     );
     // Object variable holding a boolean for each api used, true is the api is available and false if it's not available
     const [isApiAvailable, setIsApiAvailable] = useState<isApiAvailableType>({
@@ -62,19 +78,19 @@ export default function App() {
                 }
                 const randomLettersString = randomLettersArray.toString().replaceAll(",", "");
 
-                // Get 75 words from API that may include "a"
+                // Get 25 words from API that may include "a"
                 const randomWordsData1 = await fetch(
                     `https://api.datamuse.com/words?sp=${"?".repeat(
-                        gameSettings.wordLength
+                        gameSettings2.currentGameSettings.wordLength
                     )}-1234567890${randomLettersString}&max=25`
                 );
                 console.log("HEY1", randomWordsData1);
                 const randomWordsArray1 = await randomWordsData1.json();
 
-                // Get 425 words from API that don't include "a" (due to most words gotten from API call including and starting with "a")
+                // Get 75 words from API that don't include "a" (due to most words gotten from API call including and starting with "a")
                 const randomWordsData2 = await fetch(
                     `https://api.datamuse.com/words?sp=${"?".repeat(
-                        gameSettings.wordLength
+                        gameSettings2.currentGameSettings.wordLength
                     )}-1234567890aA${randomLettersString}&max=75`
                 );
                 console.log("HEYY2", randomWordsData2);
@@ -130,9 +146,13 @@ export default function App() {
         console.log("Changed randomWordAndArray");
     }, [randomWordAndArray]);
 
+    // useEffect(() => {
+    //     console.log("Changed gameSettings");
+    // }, [gameSettings]);
+
     useEffect(() => {
-        console.log("Changed gameSettings");
-    }, [gameSettings]);
+        console.log("Changed gameSettings2");
+    }, [gameSettings2]);
 
     useEffect(() => {
         console.log("Changed stageWordArray");
@@ -152,7 +172,7 @@ export default function App() {
 
     const handleStageChange = useCallback(
         () => {
-            if (currentStage < gameSettings.numberStages) {
+            if (currentStage < gameSettings2.currentGameSettings.numberStages) {
                 //Make checks
                 let colorArray: string[] = [];
                 currentGuess
@@ -188,13 +208,17 @@ export default function App() {
                 setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
             } else return;
         }, // TODO: replace gameSettings with gameSettings.prevGameSettings or something
-        [currentGuess, currentStage, gameSettings, randomWordAndArray]
+        [currentGuess, currentStage, /*gameSettings,*/ randomWordAndArray, gameSettings2.currentGameSettings]
     );
 
     const handleKeydown = useCallback(
         (event: KeyboardEvent | React.MouseEvent<HTMLParagraphElement, MouseEvent>, key: string = "") => {
             const keyValue: string = key !== "" ? key : (event as KeyboardEvent).key;
-            if (currentGuess.length < gameSettings.wordLength && keyValue.length === 1 && /[a-zA-Z]/.test(keyValue)) {
+            if (
+                currentGuess.length < gameSettings2.currentGameSettings.wordLength &&
+                keyValue.length === 1 &&
+                /[a-zA-Z]/.test(keyValue)
+            ) {
                 setLineClassNames((prevLineClassNames) => {
                     let newLineClassNames = [...prevLineClassNames];
                     newLineClassNames[currentStage] = newLineClassNames[currentStage].map((className, index) => {
@@ -205,11 +229,10 @@ export default function App() {
                 });
                 setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + keyValue);
             } else if (keyValue === "Enter") {
-                if (currentGuess.length === gameSettings.wordLength) {
+                if (currentGuess.length === gameSettings2.currentGameSettings.wordLength) {
                     if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
-
                     // Hard mode logic
-                    else if (gameSettings.hardMode && currentStage !== 0) {
+                    else if (gameSettings2.currentGameSettings.hardMode && currentStage !== 0) {
                         let arrayOfHintedLetters: string[] = []; // Array that will hold all the hinted letters ofo previous stages
                         // For each previous stage
                         for (let i = 0; i < currentStage; i++) {
@@ -231,14 +254,17 @@ export default function App() {
                         });
 
                         if (!isHintedLettersInCurrentGuess) {
-                            let classArray: string[] = "tile shake,".repeat(gameSettings.wordLength).split(",");
+                            let classArray: string[] = "tile shake,"
+                                .repeat(gameSettings2.currentGameSettings.wordLength)
+                                .split(",");
                             classArray.pop();
                             setLineClassNames((prevLineClassNames) => {
                                 let newLineClassNames = [...prevLineClassNames];
                                 newLineClassNames[currentStage] = classArray;
                                 return newLineClassNames;
                             });
-                            if (notificationsDivRef.current?.className.includes("notification_container_animate")) resetAnimation();
+                            if (notificationsDivRef.current?.className.includes("notification_container_animate"))
+                                resetAnimation();
                             console.log("Current Guess must include all hinted letters");
                         } else {
                             if (isApiAvailable.isDictionaryApiAvailable) {
@@ -247,7 +273,7 @@ export default function App() {
                                         if (response.ok) handleStageChange();
                                         else {
                                             let classArray: string[] = "tile shake,"
-                                                .repeat(gameSettings.wordLength)
+                                                .repeat(gameSettings2.currentGameSettings.wordLength)
                                                 .split(",");
                                             classArray.pop();
                                             setLineClassNames((prevLineClassNames) => {
@@ -276,7 +302,9 @@ export default function App() {
                             .then((response) => {
                                 if (response.ok) handleStageChange();
                                 else {
-                                    let classArray: string[] = "tile shake,".repeat(gameSettings.wordLength).split(",");
+                                    let classArray: string[] = "tile shake,"
+                                        .repeat(gameSettings2.currentGameSettings.wordLength)
+                                        .split(",");
                                     classArray.pop();
                                     setLineClassNames((prevLineClassNames) => {
                                         let newLineClassNames = [...prevLineClassNames];
@@ -322,9 +350,10 @@ export default function App() {
             currentStage,
             currentGuess,
             handleStageChange,
-            gameSettings,
+            // gameSettings,
+            gameSettings2.currentGameSettings,
             randomWordAndArray,
-            lineClassNames, 
+            lineClassNames,
             stageWordArray,
             isApiAvailable.isDictionaryApiAvailable,
         ]
@@ -438,8 +467,8 @@ export default function App() {
 
         // If random word hasn't been correctly guessed yet and if last stage hasn't been reached, let user keep typing guessess
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
-            console.log(gameSettings.numberStages);
-            if (currentStage < gameSettings.numberStages) {
+            console.log(gameSettings2.currentGameSettings.numberStages);
+            if (currentStage < gameSettings2.currentGameSettings.numberStages) {
                 if (!isSettingsPopUpOpen) {
                     window.addEventListener("keydown", handleKeydown);
                     console.log("I created new event listener");
@@ -456,64 +485,156 @@ export default function App() {
         currentGuess,
         handleKeydown,
         currentStage,
-        gameSettings,
+        //gameSettings,
+        gameSettings2.currentGameSettings,
         randomWordAndArray,
         isSettingsPopUpOpen,
         stageWordArray,
     ]);
 
     function resetGame() {
-        resetButtonRef.current?.blur();
+        //resetButtonRef.current?.blur();
 
-        // TODO: New word to generate must match "word_length"
-        const newRandomWord =
-            randomWordAndArray.randomWordArray[
-                Math.floor(Math.random() * randomWordAndArray.randomWordArray.length)
-            ].toLowerCase();
-        setRandomWordAndArray({ ...randomWordAndArray, randomWord: newRandomWord });
-        const newStageWordArray: string[] = Array(gameSettings.numberStages).fill("");
+        // If word length setting has been changed, get new array of random words from api
+        if (gameSettings2.futureGameSettings.wordLength !== gameSettings2.currentGameSettings.wordLength) {
+            setIsLoading(true);
+            const fetchNewData = async () => {
+                // Get 4 random letters that can't be part of the retrieved words, because API doesn't return random words.
+                let randomLettersArray: string[] = [];
+                for (let i = 0; i < 4; i++) {
+                    randomLettersArray.push(
+                        ALPHABET_LETTERS.split("")[Math.floor(Math.random() * ALPHABET_LETTERS.length)]
+                    );
+                }
+                const randomLettersString = randomLettersArray.toString().replaceAll(",", "");
+
+                // Get 25 words from API that may include "a"
+                const randomWordsData1 = await fetch(
+                    `https://api.datamuse.com/words?sp=${"?".repeat(
+                        gameSettings2.futureGameSettings.wordLength
+                    )}-1234567890${randomLettersString}&max=25`
+                );
+                const randomWordsArray1 = await randomWordsData1.json();
+
+                // Get 75 words from API that don't include "a" (due to most words gotten from API call including and starting with "a")
+                const randomWordsData2 = await fetch(
+                    `https://api.datamuse.com/words?sp=${"?".repeat(
+                        gameSettings2.futureGameSettings.wordLength
+                    )}-1234567890aA${randomLettersString}&max=75`
+                );
+                const randomWordsArray2 = await randomWordsData2.json();
+
+                // Join both arrays and keep only the words
+                const jointRandomWordsArray = [...randomWordsArray1, ...randomWordsArray2];
+                const newJointRandomWordsArray: string[] = jointRandomWordsArray.map((element) => {
+                    const elementWord: string = element.word;
+                    if (elementWord.includes(" ")) {
+                        // Remove words that have spaces
+                        return undefined;
+                    }
+                    return element.word;
+                });
+                // Remove the array positions where words with spaces were
+                const newJointRandomWordsArrayNoWhiteSpaces = newJointRandomWordsArray.filter(
+                    (element) => element != null
+                );
+
+                const randomWord =
+                    newJointRandomWordsArrayNoWhiteSpaces[
+                        Math.floor(Math.random() * newJointRandomWordsArrayNoWhiteSpaces.length)
+                    ].toLowerCase();
+                setRandomWordAndArray({
+                    randomWord: randomWord,
+                    randomWordArray: newJointRandomWordsArrayNoWhiteSpaces,
+                });
+            };
+            fetchNewData();
+            setIsLoading(false);
+        } else {
+            const newRandomWord =
+                randomWordAndArray.randomWordArray[
+                    Math.floor(Math.random() * randomWordAndArray.randomWordArray.length)
+                ].toLowerCase();
+            setRandomWordAndArray(prevRandomWordArray => ({ ...prevRandomWordArray, randomWord: newRandomWord }));
+        }
+
+        const newStageWordArray: string[] = Array(gameSettings2.futureGameSettings.numberStages).fill("");
         setStageWordArray(newStageWordArray);
-        const newLineClassNames: string[][] = Array(gameSettings.numberStages).fill(
-            Array(gameSettings.wordLength).fill("tile")
+        const newLineClassNames: string[][] = Array(gameSettings2.futureGameSettings.numberStages).fill(
+            Array(gameSettings2.futureGameSettings.wordLength).fill("tile")
         );
         setLineClassNames(newLineClassNames);
         setCurrentGuess("");
         setCurrentStage(0);
+        setGameSettings2((prevGameSettings2) => ({
+            ...prevGameSettings2,
+            currentGameSettings: {
+                ...prevGameSettings2.futureGameSettings,
+                hardMode: prevGameSettings2.currentGameSettings.hardMode,
+            },
+        }));
         setIsSettingsPopUpOpen(false);
     }
 
     function handleChangeGameSettings(gameSetting: string, option: string) {
         switch (gameSetting) {
             case "word-length":
-                if (gameSettings.wordLength > 10 || gameSettings.wordLength < 2) return;
-                if (option === "increment" && gameSettings.wordLength < 10)
-                    setGameSettings((prevGameSettings) => ({
-                        ...gameSettings,
-                        wordLength: prevGameSettings.wordLength + 1,
+                if (gameSettings2.futureGameSettings.wordLength > 10 || gameSettings2.futureGameSettings.wordLength < 2)
+                    return;
+                if (option === "increment" && gameSettings2.futureGameSettings.wordLength < 10)
+                    setGameSettings2((prevGameSettings2) => ({
+                        ...prevGameSettings2,
+                        futureGameSettings: {
+                            ...prevGameSettings2.futureGameSettings,
+                            wordLength: prevGameSettings2.futureGameSettings.wordLength + 1,
+                        },
+                        //wordLength: prevGameSettings.wordLength + 1,
                     }));
-                else if (option === "decrement" && gameSettings.wordLength > 2)
-                    setGameSettings((prevGameSettings) => ({
-                        ...gameSettings,
-                        wordLength: prevGameSettings.wordLength - 1,
+                else if (option === "decrement" && gameSettings2.futureGameSettings.wordLength > 2)
+                    setGameSettings2((prevGameSettings2) => ({
+                        ...prevGameSettings2,
+                        futureGameSettings: {
+                            ...prevGameSettings2.futureGameSettings,
+                            wordLength: prevGameSettings2.futureGameSettings.wordLength - 1,
+                        },
+                        //wordLength: prevGameSettings.wordLength - 1,
                     }));
                 return;
 
             case "stage-number":
-                if (gameSettings.numberStages > 13 || gameSettings.numberStages < 1) return;
-                if (option === "increment" && gameSettings.numberStages < 13)
-                    setGameSettings((prevGameSettings) => ({
-                        ...gameSettings,
-                        numberStages: prevGameSettings.numberStages + 1,
+                if (
+                    gameSettings2.futureGameSettings.numberStages > 13 ||
+                    gameSettings2.futureGameSettings.numberStages < 1
+                )
+                    return;
+                if (option === "increment" && gameSettings2.futureGameSettings.numberStages < 13)
+                    setGameSettings2((prevGameSettings2) => ({
+                        ...prevGameSettings2,
+                        futureGameSettings: {
+                            ...prevGameSettings2.futureGameSettings,
+                            numberStages: prevGameSettings2.futureGameSettings.numberStages + 1,
+                        },
+                        //numberStages: prevGameSettings.numberStages + 1,
                     }));
-                else if (option === "decrement" && gameSettings.numberStages > 1)
-                    setGameSettings((prevGameSettings) => ({
-                        ...gameSettings,
-                        numberStages: prevGameSettings.numberStages - 1,
+                else if (option === "decrement" && gameSettings2.futureGameSettings.numberStages > 1)
+                    setGameSettings2((prevGameSettings2) => ({
+                        ...prevGameSettings2,
+                        futureGameSettings: {
+                            ...prevGameSettings2.futureGameSettings,
+                            numberStages: prevGameSettings2.futureGameSettings.numberStages - 1,
+                        },
+                        //numberStages: prevGameSettings.numberStages - 1,
                     }));
                 return;
 
             case "hard-mode":
-                setGameSettings((prevGameSettings) => ({ ...gameSettings, hardMode: !prevGameSettings.hardMode }));
+                setGameSettings2((prevGameSettings2) => ({
+                    ...prevGameSettings2,
+                    currentGameSettings: {
+                        ...prevGameSettings2.currentGameSettings,
+                        hardMode: !prevGameSettings2.currentGameSettings.hardMode,
+                    },
+                }));
                 return;
 
             default:
@@ -613,7 +734,7 @@ export default function App() {
                                         line={isCurrentStage ? currentGuess : line ?? ""}
                                         lineClassNames={lineClassNames}
                                         index={index}
-                                        wordLength={gameSettings.wordLength}
+                                        wordLength={gameSettings2.currentGameSettings.wordLength}
                                         setLineClassNames={setLineClassNames}
                                     />
                                 );
@@ -666,7 +787,7 @@ export default function App() {
                         isSettingsPopUpOpen={isSettingsPopUpOpen}
                         toggleIsSettingsPopUpOpen={toggleIsSettingsPopUpOpen}
                         handleChangeGameSettings={handleChangeGameSettings}
-                        gameSettings={gameSettings}
+                        gameSettings2={gameSettings2}
                         isApiAvailable={isApiAvailable}
                         isDarkMode={isDarkMode}
                         handleChangeDarkMode={handleChangeDarkMode}
