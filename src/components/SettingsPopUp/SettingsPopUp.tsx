@@ -37,26 +37,20 @@ export default function SettingsPopUp({
     const settingsPopupContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        console.log("SETTINGS: in useEffect");
         const checkClickToExitSettings = (event: any) => {
-            console.log("SETTINGS: inside Event Clicker");
             if (isSettingsPopUpOpen) {
-                console.log("SETTINGS: inside Event Clicker, settings pop up is open");
                 if (settingsPopupContainerRef.current && !settingsPopupContainerRef.current?.contains(event.target)) {
-                    console.log("SETTINGS: inside Event Clicker, clicked spot isnt contained by settings' ref");
                     toggleIsSettingsPopUpOpen(event);
                 }
             }
         };
 
-        console.log("SETTINGS: add Event Clicker");
         window.addEventListener("click", checkClickToExitSettings);
 
         return () => {
-            console.log("SETTINGS: removed Event Clicker");
             window.removeEventListener("click", checkClickToExitSettings);
         };
-    }, [isSettingsPopUpOpen]);
+    }, [isSettingsPopUpOpen, toggleIsSettingsPopUpOpen]);
 
     function handleAnimationEnd() {
         if(!isSettingsPopUpOpen) setIsRender(false);

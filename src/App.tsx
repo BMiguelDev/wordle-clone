@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import "./App.scss";
 import { WordData } from "./data/WordData";
@@ -150,9 +150,8 @@ export default function App() {
         console.log("Changed lineClassNames");
     }, [lineClassNames]);
 
-    useEffect(() => {
-        function handleStageChange() {
-            console.log(gameSettings.numberStages);
+    const handleStageChange = useCallback(
+        () => {
             if (currentStage < gameSettings.numberStages) {
                 //Make checks
                 let colorArray: string[] = [];
@@ -188,10 +187,14 @@ export default function App() {
                 setCurrentGuess("");
                 setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
             } else return;
-        }
+        }, // TODO: replace gameSettings with gameSettings.prevGameSettings or something
+        [currentGuess, currentStage, gameSettings, randomWordAndArray]
+    );
 
-        const handleKeydown = (event: KeyboardEvent) => {
-            if (currentGuess.length < gameSettings.wordLength && event.key.length === 1 && /[a-zA-Z]/.test(event.key)) {
+    const handleKeydown = useCallback(
+        (event: KeyboardEvent | React.MouseEvent<HTMLParagraphElement, MouseEvent>, key: string = "") => {
+            const keyValue: string = key !== "" ? key : (event as KeyboardEvent).key;
+            if (currentGuess.length < gameSettings.wordLength && keyValue.length === 1 && /[a-zA-Z]/.test(keyValue)) {
                 setLineClassNames((prevLineClassNames) => {
                     let newLineClassNames = [...prevLineClassNames];
                     newLineClassNames[currentStage] = newLineClassNames[currentStage].map((className, index) => {
@@ -200,8 +203,8 @@ export default function App() {
                     });
                     return newLineClassNames;
                 });
-                setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + event.key);
-            } else if (event.key === "Enter") {
+                setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + keyValue);
+            } else if (keyValue === "Enter") {
                 if (currentGuess.length === gameSettings.wordLength) {
                     if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
                     // TODO: Add Hard mode logic here
@@ -237,24 +240,138 @@ export default function App() {
                         handleStageChange();
                     }
                 }
-            } else if (event.key === "Backspace") {
+            } else if (keyValue === "Backspace") {
                 // After hitting backspace, if current row had className "shake", remove it so it can be added again to trigger animation
-                if (lineClassNames[currentStage][0] === "tile shake") {
-                    const newLineClassNamesRow: string[] = Array(gameSettings.wordLength).fill("tile");
-                    setLineClassNames((prevLineClassNames) => {
-                        let newLineClassNames = [...prevLineClassNames];
-                        newLineClassNames[currentStage] = newLineClassNamesRow;
-                        return newLineClassNames;
-                    });
-                }
+                // if (lineClassNames[currentStage][0] === "tile shake") {
+                //     const newLineClassNamesRow: string[] = Array(gameSettings.wordLength).fill("tile");
+                //     setLineClassNames((prevLineClassNames) => {
+                //         let newLineClassNames = [...prevLineClassNames];
+                //         newLineClassNames[currentStage] = newLineClassNamesRow;
+                //         return newLineClassNames;
+                //     });
+                // }
                 setCurrentGuess((prevCurrentGuess) => {
                     if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
                     else return prevCurrentGuess;
                 });
             }
-        };
+            // TODO: replace gameSettings with gameSettings.prevGameSettings or something
+        },
+        [
+            currentStage,
+            currentGuess,
+            handleStageChange,
+            gameSettings,
+            randomWordAndArray,
+            isApiAvailable.isDictionaryApiAvailable,
+        ]
+    );
 
-        console.log("Im in the big useEffect");
+    useEffect(() => {
+        // function handleStageChange() {
+        //     console.log(gameSettings.numberStages);
+        //     if (currentStage < gameSettings.numberStages) {
+        //         //Make checks
+        //         let colorArray: string[] = [];
+        //         currentGuess
+        //             .toLowerCase()
+        //             .split("")
+        //             .forEach((currentGuessChar, currentGuessIndex) => {
+        //                 let color: string = "tile grey";
+        //                 randomWordAndArray.randomWord.split("").forEach((randomWordChar, randomWordIndex) => {
+        //                     if (currentGuessChar === randomWordChar) {
+        //                         if (color !== "tile green") color = "tile yellow";
+        //                     }
+        //                     if (currentGuessChar === randomWordChar && currentGuessIndex === randomWordIndex)
+        //                         color = "tile green";
+        //                 });
+        //                 colorArray.push(color);
+        //             });
+        //         setLineClassNames((prevLineClassNames) => {
+        //             let newLineClassNames = [...prevLineClassNames];
+        //             newLineClassNames[currentStage] = colorArray;
+        //             return newLineClassNames;
+        //         });
+
+        //         setStageWordArray((prevStageWordArray) => {
+        //             let newStageWordArray = [...prevStageWordArray];
+        //             newStageWordArray[currentStage] = currentGuess;
+        //             return newStageWordArray;
+        //         });
+
+        //         if (currentGuess === randomWordAndArray.randomWord) {
+        //             alert("you win");
+        //         }
+        //         setCurrentGuess("");
+        //         setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
+        //     } else return;
+        // }
+
+        // const handleKeydown = (event: KeyboardEvent) => {
+        //     if (currentGuess.length < gameSettings.wordLength && event.key.length === 1 && /[a-zA-Z]/.test(event.key)) {
+        //         setLineClassNames((prevLineClassNames) => {
+        //             let newLineClassNames = [...prevLineClassNames];
+        //             newLineClassNames[currentStage] = newLineClassNames[currentStage].map((className, index) => {
+        //                 if (index === currentGuess.length) return "tile tick";
+        //                 else return "tile";
+        //             });
+        //             return newLineClassNames;
+        //         });
+        //         setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + event.key);
+        //     } else if (event.key === "Enter") {
+        //         if (currentGuess.length === gameSettings.wordLength) {
+        //             if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
+        //             // TODO: Add Hard mode logic here
+        //             // else if (gameSettings.hardMode && currentStage!==0) {
+        //             // }
+        //             else if (isApiAvailable.isDictionaryApiAvailable) {
+        //                 fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
+        //                     .then((response) => {
+        //                         if (response.ok) handleStageChange();
+        //                         else {
+        //                             let classArray: string[] = "tile shake,".repeat(gameSettings.wordLength).split(",");
+        //                             classArray.pop();
+        //                             setLineClassNames((prevLineClassNames) => {
+        //                                 let newLineClassNames = [...prevLineClassNames];
+        //                                 newLineClassNames[currentStage] = classArray;
+        //                                 return newLineClassNames;
+        //                             });
+        //                             if (
+        //                                 notificationsDivRef.current?.className.includes(
+        //                                     "notification_container_animate"
+        //                                 )
+        //                             )
+        //                                 resetAnimation();
+
+        //                             //alert("Word doesn't exist");
+        //                         }
+        //                     })
+        //                     .catch((error) => {
+        //                         console.log(error);
+        //                     });
+        //             } else {
+        //                 // if dictionary Api is not available, don't check if word exists and allow any word
+        //                 handleStageChange();
+        //             }
+        //         }
+        //     } else if (event.key === "Backspace") {
+        //         // After hitting backspace, if current row had className "shake", remove it so it can be added again to trigger animation
+        //         // if (lineClassNames[currentStage][0] === "tile shake") {
+        //         //     const newLineClassNamesRow: string[] = Array(gameSettings.wordLength).fill("tile");
+        //         //     setLineClassNames((prevLineClassNames) => {
+        //         //         let newLineClassNames = [...prevLineClassNames];
+        //         //         newLineClassNames[currentStage] = newLineClassNamesRow;
+        //         //         return newLineClassNames;
+        //         //     });
+        //         // }
+        //         setCurrentGuess((prevCurrentGuess) => {
+        //             if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
+        //             else return prevCurrentGuess;
+        //         });
+        //     }
+        // };
+
+        //console.log("Im in the big useEffect");
 
         // If random word hasn't been correctly guessed yet and if last stage hasn't been reached, let user keep typing guessess
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
@@ -271,15 +388,15 @@ export default function App() {
             window.removeEventListener("keydown", handleKeydown);
             console.log("I removed event listener");
         };
+        // TODO: replace gameSettings with gameSettings.prevGameSettings or something
     }, [
         currentGuess,
+        handleKeydown,
         currentStage,
-        randomWordAndArray,
-        stageWordArray,
-        isApiAvailable,
         gameSettings,
-        lineClassNames,
+        randomWordAndArray,
         isSettingsPopUpOpen,
+        stageWordArray,
     ]);
 
     function resetGame() {
@@ -297,6 +414,7 @@ export default function App() {
         setLineClassNames(newLineClassNames);
         setCurrentGuess("");
         setCurrentStage(0);
+        setIsSettingsPopUpOpen(false);
     }
 
     function handleChangeGameSettings(gameSetting: string, option: string) {
@@ -342,38 +460,38 @@ export default function App() {
         setIsDarkMode((prevIsDarkMode) => !prevIsDarkMode);
     }
 
-    function handleLetterClick(letter: string) {
-        if (letter === "Enter") {
-            if (currentGuess.length === gameSettings.wordLength) {
-                fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
-                    .then((response) => {
-                        if (response.ok) console.log("handleStateChange"); //handleStageChange();
-                        else {
-                            let classArray: string[] = "tile shake,".repeat(5).split(",");
-                            classArray.pop();
-                            setLineClassNames((prevLineClassNames) => {
-                                let newLineClassNames = [...prevLineClassNames];
-                                newLineClassNames[currentStage] = classArray;
-                                return newLineClassNames;
-                            });
+    // function handleLetterClick(letter: string) {
+    //     if (letter === "Enter") {
+    //         if (currentGuess.length === gameSettings.wordLength) {
+    //             fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
+    //                 .then((response) => {
+    //                     if (response.ok) console.log("handleStateChange"); //handleStageChange();
+    //                     else {
+    //                         let classArray: string[] = "tile shake,".repeat(5).split(",");
+    //                         classArray.pop();
+    //                         setLineClassNames((prevLineClassNames) => {
+    //                             let newLineClassNames = [...prevLineClassNames];
+    //                             newLineClassNames[currentStage] = classArray;
+    //                             return newLineClassNames;
+    //                         });
 
-                            if (notificationsDivRef.current?.className.includes("notification_container_animate"))
-                                resetAnimation();
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-            }
-        } else if (letter === "Backspace") {
-            setCurrentGuess((prevCurrentGuess) => {
-                if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
-                else return prevCurrentGuess;
-            });
-        } else if (currentGuess.length < gameSettings.wordLength)
-            setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + letter);
-        else return;
-    }
+    //                         if (notificationsDivRef.current?.className.includes("notification_container_animate"))
+    //                             resetAnimation();
+    //                     }
+    //                 })
+    //                 .catch((error) => {
+    //                     console.log(error);
+    //                 });
+    //         }
+    //     } else if (letter === "Backspace") {
+    //         setCurrentGuess((prevCurrentGuess) => {
+    //             if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
+    //             else return prevCurrentGuess;
+    //         });
+    //     } else if (currentGuess.length < gameSettings.wordLength)
+    //         setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + letter);
+    //     else return;
+    // }
 
     const notificationsDivRef = useRef<HTMLDivElement>(null);
 
@@ -392,19 +510,14 @@ export default function App() {
     }
 
     // TODO:
-    // - make game settings work (Change gameSettings to object with prevGameSettings; only apply newGameSettings on gameReset; big
+    // - make game settings work (Change gameSettings to object with prevGameSettings; only apply newGameSettings on gameReset and on handleStateChange; big
     //      useEffect should have prevGameSettings)
     // - Fix gameSetting of word length (upon changing word length settings, also change size of lineClassNames array)
-    // - Make 2 functions inside big UseEffect as useCallBack and put only currentGuess and those two callback functions in the dependency array of big useEffect
-    // - Fix handleEnter/ handleKeyDown (both Api call and function being only iniside useEffect):
-    //     - make tick animation work in both keys and keyboard
-    //     - Make enter functionality work in both keys and keyboard
-    //     - Make sure all logic present in game board is also present when the handleEnter/handleKeyDown/handleWhatever functions are called in keyboard
     // - Do HardMode game setting
     // - Dark Mode
     // - Improve settings component (as pop up)
-    // - Check if settings component useEffect can be improved (callback?)
     // - Make winning message component (as pop up) appear after tiles flip (maybe keep track of player wins, and how many guesses it took)
+    // - Fix bug: when wrong word is inputted and "enter", backspace key flashes and notifications is shown, but quickly (too quickly), notification hides and enter key is highlighted. (Seems like a state-being-flipped problem)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
@@ -448,7 +561,8 @@ export default function App() {
                                     keyboardRowString={keyboardRowString}
                                     stageWordArray={stageWordArray}
                                     lineClassNames={lineClassNames}
-                                    handleLetterClick={handleLetterClick}
+                                    //handleLetterClick={handleLetterClick}
+                                    handleKeydown={handleKeydown}
                                     currentGuess={currentGuess}
                                     currentStage={currentStage}
                                 />
@@ -483,17 +597,17 @@ export default function App() {
                     </div>
 
                     {/* {isSettingsPopUpOpen && ( */}
-                        <SettingsPopUp
-                            isSettingsPopUpOpen={isSettingsPopUpOpen}
-                            toggleIsSettingsPopUpOpen={toggleIsSettingsPopUpOpen}
-                            handleChangeGameSettings={handleChangeGameSettings}
-                            gameSettings={gameSettings}
-                            isApiAvailable={isApiAvailable}
-                            isDarkMode={isDarkMode}
-                            handleChangeDarkMode={handleChangeDarkMode}
-                            resetButtonRef={resetButtonRef}
-                            resetGame={resetGame}
-                        />
+                    <SettingsPopUp
+                        isSettingsPopUpOpen={isSettingsPopUpOpen}
+                        toggleIsSettingsPopUpOpen={toggleIsSettingsPopUpOpen}
+                        handleChangeGameSettings={handleChangeGameSettings}
+                        gameSettings={gameSettings}
+                        isApiAvailable={isApiAvailable}
+                        isDarkMode={isDarkMode}
+                        handleChangeDarkMode={handleChangeDarkMode}
+                        resetButtonRef={resetButtonRef}
+                        resetGame={resetGame}
+                    />
                     {/* )} */}
                 </main>
             )}

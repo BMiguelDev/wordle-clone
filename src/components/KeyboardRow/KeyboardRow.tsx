@@ -6,7 +6,8 @@ interface PropTypes {
     keyboardRowString: string;
     stageWordArray: string[];
     lineClassNames: string[][];
-    handleLetterClick: (letter: string) => void;
+    //handleLetterClick: (letter: string) => void;
+    handleKeydown: (event: KeyboardEvent | React.MouseEvent<HTMLParagraphElement, MouseEvent>, key?: string) => void;
     currentGuess: string;
     currentStage: number;
 }
@@ -15,7 +16,8 @@ export default function KeyboardRow({
     keyboardRowString,
     stageWordArray,
     lineClassNames,
-    handleLetterClick,
+    //handleLetterClick,
+    handleKeydown,
     currentGuess,
     currentStage,
 }: PropTypes) {
@@ -28,7 +30,7 @@ export default function KeyboardRow({
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter}`
                     }
-                    onClick={() => handleLetterClick("Enter")}
+                    onClick={(e) => handleKeydown(e, "Enter") /*handleLetterClick("Enter")*/}
                 >
                     Enter
                 </p>
@@ -53,7 +55,7 @@ export default function KeyboardRow({
                     }
                 });
                 return (
-                    <div onClick={() => handleLetterClick(letter)} key={index} className={letterClassName}>
+                    <div onClick={(e) => handleKeydown(e, letter) /*handleLetterClick(letter)*/} key={index} className={letterClassName}>
                         <p className={styles.keyboard_letter_text}>{letter}</p>
                     </div>
                 );
@@ -65,7 +67,7 @@ export default function KeyboardRow({
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace}`
                     }
-                    onClick={() => handleLetterClick("Backspace")}
+                    onClick={(e) => handleKeydown(e, "Backspace")/*handleLetterClick("Backspace")*/}
                 >
                     <i className="fa-solid fa-delete-left"></i>
                 </p>
