@@ -260,7 +260,7 @@ export default function App() {
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
             console.log(gameSettings.numberStages);
             if (currentStage < gameSettings.numberStages) {
-                if(!isSettingsPopUpOpen){
+                if (!isSettingsPopUpOpen) {
                     window.addEventListener("keydown", handleKeydown);
                     console.log("I created new event listener");
                 }
@@ -271,7 +271,16 @@ export default function App() {
             window.removeEventListener("keydown", handleKeydown);
             console.log("I removed event listener");
         };
-    }, [currentGuess, currentStage, randomWordAndArray, stageWordArray, isApiAvailable, gameSettings, lineClassNames, isSettingsPopUpOpen]);
+    }, [
+        currentGuess,
+        currentStage,
+        randomWordAndArray,
+        stageWordArray,
+        isApiAvailable,
+        gameSettings,
+        lineClassNames,
+        isSettingsPopUpOpen,
+    ]);
 
     function resetGame() {
         resetButtonRef.current?.blur();
@@ -377,7 +386,8 @@ export default function App() {
         }, 100);
     }
 
-    function toogleIsSettingsPopUpOpen() {
+    function toggleIsSettingsPopUpOpen(event: React.MouseEvent) {
+        event.stopPropagation();
         setIsSettingsPopUpOpen((prevIsSettingsPopUpOpen) => !prevIsSettingsPopUpOpen);
     }
 
@@ -392,7 +402,8 @@ export default function App() {
     //     - Make sure all logic present in game board is also present when the handleEnter/handleKeyDown/handleWhatever functions are called in keyboard
     // - Do HardMode game setting
     // - Dark Mode
-    // - Make settings component (as pop up)
+    // - Improve settings component (as pop up)
+    // - Check if settings component useEffect can be improved (callback?)
     // - Make winning message component (as pop up) appear after tiles flip (maybe keep track of player wins, and how many guesses it took)
 
     const keyboardLetterRowsArray: string[] = [
@@ -406,7 +417,7 @@ export default function App() {
 
     return (
         <div className="app_container">
-            <Navbar toogleIsSettingsPopUpOpen={toogleIsSettingsPopUpOpen} />
+            <Navbar toggleIsSettingsPopUpOpen={toggleIsSettingsPopUpOpen} />
 
             {isLoading ? (
                 <main className="main_container_loading">
@@ -471,17 +482,19 @@ export default function App() {
                         Word doesn't exist
                     </div>
 
-                    <SettingsPopUp
-                        isSettingsPopUpOpen={isSettingsPopUpOpen}
-                        toogleIsSettingsPopUpOpen={toogleIsSettingsPopUpOpen}
-                        handleChangeGameSettings={handleChangeGameSettings}
-                        gameSettings={gameSettings}
-                        isApiAvailable={isApiAvailable}
-                        isDarkMode={isDarkMode}
-                        handleChangeDarkMode={handleChangeDarkMode}
-                        resetButtonRef={resetButtonRef}
-                        resetGame={resetGame}
-                    />
+                    {/* {isSettingsPopUpOpen && ( */}
+                        <SettingsPopUp
+                            isSettingsPopUpOpen={isSettingsPopUpOpen}
+                            toggleIsSettingsPopUpOpen={toggleIsSettingsPopUpOpen}
+                            handleChangeGameSettings={handleChangeGameSettings}
+                            gameSettings={gameSettings}
+                            isApiAvailable={isApiAvailable}
+                            isDarkMode={isDarkMode}
+                            handleChangeDarkMode={handleChangeDarkMode}
+                            resetButtonRef={resetButtonRef}
+                            resetGame={resetGame}
+                        />
+                    {/* )} */}
                 </main>
             )}
 

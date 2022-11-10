@@ -3,10 +3,10 @@ import styles from "./Navbar.module.scss";
 
 
 interface PropTypes {
-    toogleIsSettingsPopUpOpen: () => void;
+    toggleIsSettingsPopUpOpen: (event: React.MouseEvent) => void;
 }
 
-function Navbar({ toogleIsSettingsPopUpOpen }: PropTypes) {
+function Navbar({ toggleIsSettingsPopUpOpen }: PropTypes) {
     return (
         <header className={styles.navbar_container}>
             <div className={styles.navbar_menu_container}>
@@ -20,7 +20,7 @@ function Navbar({ toogleIsSettingsPopUpOpen }: PropTypes) {
                 <div className={styles.navbar_icon_container}>
                     <i className="fa-sharp fa-solid fa-chart-simple"></i>
                 </div>
-                <div className={styles.navbar_icon_container} onClick={toogleIsSettingsPopUpOpen}>
+                <div className={styles.navbar_icon_container} onClick={(e) => toggleIsSettingsPopUpOpen(e)}>
                     <i className="fa-solid fa-gear"></i>
                 </div>
             </div>
