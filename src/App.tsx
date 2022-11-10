@@ -207,10 +207,71 @@ export default function App() {
             } else if (keyValue === "Enter") {
                 if (currentGuess.length === gameSettings.wordLength) {
                     if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
-                    // TODO: Add Hard mode logic here
-                    // else if (gameSettings.hardMode && currentStage!==0) {
-                    // }
-                    else if (isApiAvailable.isDictionaryApiAvailable) {
+
+                    // Hard mode logic
+                    else if (gameSettings.hardMode && currentStage !== 0) {
+                        let arrayOfHintedLetters: string[] = []; // Array that will hold all the hinted letters ofo previous stages
+                        // For each previous stage
+                        for (let i = 0; i < currentStage; i++) {
+                            // For each tile class of stage
+                            lineClassNames[i].forEach((classText, index) => {
+                                console.log(classText);
+                                if (classText.includes("green") || classText.includes("yellow")) {
+                                    const hintedLetter = stageWordArray[i][index];
+                                    if (!arrayOfHintedLetters.includes(hintedLetter))
+                                        arrayOfHintedLetters.push(hintedLetter);
+                                }
+                            });
+                        }
+
+                        let isHintedLettersInCurrentGuess: boolean = true; // Flag that holds the truth value of whether the currentGuess passes hard mode or not
+                        // Iterate through <arrayOfHintedLetters> to check if all of them are included in <currentGuess>
+                        arrayOfHintedLetters.forEach((letter) => {
+                            if (!currentGuess.includes(letter)) isHintedLettersInCurrentGuess = false;
+                        });
+
+                        if (!isHintedLettersInCurrentGuess) {
+                            let classArray: string[] = "tile shake,".repeat(gameSettings.wordLength).split(",");
+                            classArray.pop();
+                            setLineClassNames((prevLineClassNames) => {
+                                let newLineClassNames = [...prevLineClassNames];
+                                newLineClassNames[currentStage] = classArray;
+                                return newLineClassNames;
+                            });
+                            if (notificationsDivRef.current?.className.includes("notification_container_animate")) resetAnimation();
+                            console.log("Current Guess must include all hinted letters");
+                        } else {
+                            if (isApiAvailable.isDictionaryApiAvailable) {
+                                fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
+                                    .then((response) => {
+                                        if (response.ok) handleStageChange();
+                                        else {
+                                            let classArray: string[] = "tile shake,"
+                                                .repeat(gameSettings.wordLength)
+                                                .split(",");
+                                            classArray.pop();
+                                            setLineClassNames((prevLineClassNames) => {
+                                                let newLineClassNames = [...prevLineClassNames];
+                                                newLineClassNames[currentStage] = classArray;
+                                                return newLineClassNames;
+                                            });
+                                            if (
+                                                notificationsDivRef.current?.className.includes(
+                                                    "notification_container_animate"
+                                                )
+                                            )
+                                                resetAnimation();
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        console.log(error);
+                                    });
+                            } else {
+                                // if dictionary Api is not available, don't check if word exists and allow any word
+                                handleStageChange();
+                            }
+                        }
+                    } else if (isApiAvailable.isDictionaryApiAvailable) {
                         fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                             .then((response) => {
                                 if (response.ok) handleStageChange();
@@ -263,6 +324,8 @@ export default function App() {
             handleStageChange,
             gameSettings,
             randomWordAndArray,
+            lineClassNames, 
+            stageWordArray,
             isApiAvailable.isDictionaryApiAvailable,
         ]
     );
@@ -401,6 +464,8 @@ export default function App() {
 
     function resetGame() {
         resetButtonRef.current?.blur();
+
+        // TODO: New word to generate must match "word_length"
         const newRandomWord =
             randomWordAndArray.randomWordArray[
                 Math.floor(Math.random() * randomWordAndArray.randomWordArray.length)
@@ -513,11 +578,11 @@ export default function App() {
     // - make game settings work (Change gameSettings to object with prevGameSettings; only apply newGameSettings on gameReset and on handleStateChange; big
     //      useEffect should have prevGameSettings)
     // - Fix gameSetting of word length (upon changing word length settings, also change size of lineClassNames array)
-    // - Do HardMode game setting
+    // - Fix notifications components to take any text dynamically
     // - Dark Mode
     // - Improve settings component (as pop up)
     // - Make winning message component (as pop up) appear after tiles flip (maybe keep track of player wins, and how many guesses it took)
-    // - Fix bug: when wrong word is inputted and "enter", backspace key flashes and notifications is shown, but quickly (too quickly), notification hides and enter key is highlighted. (Seems like a state-being-flipped problem)
+    // - Fix bug: when wrong word is inputted and "enter", backspace key flashes and notifications is shown, but quickly (too quickly [BECAUSE 'SHAKE' is removed from lineClassNames (line 591)]), notification hides and enter key is highlighted. (Seems like a state-being-flipped problem)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],

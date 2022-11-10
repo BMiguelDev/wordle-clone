@@ -5,6 +5,20 @@ export interface gameSettingsType {
     hardMode: boolean;
 }
 
+// Type definition of the <gameSettings2> state variable
+export interface gameSettings2Type {
+    currentGameSettings: {
+        numberStages: number;
+        wordLength: number;
+        hardMode: boolean;
+    };
+    futureGameSettings: {
+        numberStages: number;
+        wordLength: number;
+    };
+}
+
+
 // Type definition of the <randomWordAndArray> state variable
 export interface randomWordAndArrayType {
     randomWord: string;
