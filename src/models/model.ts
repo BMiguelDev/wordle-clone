@@ -30,3 +30,9 @@ export interface isApiAvailableType {
     isDictionaryApiAvailable: boolean;
     isWordApiAvailable: boolean;
 }
+
+// Type definition of the <gameNotification> state variable
+export interface gameNotificationType {
+    isGameNotification: boolean;
+    gameNotificationText: string;
+}

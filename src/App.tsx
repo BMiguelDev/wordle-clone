@@ -2,7 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import "./App.scss";
 import { WordData } from "./data/WordData";
-import { /*gameSettingsType,*/ gameSettings2Type, isApiAvailableType, randomWordAndArrayType } from "./models/model";
+import {
+    /*gameSettingsType,*/ gameNotificationType,
+    gameSettings2Type,
+    isApiAvailableType,
+    randomWordAndArrayType,
+} from "./models/model";
 import Line from "./components/Line/Line";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
@@ -49,6 +54,12 @@ export default function App() {
     const [isApiAvailable, setIsApiAvailable] = useState<isApiAvailableType>({
         isDictionaryApiAvailable: false,
         isWordApiAvailable: false,
+    });
+
+    // Object variable to handle whether a game notification is being shown, and what text to show
+    const [gameNotification, setGameNotification] = useState<gameNotificationType>({
+        isGameNotification: false,
+        gameNotificationText: "",
     });
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -263,9 +274,9 @@ export default function App() {
                                 newLineClassNames[currentStage] = classArray;
                                 return newLineClassNames;
                             });
-                            if (notificationsDivRef.current?.className.includes("notification_container_animate"))
-                                resetAnimation();
-                            console.log("Current Guess must include all hinted letters");
+
+                            if(gameNotification.isGameNotification) resetAnimation();
+                            setGameNotification({ gameNotificationText: "Word must include all hinted letters", isGameNotification: true });
                         } else {
                             if (isApiAvailable.isDictionaryApiAvailable) {
                                 fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
@@ -281,12 +292,9 @@ export default function App() {
                                                 newLineClassNames[currentStage] = classArray;
                                                 return newLineClassNames;
                                             });
-                                            if (
-                                                notificationsDivRef.current?.className.includes(
-                                                    "notification_container_animate"
-                                                )
-                                            )
-                                                resetAnimation();
+
+                                            if(gameNotification.isGameNotification) resetAnimation();
+                                            setGameNotification({ gameNotificationText: "Word doesn't exist", isGameNotification: true });
                                         }
                                     })
                                     .catch((error) => {
@@ -311,14 +319,9 @@ export default function App() {
                                         newLineClassNames[currentStage] = classArray;
                                         return newLineClassNames;
                                     });
-                                    if (
-                                        notificationsDivRef.current?.className.includes(
-                                            "notification_container_animate"
-                                        )
-                                    )
-                                        resetAnimation();
 
-                                    //alert("Word doesn't exist");
+                                    if(gameNotification.isGameNotification) resetAnimation();
+                                    setGameNotification({ gameNotificationText: "Word doesn't exist", isGameNotification: true });
                                 }
                             })
                             .catch((error) => {
@@ -553,7 +556,7 @@ export default function App() {
                 randomWordAndArray.randomWordArray[
                     Math.floor(Math.random() * randomWordAndArray.randomWordArray.length)
                 ].toLowerCase();
-            setRandomWordAndArray(prevRandomWordArray => ({ ...prevRandomWordArray, randomWord: newRandomWord }));
+            setRandomWordAndArray((prevRandomWordArray) => ({ ...prevRandomWordArray, randomWord: newRandomWord }));
         }
 
         const newStageWordArray: string[] = Array(gameSettings2.futureGameSettings.numberStages).fill("");
@@ -680,11 +683,18 @@ export default function App() {
     const notificationsDivRef = useRef<HTMLDivElement>(null);
 
     function resetAnimation() {
+        // if (notificationsDivRef.current)
+        //     notificationsDivRef.current.className = "notification_container notification_container_invisible";
+        // setTimeout(() => {
+        //     if (notificationsDivRef.current)
+        //         notificationsDivRef.current.className = "notification_container notification_container_animate";
+        // }, 100);
+
         if (notificationsDivRef.current)
             notificationsDivRef.current.className = "notification_container notification_container_invisible";
         setTimeout(() => {
             if (notificationsDivRef.current)
-                notificationsDivRef.current.className = "notification_container notification_container_animate";
+                notificationsDivRef.current.className = "notification_container";
         }, 100);
     }
 
@@ -694,9 +704,6 @@ export default function App() {
     }
 
     // TODO:
-    // - make game settings work (Change gameSettings to object with prevGameSettings; only apply newGameSettings on gameReset and on handleStateChange; big
-    //      useEffect should have prevGameSettings)
-    // - Fix gameSetting of word length (upon changing word length settings, also change size of lineClassNames array)
     // - Fix notifications components to take any text dynamically
     // - Dark Mode
     // - Improve settings component (as pop up)
@@ -769,7 +776,7 @@ export default function App() {
                         )} */}
                     </div>
 
-                    <div
+                    {/* <div
                         ref={notificationsDivRef}
                         className={
                             lineClassNames[currentStage] != null && lineClassNames[currentStage][0].includes("shake")
@@ -778,6 +785,20 @@ export default function App() {
                         }
                     >
                         Word doesn't exist
+                    </div> */}
+
+                    <div
+                        ref={notificationsDivRef} className={`notification_container ${
+                            !gameNotification.isGameNotification ? "notification_container_invisible" : ""
+                        }`}
+                        onAnimationEnd={() =>
+                            setGameNotification((prevGameNotification) => ({
+                                ...prevGameNotification,
+                                isGameNotification: false,
+                            }))
+                        }
+                    >
+                        {gameNotification.gameNotificationText}
                     </div>
 
                     {/* {isSettingsPopUpOpen && ( */}
