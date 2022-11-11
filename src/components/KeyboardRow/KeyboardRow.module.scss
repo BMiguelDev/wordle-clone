@@ -50,21 +50,21 @@
                     background-color: var(--keyboard-letter-tile-bg-color);
                 }
 
-                25% {
-                    background-color: var(--keyboard-letter-tile-bg-color);
-                }
+                // 25% {
+                //     background-color: var(--keyboard-letter-tile-bg-color);
+                // }
 
-                50% {
-                    background-color: var(--tile-correct-color);
-                }
+                // 50% {
+                //     background-color: var(--tile-correct-color);
+                // }
 
                 100% {
                     background-color: var(--tile-correct-color);
                 }
             }
 
-            animation: flipKeyboardTile 1s ease-in-out,
-            turnToGreen 1.25s ease-in-out;
+            //animation: flipKeyboardTile 1s ease-in-out,
+            animation: turnToGreen .5s ease-in-out;
             animation-fill-mode: forwards;
         }
 
@@ -74,21 +74,21 @@
                     background-color: var(--keyboard-letter-tile-bg-color);
                 }
 
-                25% {
-                    background-color: var(--keyboard-letter-tile-bg-color);
-                }
+                // 25% {
+                //     background-color: var(--keyboard-letter-tile-bg-color);
+                // }
 
-                50% {
-                    background-color: var(--tile-present-color);
-                }
+                // 50% {
+                //     background-color: var(--tile-present-color);
+                // }
 
                 100% {
                     background-color: var(--tile-present-color);
                 }
             }
 
-            animation: flipKeyboardTile 1s ease-in-out,
-            turnToYellow 1.25s ease-in-out;
+            //animation: flipKeyboardTile 1s ease-in-out,
+            animation: turnToYellow .5s ease-in-out;
             animation-fill-mode: forwards;
         }
 
@@ -98,21 +98,21 @@
                     background-color: var(--keyboard-letter-tile-bg-color);
                 }
 
-                25% {
-                    background-color: var(--keyboard-letter-tile-bg-color);
-                }
+                // 25% {
+                //     background-color: var(--keyboard-letter-tile-bg-color);
+                // }
 
-                50% {
-                    background-color: var(--tile-wrong-color);
-                }
+                // 50% {
+                //     background-color: var(--tile-wrong-color);
+                // }
 
                 100% {
                     background-color: var(--tile-wrong-color);
                 }
             }
 
-            animation: flipKeyboardTile 1s ease-in-out,
-            turnToGrey 1.25s ease-in-out;
+            //animation: flipKeyboardTile 1s ease-in-out,
+            animation: turnToGrey .5s ease-in-out;
             animation-fill-mode: forwards;
         }
 

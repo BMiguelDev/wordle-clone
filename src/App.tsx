@@ -213,7 +213,32 @@ export default function App() {
                 });
 
                 if (currentGuess === randomWordAndArray.randomWord) {
-                    alert("you win");
+                    if (currentStage === 0) {
+                        setGameNotification({ gameNotificationText: "L-U-C-K-Y", isGameNotification: true });
+                    } else if (currentStage === 1) {
+                        setGameNotification({ gameNotificationText: "Outstanding", isGameNotification: true });
+                    } else if (currentStage === 2) {
+                        setGameNotification({ gameNotificationText: "Impressive", isGameNotification: true });
+                    } else if (currentStage === 3) {
+                        setGameNotification({ gameNotificationText: "Amazing", isGameNotification: true });
+                    } else if (currentStage === 4) {
+                        // If game was close, set appropriate notification text, otherwise set congratulating notification text
+                        if (gameSettings2.currentGameSettings.numberStages - currentStage < 2)
+                            setGameNotification({ gameNotificationText: "That was close!", isGameNotification: true });
+                        else setGameNotification({ gameNotificationText: "Well done!", isGameNotification: true });
+                    } else if (currentStage === 5) {
+                        if (gameSettings2.currentGameSettings.numberStages - currentStage < 2)
+                            setGameNotification({ gameNotificationText: "Phew!", isGameNotification: true });
+                        else setGameNotification({ gameNotificationText: "Well done!", isGameNotification: true });
+                    } else if (currentStage > 5 && currentStage < 10) {
+                        if (gameSettings2.currentGameSettings.numberStages - currentStage < 2)
+                            setGameNotification({ gameNotificationText: "That was close!", isGameNotification: true });
+                        else setGameNotification({ gameNotificationText: "Well done!", isGameNotification: true });
+                    } else {
+                        if (gameSettings2.currentGameSettings.numberStages - currentStage < 2)
+                            setGameNotification({ gameNotificationText: "That was close!", isGameNotification: true });
+                        else setGameNotification({ gameNotificationText: "Well done!", isGameNotification: true });
+                    }
                 }
                 setCurrentGuess("");
                 setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
@@ -275,8 +300,11 @@ export default function App() {
                                 return newLineClassNames;
                             });
 
-                            if(gameNotification.isGameNotification) resetAnimation();
-                            setGameNotification({ gameNotificationText: "Word must include all hinted letters", isGameNotification: true });
+                            if (gameNotification.isGameNotification) resetGameNotificationAnimation();
+                            setGameNotification({
+                                gameNotificationText: "Word must include all hinted letters",
+                                isGameNotification: true,
+                            });
                         } else {
                             if (isApiAvailable.isDictionaryApiAvailable) {
                                 fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
@@ -293,8 +321,11 @@ export default function App() {
                                                 return newLineClassNames;
                                             });
 
-                                            if(gameNotification.isGameNotification) resetAnimation();
-                                            setGameNotification({ gameNotificationText: "Word doesn't exist", isGameNotification: true });
+                                            if (gameNotification.isGameNotification) resetGameNotificationAnimation();
+                                            setGameNotification({
+                                                gameNotificationText: "Word doesn't exist",
+                                                isGameNotification: true,
+                                            });
                                         }
                                     })
                                     .catch((error) => {
@@ -320,8 +351,11 @@ export default function App() {
                                         return newLineClassNames;
                                     });
 
-                                    if(gameNotification.isGameNotification) resetAnimation();
-                                    setGameNotification({ gameNotificationText: "Word doesn't exist", isGameNotification: true });
+                                    if (gameNotification.isGameNotification) resetGameNotificationAnimation();
+                                    setGameNotification({
+                                        gameNotificationText: "Word doesn't exist",
+                                        isGameNotification: true,
+                                    });
                                 }
                             })
                             .catch((error) => {
@@ -358,6 +392,7 @@ export default function App() {
             randomWordAndArray,
             lineClassNames,
             stageWordArray,
+            gameNotification.isGameNotification,
             isApiAvailable.isDictionaryApiAvailable,
         ]
     );
@@ -436,7 +471,7 @@ export default function App() {
         //                                     "notification_container_animate"
         //                                 )
         //                             )
-        //                                 resetAnimation();
+        //                                 resetGameNotificationAnimation();
 
         //                             //alert("Word doesn't exist");
         //                         }
@@ -472,11 +507,20 @@ export default function App() {
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
             console.log(gameSettings2.currentGameSettings.numberStages);
             if (currentStage < gameSettings2.currentGameSettings.numberStages) {
-                if (!isSettingsPopUpOpen) {
+                if (!isSettingsPopUpOpen /* && !isStatsPopUpOpen && !isHelpPopUpOpen */) {
                     window.addEventListener("keydown", handleKeydown);
                     console.log("I created new event listener");
                 }
-            } else alert(`Game over, random word was ${randomWordAndArray.randomWord}`);
+            } else {
+                if (
+                    gameNotification.gameNotificationText !==
+                    `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
+                )
+                    setGameNotification({
+                        gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
+                        isGameNotification: true,
+                    });
+            }
         }
 
         return () => {
@@ -493,7 +537,26 @@ export default function App() {
         randomWordAndArray,
         isSettingsPopUpOpen,
         stageWordArray,
+        gameNotification
     ]);
+
+
+    function handleKeyClick(event: React.MouseEvent<HTMLParagraphElement, MouseEvent>, key: string) {
+        if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
+            if (currentStage < gameSettings2.currentGameSettings.numberStages) handleKeydown(event, key);
+            else {
+                if (
+                    gameNotification.gameNotificationText !==
+                    `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
+                )
+                    setGameNotification({
+                        gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
+                        isGameNotification: true,
+                    });
+            }
+        }
+    }
+    
 
     function resetGame() {
         // If word length setting has been changed, get new array of random words from api
@@ -663,7 +726,7 @@ export default function App() {
     //                         });
 
     //                         if (notificationsDivRef.current?.className.includes("notification_container_animate"))
-    //                             resetAnimation();
+    //                             resetGameNotificationAnimation();
     //                     }
     //                 })
     //                 .catch((error) => {
@@ -682,7 +745,7 @@ export default function App() {
 
     const notificationsDivRef = useRef<HTMLDivElement>(null);
 
-    function resetAnimation() {
+    function resetGameNotificationAnimation() {
         // if (notificationsDivRef.current)
         //     notificationsDivRef.current.className = "notification_container notification_container_invisible";
         // setTimeout(() => {
@@ -693,8 +756,7 @@ export default function App() {
         if (notificationsDivRef.current)
             notificationsDivRef.current.className = "notification_container notification_container_invisible";
         setTimeout(() => {
-            if (notificationsDivRef.current)
-                notificationsDivRef.current.className = "notification_container";
+            if (notificationsDivRef.current) notificationsDivRef.current.className = "notification_container";
         }, 100);
     }
 
@@ -704,11 +766,12 @@ export default function App() {
     }
 
     // TODO:
-    // - Fix notifications components to take any text dynamically
     // - Dark Mode
     // - Improve settings component (as pop up)
     // - Make winning message component (as pop up) appear after tiles flip (maybe keep track of player wins, and how many guesses it took)
-    // - Fix bug: when wrong word is inputted and "enter", backspace key flashes and notifications is shown, but quickly (too quickly [BECAUSE 'SHAKE' is removed from lineClassNames (line 591)]), notification hides and enter key is highlighted. (Seems like a state-being-flipped problem)
+    // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has. { and array of all guessed words, the last guessed word}
+    //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
+    // -Fix bug: after tile ticks and letter if removed with backspace, same tile will not tick again (only if we backspace more tiles)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
@@ -753,9 +816,12 @@ export default function App() {
                                     stageWordArray={stageWordArray}
                                     lineClassNames={lineClassNames}
                                     //handleLetterClick={handleLetterClick}
-                                    handleKeydown={handleKeydown}
+                                    //handleKeydown={handleKeydown}
+                                    wordLength={gameSettings2.currentGameSettings.wordLength}
+                                    handleKeyClick={handleKeyClick}
                                     currentGuess={currentGuess}
                                     currentStage={currentStage}
+                                    gameNotification={gameNotification}
                                 />
                             ))}
                         </div>
@@ -788,7 +854,8 @@ export default function App() {
                     </div> */}
 
                     <div
-                        ref={notificationsDivRef} className={`notification_container ${
+                        ref={notificationsDivRef}
+                        className={`notification_container ${
                             !gameNotification.isGameNotification ? "notification_container_invisible" : ""
                         }`}
                         onAnimationEnd={() =>

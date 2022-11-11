@@ -1,5 +1,6 @@
 import React from "react";
 
+import { gameNotificationType } from "../../models/model";
 import styles from "./KeyboardRow.module.scss";
 
 interface PropTypes {
@@ -7,9 +8,12 @@ interface PropTypes {
     stageWordArray: string[];
     lineClassNames: string[][];
     //handleLetterClick: (letter: string) => void;
-    handleKeydown: (event: KeyboardEvent | React.MouseEvent<HTMLParagraphElement, MouseEvent>, key?: string) => void;
+    //handleKeydown: (event: KeyboardEvent | React.MouseEvent<HTMLParagraphElement, MouseEvent>, key?: string) => void;
+    handleKeyClick: (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>, key: string) => void;
     currentGuess: string;
     currentStage: number;
+    gameNotification: gameNotificationType;
+    wordLength: number;
 }
 
 export default function KeyboardRow({
@@ -17,20 +21,23 @@ export default function KeyboardRow({
     stageWordArray,
     lineClassNames,
     //handleLetterClick,
-    handleKeydown,
+    handleKeyClick,
     currentGuess,
     currentStage,
+    gameNotification,
+    wordLength,
 }: PropTypes) {
     return (
         <div className={styles.keyboard_row}>
             {keyboardRowString[0] === "z" && (
                 <p
                     className={
-                        currentGuess.length === 5 && !lineClassNames[currentStage][0].includes("shake")
+                        // TODO: improve highlighting based on previousGuess state variable
+                        currentGuess.length === 5 && !gameNotification.isGameNotification
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter}`
                     }
-                    onClick={(e) => handleKeydown(e, "Enter") /*handleLetterClick("Enter")*/}
+                    onClick={(e) => handleKeyClick(e, "Enter") /*handleLetterClick("Enter")*/}
                 >
                     Enter
                 </p>
@@ -55,7 +62,12 @@ export default function KeyboardRow({
                     }
                 });
                 return (
-                    <div onClick={(e) => handleKeydown(e, letter) /*handleLetterClick(letter)*/} key={index} className={letterClassName}>
+                    <div
+                        onClick={(e) => handleKeyClick(e, letter) /*handleLetterClick(letter)*/}
+                        key={index}
+                        className={letterClassName}
+                        style={{ animationDelay: `${wordLength * 0.2}s` }}
+                    >
                         <p className={styles.keyboard_letter_text}>{letter}</p>
                     </div>
                 );
@@ -63,11 +75,12 @@ export default function KeyboardRow({
             {keyboardRowString[0] === "z" && (
                 <p
                     className={
-                        currentGuess.length === 5 && lineClassNames[currentStage][0].includes("shake")
+                        // TODO: improve highlighting based on previousGuess state variable
+                        currentGuess.length === 5 && gameNotification.isGameNotification //lineClassNames[currentStage][0].includes("shake")
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace}`
                     }
-                    onClick={(e) => handleKeydown(e, "Backspace")/*handleLetterClick("Backspace")*/}
+                    onClick={(e) => handleKeyClick(e, "Backspace") /*handleLetterClick("Backspace")*/}
                 >
                     <i className="fa-solid fa-delete-left"></i>
                 </p>
