@@ -26,44 +26,17 @@
             color: var(--keyboard-letter-text-color);
         }
 
-        @keyframes flipKeyboardTile {
-            0% {
-                rotate: x 0deg;
-            }
-
-            47.5% {
-                rotate: x 90deg;
-            }
-
-            52.5% {
-                rotate: x 90deg;
-            }
-
-            100% {
-                rotate: x 0deg;
-            }
-        }
-
         &.keyboard_letter_tile_green {
             @keyframes turnToGreen {
                 0% {
                     background-color: var(--keyboard-letter-tile-bg-color);
                 }
 
-                // 25% {
-                //     background-color: var(--keyboard-letter-tile-bg-color);
-                // }
-
-                // 50% {
-                //     background-color: var(--tile-correct-color);
-                // }
-
                 100% {
                     background-color: var(--tile-correct-color);
                 }
             }
 
-            //animation: flipKeyboardTile 1s ease-in-out,
             animation: turnToGreen .5s ease-in-out;
             animation-fill-mode: forwards;
         }
@@ -74,20 +47,11 @@
                     background-color: var(--keyboard-letter-tile-bg-color);
                 }
 
-                // 25% {
-                //     background-color: var(--keyboard-letter-tile-bg-color);
-                // }
-
-                // 50% {
-                //     background-color: var(--tile-present-color);
-                // }
-
                 100% {
                     background-color: var(--tile-present-color);
                 }
             }
 
-            //animation: flipKeyboardTile 1s ease-in-out,
             animation: turnToYellow .5s ease-in-out;
             animation-fill-mode: forwards;
         }
@@ -98,20 +62,11 @@
                     background-color: var(--keyboard-letter-tile-bg-color);
                 }
 
-                // 25% {
-                //     background-color: var(--keyboard-letter-tile-bg-color);
-                // }
-
-                // 50% {
-                //     background-color: var(--tile-wrong-color);
-                // }
-
                 100% {
                     background-color: var(--tile-wrong-color);
                 }
             }
 
-            //animation: flipKeyboardTile 1s ease-in-out,
             animation: turnToGrey .5s ease-in-out;
             animation-fill-mode: forwards;
         }

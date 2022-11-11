@@ -258,7 +258,7 @@ export default function App() {
                 setLineClassNames((prevLineClassNames) => {
                     let newLineClassNames = [...prevLineClassNames];
                     newLineClassNames[currentStage] = newLineClassNames[currentStage].map((className, index) => {
-                        if (index === currentGuess.length) return "tile tick";
+                        if (index === currentGuess.length) return "tile tick"
                         else return "tile";
                     });
                     return newLineClassNames;
@@ -771,7 +771,8 @@ export default function App() {
     // - Make winning message component (as pop up) appear after tiles flip (maybe keep track of player wins, and how many guesses it took)
     // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has. { and array of all guessed words, the last guessed word}
     //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
-    // -Fix bug: after tile ticks and letter if removed with backspace, same tile will not tick again (only if we backspace more tiles)
+    // - Fix bug: after tile ticks and letter if removed with backspace, same tile will not tick again (only if we backspace more tiles)
+    // - Add localStorage for all state variables
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],

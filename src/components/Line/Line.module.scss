@@ -13,10 +13,15 @@
         font-size: 2rem;
         border: .1rem solid var(--tile-border-color);
         font-weight: bold;
+        transition: all .05s ease-in-out;
 
         .letter {
             z-index: 3;
             color: var(--tile-text-color);
+        }
+
+        &.border_highlight {
+            border: .1rem solid var(--tile-hightlighted-border-color);
         }
 
         &.tick {
