@@ -561,6 +561,11 @@ export default function App() {
                         currentStreak: 0,
                     }));
 
+                    // After a short delay, show the statistics pop up
+                    setTimeout(() => {
+                        setIsPopUpOpen(prevIsPopUpOpen => ({ ...prevIsPopUpOpen, isStatsPopUpOpen: true}));
+                    }, gameSettings2.currentGameSettings.wordLength*200+500);
+
                     if (gameNotification.isGameNotification) resetGameNotificationAnimation();
                     setGameNotification({
                         gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
@@ -594,12 +599,27 @@ export default function App() {
                 if (
                     gameNotification.gameNotificationText !==
                     `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
-                )
+                ) {
+                    // Update player statistics with 1 more loss
+                    setPlayerStatistics(prevPlayerStatistics => ({
+                        ...prevPlayerStatistics, 
+                        gamesFinished: prevPlayerStatistics.gamesFinished+1,
+                        gamesLost: prevPlayerStatistics.gamesLost+1,
+                        currentStreak: 0,
+                    }));
+
+                    // After a short delay, show the statistics pop up
+                    setTimeout(() => {
+                        setIsPopUpOpen(prevIsPopUpOpen => ({ ...prevIsPopUpOpen, isStatsPopUpOpen: true}));
+                    }, gameSettings2.currentGameSettings.wordLength*200+500);
+
                     if (gameNotification.isGameNotification) resetGameNotificationAnimation();
                     setGameNotification({
                         gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
                         isGameNotification: true,
                     });
+
+                }
             }
         }
     }
@@ -834,8 +854,7 @@ export default function App() {
 
 
     // TODO:
-    // - Dark Mode
-    // - Visually impaired mode (or whatever its called)
+    // - Add remaining Dark Mode colors
     // - Improve settings component (as pop up), including toggles and toggle animation
     // - Make help component
     // - Improve stats component
@@ -843,8 +862,8 @@ export default function App() {
     //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
     // - Add localStorage for all state variables
     // - Fix bug where after game ending, if you click keyboard, it reshows notification (maybe prevent player from clicking keyboard, or dont do anything when he does)[line 597]
-    // - Make stats pop up appear even when game is lost
 
+    
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
         ALPHABET_LETTERS.split("p")[1].split("z")[0],
