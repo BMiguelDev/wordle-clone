@@ -34,7 +34,6 @@ const LOCAL_STORAGE_KEY_PLAYER_STATISTICS = "WordleCloneApp.playerStatistics";
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
 export default function App() {
-
     // Object state variable to hold the current and future game settings
     const [gameSettings, setgameSettings] = useState<gameSettingsType>(() => {
         const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_GAME_SETTINGS);
@@ -54,57 +53,158 @@ export default function App() {
             };
     });
 
-    const [randomWordAndArray, setRandomWordAndArray] = useState<randomWordAndArrayType>({
-        randomWord: "",
-        randomWordArray: [],
+    const [randomWordAndArray, setRandomWordAndArray] = useState<randomWordAndArrayType>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_RANDOM_WORD_AND_ARRAY);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else
+            return {
+                randomWord: "",
+                randomWordArray: [],
+            };
     });
-    const [stageWordArray, setStageWordArray] = useState<string[]>(
-        Array(gameSettings.currentGameSettings.numberStages).fill("")
-    );
-    const [currentGuess, setCurrentGuess] = useState<string>("");
-    const [currentStage, setCurrentStage] = useState<number>(0);
-    const [lineClassNames, setLineClassNames] = useState<string[][]>(
-        Array(gameSettings.currentGameSettings.numberStages).fill(
-            Array(gameSettings.currentGameSettings.wordLength).fill("tile")
-        )
-    );
+
+    const [stageWordArray, setStageWordArray] = useState<string[]>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_STAGE_WORD_ARRAY);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else return Array(gameSettings.currentGameSettings.numberStages).fill("");
+    });
+
+    const [currentGuess, setCurrentGuess] = useState<string>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_CURRENT_GUESS);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else return "";
+    });
+
+    const [currentStage, setCurrentStage] = useState<number>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_CURRENT_STAGE);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else return 0;
+    });
+
+    const [lineClassNames, setLineClassNames] = useState<string[][]>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_LINE_CLASS_NAMES);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else
+            return Array(gameSettings.currentGameSettings.numberStages).fill(
+                Array(gameSettings.currentGameSettings.wordLength).fill("tile")
+            );
+    });
+
     // Object state variable holding a boolean for each API used, true is the api is available and false if it's not available
-    const [isApiAvailable, setIsApiAvailable] = useState<isApiAvailableType>({
-        isDictionaryApiAvailable: false,
-        isWordApiAvailable: false,
+    const [isApiAvailable, setIsApiAvailable] = useState<isApiAvailableType>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_IS_WORD_API_AVAILABLE);
+        if (localStorageItem)
+            return { isDictionaryApiAvailable: false, isWordApiAvailable: JSON.parse(localStorageItem) };
+        else
+            return {
+                isDictionaryApiAvailable: false,
+                isWordApiAvailable: false,
+            };
     });
 
     // Object state variable to handle whether a game notification is being shown, and what text to show
-    const [gameNotification, setGameNotification] = useState<gameNotificationType>({
-        isGameNotification: false,
-        gameNotificationText: "",
+    const [gameNotification, setGameNotification] = useState<gameNotificationType>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_GAME_NOTIFICATION);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else
+            return {
+                isGameNotification: false,
+                gameNotificationText: "",
+            };
     });
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
-    const [isHighContrastMode, setIsHighContrastMode] = useState<boolean>(false);
+
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_IS_DARK_MODE);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else return true;
+    });
+
+    const [isHighContrastMode, setIsHighContrastMode] = useState<boolean>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_IS_HIGH_CONTRAST_MODE);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else return false;
+    });
 
     // Object state variable to handle whether each pop up is open or not
-    const [isPopUpOpen, setIsPopUpOpen] = useState<isPopUpOpenType>({
-        isSettingsPopUpOpen: false,
-        isStatsPopUpOpen: false,
-        isHelpPopUpOpen: false,
+    const [isPopUpOpen, setIsPopUpOpen] = useState<isPopUpOpenType>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_IS_POPUP_OPEN);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else
+            return {
+                isSettingsPopUpOpen: false,
+                isStatsPopUpOpen: false,
+                isHelpPopUpOpen: false,
+            };
     });
 
     // Object state variable to hold the statistics of the player's games
-    const [playerStatistics, setPlayerStatistics] = useState<playerStatisticsType>({
-        gamesFinished: 0,
-        gamesWon: 0,
-        gamesLost: 0,
-        currentStreak: 0,
-        maxStreak: 0,
-        NumberWinsWithXGuesses: Array(13).fill(0),
+    const [playerStatistics, setPlayerStatistics] = useState<playerStatisticsType>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_PLAYER_STATISTICS);
+        if (localStorageItem) return JSON.parse(localStorageItem);
+        else
+            return {
+                gamesFinished: 0,
+                gamesWon: 0,
+                gamesLost: 0,
+                currentStreak: 0,
+                maxStreak: 0,
+                NumberWinsWithXGuesses: Array(13).fill(0),
+            };
     });
 
     // useEffect hooks to store state variables ini local storage whenever they update
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_KEY_GAME_SETTINGS, JSON.stringify(gameSettings));
     }, [gameSettings]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_RANDOM_WORD_AND_ARRAY, JSON.stringify(randomWordAndArray));
+    }, [randomWordAndArray]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_STAGE_WORD_ARRAY, JSON.stringify(stageWordArray));
+    }, [stageWordArray]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_CURRENT_GUESS, JSON.stringify(currentGuess));
+    }, [currentGuess]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_CURRENT_STAGE, JSON.stringify(currentStage));
+    }, [currentStage]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_LINE_CLASS_NAMES, JSON.stringify(lineClassNames));
+    }, [lineClassNames]);
+
+    useEffect(() => {
+        localStorage.setItem(
+            LOCAL_STORAGE_KEY_IS_WORD_API_AVAILABLE,
+            JSON.stringify(isApiAvailable.isWordApiAvailable)
+        );
+    }, [isApiAvailable.isWordApiAvailable]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_GAME_NOTIFICATION, JSON.stringify(gameNotification));
+    }, [gameNotification]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_IS_DARK_MODE, JSON.stringify(isDarkMode));
+    }, [isDarkMode]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_IS_HIGH_CONTRAST_MODE, JSON.stringify(isHighContrastMode));
+    }, [isHighContrastMode]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_IS_POPUP_OPEN, JSON.stringify(isPopUpOpen));
+    }, [isPopUpOpen]);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY_PLAYER_STATISTICS, JSON.stringify(playerStatistics));
+    }, [playerStatistics]);
 
     // Ref variable to access reset button
     const resetButtonRef = useRef<HTMLButtonElement>(null);
@@ -855,7 +955,7 @@ export default function App() {
     // - Improve stats component
     // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has: { and array of all guessed words, the last guessed word}
     //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
-    // - Add localStorage for all state variables
+    // - Test localStorage on all state variables (remaining: ....); fix bug random word changing between page refreshes[line 214]; fix bug player statistics rerunning on page refresh, and thus updating statistics with one more game (at least on game loss) (also statistics page comes up if game is ended (at least lost) after refresh every time)
     // - Fix bug where after game ending, if you click keyboard, it reshows notification (maybe prevent player from clicking keyboard, or dont do anything when he does)[line 597]
 
     const keyboardLetterRowsArray: string[] = [
