@@ -69,6 +69,7 @@ export default function App() {
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+    const [isHighContrastMode, setIsHighContrastMode] = useState<boolean>(false);
 
     // Object variable to handle whether each pop up is open or not
     const [isPopUpOpen, setIsPopUpOpen] = useState<isPopUpOpenType>({isSettingsPopUpOpen: false, isStatsPopUpOpen: false, isHelpPopUpOpen: false})
@@ -757,6 +758,10 @@ export default function App() {
         setIsDarkMode((prevIsDarkMode) => !prevIsDarkMode);
     }
 
+    function handleChangeHighContrastMode() {
+        setIsHighContrastMode((prevIsHighContrastMode) => !prevIsHighContrastMode);
+    }
+
     // function handleLetterClick(letter: string) {
     //     if (letter === "Enter") {
     //         if (currentGuess.length === gameSettings.wordLength) {
@@ -851,7 +856,7 @@ export default function App() {
     console.log(playerStatistics);
 
     return (
-        <div className="app_container">
+        <div className={`app_container ${isDarkMode ? "dark_mode" : ""} ${isHighContrastMode ? "high_contrast_mode" : ""}`}>
             <Navbar toggleIsPopUpOpen={toggleIsPopUpOpen} />
 
             {isLoading ? (
@@ -944,7 +949,9 @@ export default function App() {
                         gameSettings2={gameSettings2}
                         isApiAvailable={isApiAvailable}
                         isDarkMode={isDarkMode}
+                        isHighContrastMode={isHighContrastMode}
                         handleChangeDarkMode={handleChangeDarkMode}
+                        handleChangeHighContrastMode={handleChangeHighContrastMode}
                         resetButtonRef={resetButtonRef}
                         resetGame={resetGame}
                     />

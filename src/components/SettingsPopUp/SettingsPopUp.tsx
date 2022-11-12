@@ -10,7 +10,9 @@ interface PropTypes {
     gameSettings2: gameSettings2Type;
     isApiAvailable: isApiAvailableType;
     isDarkMode: boolean;
+    isHighContrastMode: boolean;
     handleChangeDarkMode: () => void;
+    handleChangeHighContrastMode: () => void;
     resetButtonRef: React.RefObject<HTMLButtonElement>;
     resetGame: () => void;
 }
@@ -22,7 +24,9 @@ export default function SettingsPopUp({
     gameSettings2,
     isApiAvailable,
     isDarkMode,
+    isHighContrastMode,
     handleChangeDarkMode,
+    handleChangeHighContrastMode,
     resetButtonRef,
     resetGame,
 }: PropTypes) {
@@ -116,6 +120,17 @@ export default function SettingsPopUp({
                             <button onClick={() => handleChangeGameSettings("lazy-mode", "")}>Toggle{gameSettings2.currentGameSettings.lazyMode ? "true" : "false"}</button>
                         </div>
                     </div>
+                    <div className={styles.singular_setting_container}>
+                        <div className={styles.singular_setting_text}>
+                            <h4>High Contrast Mode</h4>
+                            <p>For improved color vision</p>
+                        </div>
+                        <div className={styles.singular_setting_toggler}>
+                            {/* Toggler */}
+                            <button onClick={handleChangeHighContrastMode}>Toggle{isHighContrastMode ? "true" : "false"}</button>
+                        </div>
+                    </div>
+
                     <div className={styles.singular_setting_container}>
                         <div className={styles.singular_setting_text}>
                             <h4>Dark Mode</h4>

@@ -16,6 +16,32 @@ body {
 
 // Style variables
 :root {
+    --app-bg-color: #ffffff;
+    --header-border-color: #d3d6da;
+    --tile-correct-color: #6aaa64;
+    --tile-present-color: #c9b458;
+    --tile-wrong-color: #787c7e;
+    --tile-text-color: #ffffff;
+    --tile-border-color: #d3d6da;
+    --keyboard-letter-text-color: #000000;
+
+    --keyboard-letter-checked-color: #ffffff;
+    --keyboard-letter-tile-bg-color: #d3d6da;
+
+    --keyboard-letter-highlight-color: #5c8d78;
+    --settings-popup-bg-color: #ffffff; 
+    --settings-popup-border-color: #f6f7f8;
+    --settings-popup-box-shadow-color: rgba(0, 0, 0, .5);
+    --settings-text-description-color: #787c7e;
+
+
+    --footer-bg-color: rgb(27, 27, 27);
+    --tile-hightlighted-border-color: #565758;
+}
+
+
+// Dark mode variables
+.dark_mode {
     --app-bg-color: #121213;
     --header-border-color: #3a3a3c;
     --footer-bg-color: rgb(27, 27, 27);
@@ -32,6 +58,13 @@ body {
     --settings-popup-border-color: #1a1a1b;
     --settings-popup-box-shadow-color: rgba(0, 0, 0, .5);
     --settings-text-description-color: #818384;
+}
+
+
+// High contrast mode variables
+.high_contrast_mode {
+    --tile-correct-color: #f5793a;
+    --tile-present-color: #85c0f9;
 }
 
 
