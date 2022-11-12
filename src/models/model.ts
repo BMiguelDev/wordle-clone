@@ -1,12 +1,5 @@
-// // Type definition of the <gameSettings> state variable
-// export interface gameSettingsType {
-//     numberStages: number;
-//     wordLength: number;
-//     hardMode: boolean;
-// }
-
-// Type definition of the <gameSettings2> state variable
-export interface gameSettings2Type {
+// Type definition of the <gameSettings> state variable
+export interface gameSettingsType {
     currentGameSettings: {
         numberStages: number;
         wordLength: number;
@@ -51,7 +44,7 @@ export interface playerStatisticsType {
     gamesLost: number;
     currentStreak: number;
     maxStreak: number;
-    // This array holds, in index 0, the number of wins with 1 guess, in index 1, the number of wins with 2 guesses, and 
+    // This array holds, in index 0, the number of wins with 1 guess, in index 1, the number of wins with 2 guesses, and
     // so on until index 12, with the number of wins with 13 guesses.
     NumberWinsWithXGuesses: number[];
 }

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import styles from "./SettingsPopUp.module.scss";
-import { /*gameSettingsType,*/ gameSettings2Type, isApiAvailableType } from "../../models/model";
+import { gameSettingsType, isApiAvailableType } from "../../models/model";
 
 interface PropTypes {
     isSettingsPopUpOpen: boolean;
     toggleIsPopUpOpen: (event: React.MouseEvent, popUpName: string) => void
     handleChangeGameSettings: (gameSetting: string, option: string) => void;
-    gameSettings2: gameSettings2Type;
+    gameSettings: gameSettingsType;
     isApiAvailable: isApiAvailableType;
     isDarkMode: boolean;
     isHighContrastMode: boolean;
@@ -21,7 +21,7 @@ export default function SettingsPopUp({
     isSettingsPopUpOpen,
     toggleIsPopUpOpen,
     handleChangeGameSettings,
-    gameSettings2,
+    gameSettings,
     isApiAvailable,
     isDarkMode,
     isHighContrastMode,
@@ -84,7 +84,7 @@ export default function SettingsPopUp({
                         >
                             {/* Toggler */}
                             <button onClick={() => handleChangeGameSettings("word-length", "increment")}>+</button>
-                            {gameSettings2.futureGameSettings.wordLength}
+                            {gameSettings.futureGameSettings.wordLength}
                             <button onClick={() => handleChangeGameSettings("word-length", "decrement")}>-</button>
                         </div>
                     </div>
@@ -96,7 +96,7 @@ export default function SettingsPopUp({
                         <div className={styles.singular_setting_toggler}>
                             {/* Toggler */}
                             <button onClick={() => handleChangeGameSettings("stage-number", "increment")}>+</button>
-                            {gameSettings2.futureGameSettings.numberStages}
+                            {gameSettings.futureGameSettings.numberStages}
                             <button onClick={() => handleChangeGameSettings("stage-number", "decrement")}>-</button>
                         </div>
                     </div>
@@ -107,7 +107,7 @@ export default function SettingsPopUp({
                         </div>
                         <div className={styles.singular_setting_toggler}>
                             {/* Toggler */}
-                            <button onClick={() => handleChangeGameSettings("hard-mode", "")}>Toggle{gameSettings2.currentGameSettings.hardMode ? "true" : "false"}</button>
+                            <button onClick={() => handleChangeGameSettings("hard-mode", "")}>Toggle{gameSettings.currentGameSettings.hardMode ? "true" : "false"}</button>
                         </div>
                     </div>
                     <div className={styles.singular_setting_container}>
@@ -117,7 +117,7 @@ export default function SettingsPopUp({
                         </div>
                         <div className={styles.singular_setting_toggler}>
                             {/* Toggler */}
-                            <button onClick={() => handleChangeGameSettings("lazy-mode", "")}>Toggle{gameSettings2.currentGameSettings.lazyMode ? "true" : "false"}</button>
+                            <button onClick={() => handleChangeGameSettings("lazy-mode", "")}>Toggle{gameSettings.currentGameSettings.lazyMode ? "true" : "false"}</button>
                         </div>
                     </div>
                     <div className={styles.singular_setting_container}>

@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Volkhov:wght@700&display=swap');
 
+
 // General page content
 * {
     box-sizing: border-box;
@@ -13,6 +14,7 @@ body {
     padding: 0;
     font-family: 'Open Sans', sans-serif;
 }
+
 
 // Style variables
 :root {
@@ -79,12 +81,15 @@ body {
     background-color: var(--app-bg-color);
 }
 
+
+
 .main_container_loading {
     i {
         font-size: 5rem;
         color: var(--tile-text-color);
     }
 }
+
 
 .main_container {
     position: relative;
