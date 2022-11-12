@@ -3,10 +3,10 @@ import styles from "./Navbar.module.scss";
 
 
 interface PropTypes {
-    toggleIsSettingsPopUpOpen: (event: React.MouseEvent) => void;
+    toggleIsPopUpOpen: (event: React.MouseEvent, popUpName: string) => void;
 }
 
-function Navbar({ toggleIsSettingsPopUpOpen }: PropTypes) {
+function Navbar({ toggleIsPopUpOpen }: PropTypes) {
     return (
         <header className={styles.navbar_container}>
             <div className={styles.navbar_menu_container}>
@@ -14,13 +14,13 @@ function Navbar({ toggleIsSettingsPopUpOpen }: PropTypes) {
             </div>
             <h2 className={styles.navbar_title}>Wordle</h2>
             <div className={styles.navbar_icons_container}>
-                <div className={styles.navbar_icon_container}>
+                <div className={styles.navbar_icon_container}  onClick={(e) => toggleIsPopUpOpen(e, "help")}>
                     <i className="fa-solid fa-question"></i>
                 </div>
-                <div className={styles.navbar_icon_container}>
+                <div className={styles.navbar_icon_container} onClick={(e) => toggleIsPopUpOpen(e, "stats")}>
                     <i className="fa-sharp fa-solid fa-chart-simple"></i>
                 </div>
-                <div className={styles.navbar_icon_container} onClick={(e) => toggleIsSettingsPopUpOpen(e)}>
+                <div className={styles.navbar_icon_container} onClick={(e) => toggleIsPopUpOpen(e, "settings")}>
                     <i className="fa-solid fa-gear"></i>
                 </div>
             </div>

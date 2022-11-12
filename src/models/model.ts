@@ -1,9 +1,9 @@
-// Type definition of the <gameSettings> state variable
-export interface gameSettingsType {
-    numberStages: number;
-    wordLength: number;
-    hardMode: boolean;
-}
+// // Type definition of the <gameSettings> state variable
+// export interface gameSettingsType {
+//     numberStages: number;
+//     wordLength: number;
+//     hardMode: boolean;
+// }
 
 // Type definition of the <gameSettings2> state variable
 export interface gameSettings2Type {
@@ -11,13 +11,13 @@ export interface gameSettings2Type {
         numberStages: number;
         wordLength: number;
         hardMode: boolean;
+        lazyMode: boolean;
     };
     futureGameSettings: {
         numberStages: number;
         wordLength: number;
     };
 }
-
 
 // Type definition of the <randomWordAndArray> state variable
 export interface randomWordAndArrayType {
@@ -35,4 +35,23 @@ export interface isApiAvailableType {
 export interface gameNotificationType {
     isGameNotification: boolean;
     gameNotificationText: string;
+}
+
+// Type definition of the <isPopUpOpen> state varialbe
+export interface isPopUpOpenType {
+    isSettingsPopUpOpen: boolean;
+    isStatsPopUpOpen: boolean;
+    isHelpPopUpOpen: boolean;
+}
+
+//Type definition of the <playerStatistics> state variable
+export interface playerStatisticsType {
+    gamesFinished: number;
+    gamesWon: number;
+    gamesLost: number;
+    currentStreak: number;
+    maxStreak: number;
+    // This array holds, in index 0, the number of wins with 1 guess, in index 1, the number of wins with 2 guesses, and 
+    // so on until index 12, with the number of wins with 13 guesses.
+    NumberWinsWithXGuesses: number[];
 }

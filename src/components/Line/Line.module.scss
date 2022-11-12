@@ -114,7 +114,7 @@
                     background-color: var(--tile-correct-color);
                 }
             }
-            animation: flipBoardTile 1s ease-in-out, turnToGreen 1.25s ease-in-out;
+            animation: flipBoardTile .6s ease-in-out, turnToGreen .85s ease-in-out;
             animation-fill-mode: forwards;
         }
 
@@ -136,7 +136,7 @@
                     background-color: var(--tile-present-color);
                 }
             }
-            animation: flipBoardTile 1s ease-in-out, turnToYellow 1.25s ease-in-out;
+            animation: flipBoardTile .6s ease-in-out, turnToYellow .85s ease-in-out;
             animation-fill-mode: forwards;
         }
 
@@ -158,7 +158,7 @@
                     background-color: var(--tile-wrong-color);
                 }
             }
-            animation: flipBoardTile 1s ease-in-out, turnToGrey 1.25s ease-in-out;
+            animation: flipBoardTile .6s ease-in-out, turnToGrey .85s ease-in-out;
             animation-fill-mode: forwards;
         }
     }

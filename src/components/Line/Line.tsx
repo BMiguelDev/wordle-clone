@@ -2,15 +2,20 @@ import React from "react";
 
 import styles from "./Line.module.scss";
 
-interface LineProps {
+interface PropTypes {
     line: string;
     lineClassNames: string[][];
     index: number;
     wordLength: number;
+    numberStages: number;
     setLineClassNames: React.Dispatch<React.SetStateAction<string[][]>>;
 }
 
-export default function Line({ line, lineClassNames, index, wordLength, setLineClassNames }: LineProps) {
+const MAX_GAME_BOARD_HEIGHT: number = 23;
+const MAX_GAME_BOARD_WIDTH: number = 23.125;
+
+
+export default function Line({ line, lineClassNames, index, wordLength, numberStages, setLineClassNames }: PropTypes) {
     function handleAnimationEnd(i: number) {
         if (lineClassNames[index][i].includes("shake")) {
             setLineClassNames((prevLineClassNames) => {
@@ -24,13 +29,12 @@ export default function Line({ line, lineClassNames, index, wordLength, setLineC
                 newLineClassNames[index][i] = "tile";
                 return newLineClassNames;
             });
-        }
-        else return;
+        } else return;
     }
 
     let tileArray = [];
     for (let i = 0; i < wordLength; i++) {
-        console.log(line[i]);
+        const maxWidthHeightMultiplier = Math.max(wordLength, numberStages);
         tileArray.push(
             <div
                 key={i}
@@ -38,8 +42,13 @@ export default function Line({ line, lineClassNames, index, wordLength, setLineC
                     !lineClassNames[index][i].includes("shake") && !lineClassNames[index][i].includes("tick")
                         ? {
                               animationDelay: `${i * 0.2}s`,
+                              width: `${MAX_GAME_BOARD_WIDTH/maxWidthHeightMultiplier}rem`,
+                              height: `${MAX_GAME_BOARD_HEIGHT/maxWidthHeightMultiplier}rem`,
                           }
-                        : {}
+                        : {
+                              width: `${MAX_GAME_BOARD_WIDTH/maxWidthHeightMultiplier}rem`,
+                              height: `${MAX_GAME_BOARD_HEIGHT/maxWidthHeightMultiplier}rem`,
+                          }
                 }
                 onAnimationEnd={() => handleAnimationEnd(i)}
                 // For each class in lineClassNames[index][i] string, we need a singular `styles.thatString`, hence the confusing code below

@@ -5,7 +5,7 @@ import { /*gameSettingsType,*/ gameSettings2Type, isApiAvailableType } from "../
 
 interface PropTypes {
     isSettingsPopUpOpen: boolean;
-    toggleIsSettingsPopUpOpen: (event: React.MouseEvent) => void;
+    toggleIsPopUpOpen: (event: React.MouseEvent, popUpName: string) => void
     handleChangeGameSettings: (gameSetting: string, option: string) => void;
     gameSettings2: gameSettings2Type;
     isApiAvailable: isApiAvailableType;
@@ -17,7 +17,7 @@ interface PropTypes {
 
 export default function SettingsPopUp({
     isSettingsPopUpOpen,
-    toggleIsSettingsPopUpOpen,
+    toggleIsPopUpOpen,
     handleChangeGameSettings,
     gameSettings2,
     isApiAvailable,
@@ -40,7 +40,7 @@ export default function SettingsPopUp({
         const checkClickToExitSettings = (event: any) => {
             if (isSettingsPopUpOpen) {
                 if (settingsPopupContainerRef.current && !settingsPopupContainerRef.current?.contains(event.target)) {
-                    toggleIsSettingsPopUpOpen(event);
+                    toggleIsPopUpOpen(event, "settings");
                 }
             }
         };
@@ -50,7 +50,7 @@ export default function SettingsPopUp({
         return () => {
             window.removeEventListener("click", checkClickToExitSettings);
         };
-    }, [isSettingsPopUpOpen, toggleIsSettingsPopUpOpen]);
+    }, [isSettingsPopUpOpen, toggleIsPopUpOpen]);
 
     function handleAnimationEnd() {
         if(!isSettingsPopUpOpen) setIsRender(false);
@@ -108,6 +108,16 @@ export default function SettingsPopUp({
                     </div>
                     <div className={styles.singular_setting_container}>
                         <div className={styles.singular_setting_text}>
+                            <h4>Lazy Mode</h4>
+                            <p>Guessed words don't need to be in dictionary</p>
+                        </div>
+                        <div className={styles.singular_setting_toggler}>
+                            {/* Toggler */}
+                            <button onClick={() => handleChangeGameSettings("lazy-mode", "")}>Toggle{gameSettings2.currentGameSettings.lazyMode ? "true" : "false"}</button>
+                        </div>
+                    </div>
+                    <div className={styles.singular_setting_container}>
+                        <div className={styles.singular_setting_text}>
                             <h4>Dark Mode</h4>
                         </div>
                         <div className={styles.singular_setting_toggler}>
@@ -122,7 +132,7 @@ export default function SettingsPopUp({
                     </button>
                 </div>
 
-                <button className={styles.settings_popup_exit_button} onClick={(e) => toggleIsSettingsPopUpOpen(e)}>
+                <button className={styles.settings_popup_exit_button} onClick={(e) => toggleIsPopUpOpen(e, "settings")}>
                     <i className="fa-solid fa-xmark"></i>
                 </button>
 

@@ -6,6 +6,8 @@ import {
     /*gameSettingsType,*/ gameNotificationType,
     gameSettings2Type,
     isApiAvailableType,
+    isPopUpOpenType,
+    playerStatisticsType,
     randomWordAndArrayType,
 } from "./models/model";
 import Line from "./components/Line/Line";
@@ -13,6 +15,8 @@ import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import KeyboardRow from "./components/KeyboardRow/KeyboardRow";
 import SettingsPopUp from "./components/SettingsPopUp/SettingsPopUp";
+import HelpPopUp from "./components/HelpPopUp/HelpPopUp";
+import StatsPopUp from "./components/StatsPopUp/StatsPopUp";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
@@ -29,6 +33,7 @@ export default function App() {
             numberStages: 6,
             wordLength: 5,
             hardMode: false,
+            lazyMode: false
         },
         futureGameSettings: {
             numberStages: 6,
@@ -63,8 +68,20 @@ export default function App() {
     });
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [isSettingsPopUpOpen, setIsSettingsPopUpOpen] = useState<boolean>(false);
     const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+
+    // Object variable to handle whether each pop up is open or not
+    const [isPopUpOpen, setIsPopUpOpen] = useState<isPopUpOpenType>({isSettingsPopUpOpen: false, isStatsPopUpOpen: false, isHelpPopUpOpen: false})
+
+    // Object variable to hold the statistics of the player's games
+    const [playerStatistics, setPlayerStatistics] = useState<playerStatisticsType>({
+        gamesFinished: 0,
+        gamesWon: 0,
+        gamesLost: 0,
+        currentStreak: 0,
+        maxStreak: 0,
+        NumberWinsWithXGuesses: Array(13).fill(0)
+    });
 
     // Ref variable to access reset button
     const resetButtonRef = useRef<HTMLButtonElement>(null);
@@ -145,6 +162,7 @@ export default function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // TODO: remove these useEffects
     useEffect(() => {
         console.log("Changed CurrentGuess");
     }, [currentGuess]);
@@ -156,10 +174,6 @@ export default function App() {
     useEffect(() => {
         console.log("Changed randomWordAndArray");
     }, [randomWordAndArray]);
-
-    // useEffect(() => {
-    //     console.log("Changed gameSettings");
-    // }, [gameSettings]);
 
     useEffect(() => {
         console.log("Changed gameSettings2");
@@ -212,7 +226,10 @@ export default function App() {
                     return newStageWordArray;
                 });
 
+                // Handle game win
                 if (currentGuess === randomWordAndArray.randomWord) {
+                    // Set notification for game end
+                    if (gameNotification.isGameNotification) resetGameNotificationAnimation();
                     if (currentStage === 0) {
                         setGameNotification({ gameNotificationText: "L-U-C-K-Y", isGameNotification: true });
                     } else if (currentStage === 1) {
@@ -239,12 +256,31 @@ export default function App() {
                             setGameNotification({ gameNotificationText: "That was close!", isGameNotification: true });
                         else setGameNotification({ gameNotificationText: "Well done!", isGameNotification: true });
                     }
+
+                    //Update player statistics with 1 more win
+                    setPlayerStatistics(prevPlayerStatistics => {
+                        let newNumberWinsWithXGuesses = [...prevPlayerStatistics.NumberWinsWithXGuesses];
+                        newNumberWinsWithXGuesses[currentStage] += 1;
+                         return {
+                             ...prevPlayerStatistics,
+                             gamesFinished: prevPlayerStatistics.gamesFinished+1,
+                             gamesWon: prevPlayerStatistics.gamesWon+1,
+                             currentStreak: prevPlayerStatistics.currentStreak+1,
+                             maxStreak: prevPlayerStatistics.currentStreak+1 > prevPlayerStatistics.maxStreak ? prevPlayerStatistics.currentStreak+1 : prevPlayerStatistics.maxStreak,
+                             NumberWinsWithXGuesses: newNumberWinsWithXGuesses
+                         }
+                     });
+                    
+                    // After a short delay, show the statistics pop up
+                    setTimeout(() => {
+                        setIsPopUpOpen(prevIsPopUpOpen => ({ ...prevIsPopUpOpen, isStatsPopUpOpen: true}));
+                    }, gameSettings2.currentGameSettings.wordLength*200+500);
                 }
                 setCurrentGuess("");
                 setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
             } else return;
         }, // TODO: replace gameSettings with gameSettings.prevGameSettings or something
-        [currentGuess, currentStage, /*gameSettings,*/ randomWordAndArray, gameSettings2.currentGameSettings]
+        [currentGuess, currentStage, randomWordAndArray, gameNotification, gameSettings2.currentGameSettings]
     );
 
     const handleKeydown = useCallback(
@@ -269,7 +305,7 @@ export default function App() {
                     if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
                     // Hard mode logic
                     else if (gameSettings2.currentGameSettings.hardMode && currentStage !== 0) {
-                        let arrayOfHintedLetters: string[] = []; // Array that will hold all the hinted letters ofo previous stages
+                        let arrayOfHintedLetters: string[] = []; // Array that will hold all the hinted letters of previous stages
                         // For each previous stage
                         for (let i = 0; i < currentStage; i++) {
                             // For each tile class of stage
@@ -336,7 +372,7 @@ export default function App() {
                                 handleStageChange();
                             }
                         }
-                    } else if (isApiAvailable.isDictionaryApiAvailable) {
+                    } else if (isApiAvailable.isDictionaryApiAvailable && !gameSettings2.currentGameSettings.lazyMode) {
                         fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                             .then((response) => {
                                 if (response.ok) handleStageChange();
@@ -362,7 +398,7 @@ export default function App() {
                                 console.log(error);
                             });
                     } else {
-                        // if dictionary Api is not available, don't check if word exists and allow any word
+                        // if dictionary Api is not available or lazy mode is on, don't check if word exists and allow any word
                         handleStageChange();
                     }
                 }
@@ -507,7 +543,7 @@ export default function App() {
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
             console.log(gameSettings2.currentGameSettings.numberStages);
             if (currentStage < gameSettings2.currentGameSettings.numberStages) {
-                if (!isSettingsPopUpOpen /* && !isStatsPopUpOpen && !isHelpPopUpOpen */) {
+                if (!isPopUpOpen.isSettingsPopUpOpen && !isPopUpOpen.isStatsPopUpOpen && !isPopUpOpen.isHelpPopUpOpen) {
                     window.addEventListener("keydown", handleKeydown);
                     console.log("I created new event listener");
                 }
@@ -515,11 +551,21 @@ export default function App() {
                 if (
                     gameNotification.gameNotificationText !==
                     `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
-                )
+                ) {
+                    // Update player statistics with 1 more loss
+                    setPlayerStatistics(prevPlayerStatistics => ({
+                        ...prevPlayerStatistics, 
+                        gamesFinished: prevPlayerStatistics.gamesFinished+1,
+                        gamesLost: prevPlayerStatistics.gamesLost+1,
+                        currentStreak: 0,
+                    }));
+
+                    if (gameNotification.isGameNotification) resetGameNotificationAnimation();
                     setGameNotification({
                         gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
                         isGameNotification: true,
                     });
+                }
             }
         }
 
@@ -532,10 +578,9 @@ export default function App() {
         currentGuess,
         handleKeydown,
         currentStage,
-        //gameSettings,
         gameSettings2.currentGameSettings,
         randomWordAndArray,
-        isSettingsPopUpOpen,
+        isPopUpOpen,
         stageWordArray,
         gameNotification
     ]);
@@ -549,6 +594,7 @@ export default function App() {
                     gameNotification.gameNotificationText !==
                     `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
                 )
+                    if (gameNotification.isGameNotification) resetGameNotificationAnimation();
                     setGameNotification({
                         gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
                         isGameNotification: true,
@@ -556,7 +602,8 @@ export default function App() {
             }
         }
     }
-    
+
+    console.log(gameNotification);
 
     function resetGame() {
         // If word length setting has been changed, get new array of random words from api
@@ -635,16 +682,15 @@ export default function App() {
             currentGameSettings: {
                 ...prevGameSettings2.futureGameSettings,
                 hardMode: prevGameSettings2.currentGameSettings.hardMode,
+                lazyMode: prevGameSettings2.currentGameSettings.lazyMode
             },
         }));
-        setIsSettingsPopUpOpen(false);
+        setIsPopUpOpen(prevIsPopUpOpen => ({...prevIsPopUpOpen, isSettingsPopUpOpen: false}));
     }
 
     function handleChangeGameSettings(gameSetting: string, option: string) {
         switch (gameSetting) {
             case "word-length":
-                if (gameSettings2.futureGameSettings.wordLength > 10 || gameSettings2.futureGameSettings.wordLength < 2)
-                    return;
                 if (option === "increment" && gameSettings2.futureGameSettings.wordLength < 10)
                     setGameSettings2((prevGameSettings2) => ({
                         ...prevGameSettings2,
@@ -652,7 +698,6 @@ export default function App() {
                             ...prevGameSettings2.futureGameSettings,
                             wordLength: prevGameSettings2.futureGameSettings.wordLength + 1,
                         },
-                        //wordLength: prevGameSettings.wordLength + 1,
                     }));
                 else if (option === "decrement" && gameSettings2.futureGameSettings.wordLength > 2)
                     setGameSettings2((prevGameSettings2) => ({
@@ -661,16 +706,10 @@ export default function App() {
                             ...prevGameSettings2.futureGameSettings,
                             wordLength: prevGameSettings2.futureGameSettings.wordLength - 1,
                         },
-                        //wordLength: prevGameSettings.wordLength - 1,
                     }));
                 return;
 
             case "stage-number":
-                if (
-                    gameSettings2.futureGameSettings.numberStages > 13 ||
-                    gameSettings2.futureGameSettings.numberStages < 1
-                )
-                    return;
                 if (option === "increment" && gameSettings2.futureGameSettings.numberStages < 13)
                     setGameSettings2((prevGameSettings2) => ({
                         ...prevGameSettings2,
@@ -678,7 +717,6 @@ export default function App() {
                             ...prevGameSettings2.futureGameSettings,
                             numberStages: prevGameSettings2.futureGameSettings.numberStages + 1,
                         },
-                        //numberStages: prevGameSettings.numberStages + 1,
                     }));
                 else if (option === "decrement" && gameSettings2.futureGameSettings.numberStages > 1)
                     setGameSettings2((prevGameSettings2) => ({
@@ -687,7 +725,6 @@ export default function App() {
                             ...prevGameSettings2.futureGameSettings,
                             numberStages: prevGameSettings2.futureGameSettings.numberStages - 1,
                         },
-                        //numberStages: prevGameSettings.numberStages - 1,
                     }));
                 return;
 
@@ -698,6 +735,16 @@ export default function App() {
                         ...prevGameSettings2.currentGameSettings,
                         hardMode: !prevGameSettings2.currentGameSettings.hardMode,
                     },
+                }));
+                return;
+            
+            case "lazy-mode":
+                setGameSettings2((prevGameSettings2) => ({
+                    ...prevGameSettings2, 
+                    currentGameSettings: {
+                        ...prevGameSettings2.currentGameSettings,
+                        lazyMode: !prevGameSettings2.currentGameSettings.lazyMode
+                    }
                 }));
                 return;
 
@@ -760,19 +807,38 @@ export default function App() {
         }, 100);
     }
 
-    function toggleIsSettingsPopUpOpen(event: React.MouseEvent) {
+    function toggleIsPopUpOpen(event: React.MouseEvent, popUpName: string) {
         event.stopPropagation();
-        setIsSettingsPopUpOpen((prevIsSettingsPopUpOpen) => !prevIsSettingsPopUpOpen);
+        switch (popUpName) {
+            case "settings":
+                setIsPopUpOpen(prevIsPopUpOpen => ({...prevIsPopUpOpen, isSettingsPopUpOpen: !prevIsPopUpOpen.isSettingsPopUpOpen}));
+                break;
+
+            case "stats":
+                setIsPopUpOpen(prevIsPopUpOpen => ({...prevIsPopUpOpen, isStatsPopUpOpen: !prevIsPopUpOpen.isStatsPopUpOpen}));
+                break;
+    
+            case "help":
+                setIsPopUpOpen(prevIsPopUpOpen => ({...prevIsPopUpOpen, isHelpPopUpOpen: !prevIsPopUpOpen.isHelpPopUpOpen}));
+                break;
+    
+            default:
+                break;
+        }
     }
+
 
     // TODO:
     // - Dark Mode
-    // - Improve settings component (as pop up)
-    // - Make winning message component (as pop up) appear after tiles flip (maybe keep track of player wins, and how many guesses it took)
-    // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has. { and array of all guessed words, the last guessed word}
+    // - Visually impaired mode (or whatever its called)
+    // - Improve settings component (as pop up), including toggles and toggle animation
+    // - Make help component
+    // - Improve stats component
+    // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has: { and array of all guessed words, the last guessed word}
     //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
-    // - Fix bug: after tile ticks and letter if removed with backspace, same tile will not tick again (only if we backspace more tiles)
     // - Add localStorage for all state variables
+    // - Fix bug where after game ending, if you click keyboard, it reshows notification (maybe prevent player from clicking keyboard, or dont do anything when he does)[line 597]
+    // - Make stats pop up appear even when game is lost
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
@@ -782,10 +848,11 @@ export default function App() {
 
     console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
     console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
+    console.log(playerStatistics);
 
     return (
         <div className="app_container">
-            <Navbar toggleIsSettingsPopUpOpen={toggleIsSettingsPopUpOpen} />
+            <Navbar toggleIsPopUpOpen={toggleIsPopUpOpen} />
 
             {isLoading ? (
                 <main className="main_container_loading">
@@ -804,6 +871,7 @@ export default function App() {
                                         lineClassNames={lineClassNames}
                                         index={index}
                                         wordLength={gameSettings2.currentGameSettings.wordLength}
+                                        numberStages={gameSettings2.currentGameSettings.numberStages}
                                         setLineClassNames={setLineClassNames}
                                     />
                                 );
@@ -869,10 +937,9 @@ export default function App() {
                         {gameNotification.gameNotificationText}
                     </div>
 
-                    {/* {isSettingsPopUpOpen && ( */}
                     <SettingsPopUp
-                        isSettingsPopUpOpen={isSettingsPopUpOpen}
-                        toggleIsSettingsPopUpOpen={toggleIsSettingsPopUpOpen}
+                        isSettingsPopUpOpen={isPopUpOpen.isSettingsPopUpOpen}
+                        toggleIsPopUpOpen={toggleIsPopUpOpen}
                         handleChangeGameSettings={handleChangeGameSettings}
                         gameSettings2={gameSettings2}
                         isApiAvailable={isApiAvailable}
@@ -881,7 +948,17 @@ export default function App() {
                         resetButtonRef={resetButtonRef}
                         resetGame={resetGame}
                     />
-                    {/* )} */}
+
+                    <StatsPopUp
+                        isStatsPopUpOpen={isPopUpOpen.isStatsPopUpOpen}
+                        toggleIsPopUpOpen={toggleIsPopUpOpen}
+                        playerStatistics={playerStatistics}
+                    />
+
+                    <HelpPopUp
+                        isHelpPopUpOpen={isPopUpOpen.isHelpPopUpOpen}
+                        toggleIsPopUpOpen={toggleIsPopUpOpen}
+                    />
                 </main>
             )}
 
