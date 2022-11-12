@@ -638,8 +638,8 @@ export default function App() {
                     window.addEventListener("keydown", handleKeydown);
                     console.log("I created new event listener");
                 }
-            } else {
-                if (
+            } else if(currentStage === gameSettings.currentGameSettings.numberStages) {
+                if ( // Probably this connditional isnt necessary anymore, because this will only run once on game loss and then currentStage won't be === gameSettings.currentGameSettings.numberStages anymore
                     gameNotification.gameNotificationText !==
                     `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
                 ) {
@@ -661,8 +661,11 @@ export default function App() {
                         gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
                         isGameNotification: true,
                     });
+
+                    setCurrentGuess("");
+                    setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
                 }
-            }
+            } else return;
         }
 
         return () => {
@@ -683,8 +686,8 @@ export default function App() {
     function handleKeyClick(event: React.MouseEvent<HTMLParagraphElement, MouseEvent>, key: string) {
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
             if (currentStage < gameSettings.currentGameSettings.numberStages) handleKeydown(event, key);
-            else {
-                if (
+            else if(currentStage === gameSettings.currentGameSettings.numberStages) {
+                if ( // Probably this connditional isnt necessary anymore, because this will only run once on game loss and then currentStage won't be === gameSettings.currentGameSettings.numberStages anymore
                     gameNotification.gameNotificationText !==
                     `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
                 ) {
@@ -706,8 +709,11 @@ export default function App() {
                         gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
                         isGameNotification: true,
                     });
+
+                    setCurrentGuess("");
+                    setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
                 }
-            }
+            } else return;
         }
     }
 
@@ -955,7 +961,7 @@ export default function App() {
     // - Improve stats component
     // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has: { and array of all guessed words, the last guessed word}
     //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
-    // - Test localStorage on all state variables (remaining: ....); fix bug random word changing between page refreshes[line 214]; fix bug player statistics rerunning on page refresh, and thus updating statistics with one more game (at least on game loss) (also statistics page comes up if game is ended (at least lost) after refresh every time)
+    // - Test localStorage on all state variables (remaining: lineClassNames); fix bug random word changing between page refreshes[line 214]; fix bug player statistics rerunning on page refresh, and thus updating statistics with one more game (only on game loss) (also statistics page comes up if game is lost after refresh every time) [line 690 and 642]
     // - Fix bug where after game ending, if you click keyboard, it reshows notification (maybe prevent player from clicking keyboard, or dont do anything when he does)[line 597]
 
     const keyboardLetterRowsArray: string[] = [
