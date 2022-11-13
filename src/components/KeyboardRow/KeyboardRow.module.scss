@@ -39,6 +39,10 @@
 
             animation: turnToGreen .5s ease-in-out;
             animation-fill-mode: forwards;
+
+            p {
+                color: var(--keyboard-letter-checked-color);
+            }
         }
 
         &.keyboard_letter_tile_yellow {
@@ -54,6 +58,10 @@
 
             animation: turnToYellow .5s ease-in-out;
             animation-fill-mode: forwards;
+
+            p {
+                color: var(--keyboard-letter-checked-color);
+            }
         }
 
         &.keyboard_letter_tile_grey {
@@ -69,18 +77,22 @@
 
             animation: turnToGrey .5s ease-in-out;
             animation-fill-mode: forwards;
+            
+            p {
+                color: var(--keyboard-letter-checked-color);
+            }
         }
 
         &.keyboard_letter_tile_enter {
             width: 4rem;
-            color: var(--tile-text-color);
+            color: var(--keyboard-letter-text-color);
             letter-spacing: .05rem;
             font-size: .8rem;
         }
 
         &.keyboard_letter_tile_backspace {
             width: 4rem;
-            color: var(--tile-text-color);
+            color: var(--keyboard-letter-text-color);
             font-size: 1.3rem;
         }
 

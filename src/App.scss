@@ -19,47 +19,50 @@ body {
 // Style variables
 :root {
     --app-bg-color: #ffffff;
+    --header-color: #000000;
     --header-border-color: #d3d6da;
     --tile-correct-color: #6aaa64;
     --tile-present-color: #c9b458;
     --tile-wrong-color: #787c7e;
     --tile-text-color: #ffffff;
     --tile-border-color: #d3d6da;
+    --tile-hightlighted-border-color: #878a8c;
     --keyboard-letter-text-color: #000000;
-
     --keyboard-letter-checked-color: #ffffff;
     --keyboard-letter-tile-bg-color: #d3d6da;
-
     --keyboard-letter-highlight-color: #5c8d78;
-    --settings-popup-bg-color: #ffffff; 
-    --settings-popup-border-color: #f6f7f8;
-    --settings-popup-box-shadow-color: rgba(0, 0, 0, .5);
-    --settings-text-description-color: #787c7e;
+    --popup-bg-color: #ffffff; 
+    --popup-border-color: #f6f7f8;
+    --popup-box-shadow-color: rgba(0, 0, 0, .375);
+    --popup-text-description-color: #787c7e;
 
 
     --footer-bg-color: rgb(27, 27, 27);
-    --tile-hightlighted-border-color: #565758;
+    
 }
 
 
 // Dark mode variables
 .dark_mode {
     --app-bg-color: #121213;
+    --header-color: #ffffff;
     --header-border-color: #3a3a3c;
-    --footer-bg-color: rgb(27, 27, 27);
     --tile-correct-color: #538d4e;
     --tile-present-color: #b59f3b;
     --tile-wrong-color: #3a3a3c;
     --tile-border-color: #363636;
     --tile-hightlighted-border-color: #565758;
     --tile-text-color: #ffffff;
+    --keyboard-letter-text-color: #ffffff;
+    --keyboard-letter-checked-color: #ffffff;
     --keyboard-letter-tile-bg-color: #818384;
     --keyboard-letter-highlight-color: #5c8d78;
-    --keyboard-letter-text-color: #ffffff;
     --settings-popup-bg-color: #121213;
     --settings-popup-border-color: #1a1a1b;
     --settings-popup-box-shadow-color: rgba(0, 0, 0, .5);
     --settings-text-description-color: #818384;
+
+    --footer-bg-color: rgb(27, 27, 27);
 }
 
 

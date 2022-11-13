@@ -7,15 +7,15 @@
     //height: 61.5%;
     height: fit-content;
     padding: 2rem 0;
-    border: 1px solid var(--settings-popup-border-color);
-    background-color: var(--settings-popup-bg-color);
+    border: 1px solid var(--popup-border-color);
+    background-color: var(--popup-bg-color);
     display: flex;
     align-items: center;
     flex-direction: column;
     //justify-content: space-evenly;
     justify-content: center;
     gap: 2rem;
-    box-shadow: 0 0 10px 1000px var(--settings-popup-box-shadow-color);
+    box-shadow: 0 0 10px 1000px var(--popup-box-shadow-color);
     border-radius: .5rem;
     
     @keyframes slideIn {
@@ -45,10 +45,10 @@
         gap: 1rem;
         width: 100%;
         padding: 0 1rem;
-        color: var(--tile-text-color);
+        color: var(--keyboard-letter-text-color);
 
         .stats_popup_stats_numbers_title {
-            color: var(--tile-text-color);
+            color: var(--keyboard-letter-text-color);
             text-transform: uppercase;
             text-align: center;
             font-weight: bold;
@@ -81,9 +81,7 @@
                     font-size: .75rem;
                 }
             }
-
         }
-
     }
 
     .stats_popup_stats_graph {
@@ -93,10 +91,10 @@
         justify-content: center;
         width: 100%;
         padding: 0 1rem;
-        color: var(--tile-text-color);
+        color: var(--keyboard-letter-text-color);
 
         .stats_popup_stats_graph_title {
-            color: var(--tile-text-color);
+            color: var(--keyboard-letter-text-color);
             text-transform: uppercase;
             text-align: center;
             font-weight: bold;
@@ -113,7 +111,7 @@
             .singular_graph_line_container {
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                justify-content: flex-start;
                 gap: .5rem;
                 width: 100%;
 
@@ -126,84 +124,16 @@
                 }
 
                 .singular_graph_bar {
-                    width: 90%;
                     display: flex;
                     justify-content: flex-end;
+                    background-color: var(--tile-wrong-color);
 
                     p {
                         margin: 0;
+                        color: var(--tile-text-color);
                     }
                 }
             }
-        }
-    }
-
-    .stats_popup_settings {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        padding: 0 1rem;
-        color: var(--tile-text-color);
-
-        .singular_setting_container {
-            width: 100%;
-            display: flex;  
-            align-items: center;
-            justify-content: space-between; 
-            border-bottom: 1px solid var(--tile-wrong-color);
-
-            .singular_setting_text {
-
-                padding: 1rem 0;
-                h4 {
-                    margin: 0;
-                    font-weight: lighter;
-                    font-size: 1.13rem;
-                }
-
-                p {
-                    margin: 0;
-                    font-size: .75rem;
-                    color: var(--settings-text-description-color);
-                }
-            }
-
-            // TODO: change according to toggler style
-            .singular_setting_toggler {
-                background-color: blueviolet;
-                display: flex;
-                align-items: center;
-
-                // TODO: recheck if this is 100% correct (make opacity and not being able to click only on the buttons maybe?)
-                &.singular_setting_toggler_disabled {
-                    opacity: .35;
-                    position: relative;
-
-                    &::before {
-                        content: '';
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
-            }
-        }
-    }
-
-    .settings_popup_reset_button_container {
-
-        button {
-            padding: .5rem 1rem;
-            border-radius: .25rem;
-            background-color: var(--tile-present-color);
-            color: var(--settings-popup-bg-color);
-            font-size: .9rem;
-            font-weight: bold;
-            cursor: pointer;
         }
     }
 
@@ -212,8 +142,8 @@
         top: 3.15%;
         right: 3%;
         font-size: 1.3rem;
-        background-color: var(--settings-popup-bg-color);
-        color: var(--tile-text-color);
+        background-color: var(--popup-bg-color);
+        color: var(--keyboard-letter-text-color);
         border: none;
         cursor: pointer;
     }

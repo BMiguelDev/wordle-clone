@@ -37,6 +37,12 @@ export default function StatsPopUp({ isStatsPopUpOpen, toggleIsPopUpOpen, player
     function handleAnimationEnd() {
         if (!isStatsPopUpOpen) setIsRender(false);
     }
+    
+    let maxGraphWins = 0;
+    playerStatistics.NumberWinsWithXGuesses.forEach(numberWins => {
+        if(numberWins>maxGraphWins) maxGraphWins=numberWins;
+    })
+    const widthPerWin = Math.floor(90/maxGraphWins);
 
     return isRender ? (
         <div className={styles.stats_pop_up_wrapper}>
@@ -74,31 +80,24 @@ export default function StatsPopUp({ isStatsPopUpOpen, toggleIsPopUpOpen, player
                 <div className={styles.stats_popup_stats_graph}>
                     <div className={styles.stats_popup_stats_graph_title}>Guess Distribution</div>
                     <div className={styles.stats_graph_column_container}>
-                        <div className={styles.singular_graph_line_container}>
+                    {
+                        playerStatistics.NumberWinsWithXGuesses.map((numberWins, index) => (
+                        <div key={index} className={styles.singular_graph_line_container}>
                             <p className={styles.singular_graph_number}>
-                                0
+                                {index+1}
                             </p>
-                            <div className={styles.singular_graph_bar}>
-                                <p>Hey</p>
+                            <div className={styles.singular_graph_bar} style={{width: numberWins>0 ? `${widthPerWin*numberWins}%` : `5%`}}>
+                                <p>{numberWins}</p>
                             </div>
                         </div>
-                        <div className={styles.singular_graph_line_container}>
-                            <p className={styles.singular_graph_number}>
-                                1
-                            </p>
-                            <div className={styles.singular_graph_bar}>
-                                <p>Hey</p>
-                            </div>
-                        </div>
+                        ))
+                    }
                     </div>
                 </div>
 
                 <button className={styles.stats_popup_exit_button} onClick={(e) => toggleIsPopUpOpen(e, "stats")}>
                     <i className="fa-solid fa-xmark"></i>
                 </button>
-
-                {/* TODO: Maybe add an area of notification to the right of the restart button when a gameSetting is different from the currentGameSetting (being used in the current game).
-            This notification area should say "Restart game to apply New Settings" */}
             </div>
         </div>
     ) : (

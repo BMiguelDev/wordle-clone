@@ -5,13 +5,13 @@
     left: 33.75%;
     width: 32.5%;
     height: 61.5%;
-    border: 1px solid var(--settings-popup-border-color);
-    background-color: var(--settings-popup-bg-color);
+    border: 1px solid var(--popup-border-color);
+    background-color: var(--popup-bg-color);
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: space-evenly;
-    box-shadow: 0 0 10px 1000px var(--settings-popup-box-shadow-color);
+    box-shadow: 0 0 10px 1000px var(--popup-box-shadow-color);
     border-radius: .5rem;
     
     @keyframes slideIn {
@@ -27,7 +27,7 @@
     animation: slideIn .2s ease 0s;
 
     .settings_popup_title {
-        color: var(--tile-text-color);
+        color: var(--keyboard-letter-text-color);
         text-transform: uppercase;
         text-align: center;
         font-weight: bold;
@@ -41,7 +41,7 @@
         justify-content: center;
         width: 100%;
         padding: 0 1rem;
-        color: var(--tile-text-color);
+        color: var(--keyboard-letter-text-color);
 
         .singular_setting_container {
             width: 100%;
@@ -62,7 +62,7 @@
                 p {
                     margin: 0;
                     font-size: .75rem;
-                    color: var(--settings-text-description-color);
+                    color: var(--popup-text-description-color);
                 }
             }
 
@@ -96,7 +96,8 @@
             padding: .5rem 1rem;
             border-radius: .25rem;
             background-color: var(--tile-present-color);
-            color: var(--settings-popup-bg-color);
+            color: var(--popup-bg-color);
+            border: .05rem solid var(--popup-text-description-color);
             font-size: .9rem;
             font-weight: bold;
             cursor: pointer;
@@ -108,7 +109,7 @@
         top: 3.15%;
         right: 3%;
         font-size: 1.3rem;
-        background-color: var(--settings-popup-bg-color);
+        background-color: var(--popup-bg-color);
         color: var(--tile-text-color);
         border: none;
         cursor: pointer;

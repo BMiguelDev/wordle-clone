@@ -807,6 +807,7 @@ export default function App() {
     // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has: { and array of all guessed words, the last guessed word}
     //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
     // - Test localStorage on all state variables (remaining: lineClassNames)
+    // - Make stats color green the background of the graph of the number of stages of last win (if it was a win) (maybe state object about last game: isWin, arrayofGuesses, numberGuessesInputted)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],

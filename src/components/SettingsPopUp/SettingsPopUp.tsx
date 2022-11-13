@@ -75,7 +75,6 @@ export default function SettingsPopUp({
                     <div className={styles.singular_setting_container}>
                         <div className={styles.singular_setting_text}>
                             <h4>Word Length</h4>
-                            <p>Explanation of word Length (if necessary)</p>
                         </div>
                         <div
                             className={`${styles.singular_setting_toggler} ${
@@ -90,8 +89,7 @@ export default function SettingsPopUp({
                     </div>
                     <div className={styles.singular_setting_container}>
                         <div className={styles.singular_setting_text}>
-                            <h4>Stage Number</h4>
-                            <p>Explanation of Stage Number (if necessary)</p>
+                            <h4>Number of Stages</h4>
                         </div>
                         <div className={styles.singular_setting_toggler}>
                             {/* Toggler */}
