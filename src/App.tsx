@@ -33,6 +33,7 @@ const LOCAL_STORAGE_KEY_PLAYER_STATISTICS = "WordleCloneApp.playerStatistics";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
+
 export default function App() {
     // Object state variable to hold the current and future game settings
     const [gameSettings, setgameSettings] = useState<gameSettingsType>(() => {
@@ -211,9 +212,6 @@ export default function App() {
 
     useEffect(() => {
         const fetchData = async () => {
-            // TODO: if randomWordArray isnt empty (from local storage), skip this whole function (because we will have "infinite"
-            //  random words and the api is "pseudo-available" because we already have everything in storage)
-
             // Check if words Api is available
             const checkWordsApi = await fetch("https://api.datamuse.com/words?sp=?????");
             if (checkWordsApi.ok)
@@ -278,10 +276,9 @@ export default function App() {
             const dictionaryTestData = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/hello");
             if (dictionaryTestData.ok)
                 setIsApiAvailable((prevIsApiAvailable) => ({ ...prevIsApiAvailable, isDictionaryApiAvailable: true }));
-            console.log(dictionaryTestData);
         };
 
-        fetchData();
+        if(randomWordAndArray.randomWordArray.length===0) fetchData();
         checkDictionaryApi();
         setIsLoading(false);
 
@@ -496,15 +493,6 @@ export default function App() {
                     }
                 }
             } else if (keyValue === "Backspace") {
-                // After hitting backspace, if current row had className "shake", remove it so it can be added again to trigger animation
-                // if (lineClassNames[currentStage][0] === "tile shake") {
-                //     const newLineClassNamesRow: string[] = Array(gameSettings.wordLength).fill("tile");
-                //     setLineClassNames((prevLineClassNames) => {
-                //         let newLineClassNames = [...prevLineClassNames];
-                //         newLineClassNames[currentStage] = newLineClassNamesRow;
-                //         return newLineClassNames;
-                //     });
-                // }
                 setCurrentGuess((prevCurrentGuess) => {
                     if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
                     else return prevCurrentGuess;
@@ -525,111 +513,6 @@ export default function App() {
     );
 
     useEffect(() => {
-        // function handleStageChange() {
-        //     console.log(gameSettings.numberStages);
-        //     if (currentStage < gameSettings.numberStages) {
-        //         //Make checks
-        //         let colorArray: string[] = [];
-        //         currentGuess
-        //             .toLowerCase()
-        //             .split("")
-        //             .forEach((currentGuessChar, currentGuessIndex) => {
-        //                 let color: string = "tile grey";
-        //                 randomWordAndArray.randomWord.split("").forEach((randomWordChar, randomWordIndex) => {
-        //                     if (currentGuessChar === randomWordChar) {
-        //                         if (color !== "tile green") color = "tile yellow";
-        //                     }
-        //                     if (currentGuessChar === randomWordChar && currentGuessIndex === randomWordIndex)
-        //                         color = "tile green";
-        //                 });
-        //                 colorArray.push(color);
-        //             });
-        //         setLineClassNames((prevLineClassNames) => {
-        //             let newLineClassNames = [...prevLineClassNames];
-        //             newLineClassNames[currentStage] = colorArray;
-        //             return newLineClassNames;
-        //         });
-
-        //         setStageWordArray((prevStageWordArray) => {
-        //             let newStageWordArray = [...prevStageWordArray];
-        //             newStageWordArray[currentStage] = currentGuess;
-        //             return newStageWordArray;
-        //         });
-
-        //         if (currentGuess === randomWordAndArray.randomWord) {
-        //             alert("you win");
-        //         }
-        //         setCurrentGuess("");
-        //         setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
-        //     } else return;
-        // }
-
-        // const handleKeydown = (event: KeyboardEvent) => {
-        //     if (currentGuess.length < gameSettings.wordLength && event.key.length === 1 && /[a-zA-Z]/.test(event.key)) {
-        //         setLineClassNames((prevLineClassNames) => {
-        //             let newLineClassNames = [...prevLineClassNames];
-        //             newLineClassNames[currentStage] = newLineClassNames[currentStage].map((className, index) => {
-        //                 if (index === currentGuess.length) return "tile tick";
-        //                 else return "tile";
-        //             });
-        //             return newLineClassNames;
-        //         });
-        //         setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + event.key);
-        //     } else if (event.key === "Enter") {
-        //         if (currentGuess.length === gameSettings.wordLength) {
-        //             if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
-        //             // TODO: Add Hard mode logic here
-        //             // else if (gameSettings.hardMode && currentStage!==0) {
-        //             // }
-        //             else if (isApiAvailable.isDictionaryApiAvailable) {
-        //                 fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
-        //                     .then((response) => {
-        //                         if (response.ok) handleStageChange();
-        //                         else {
-        //                             let classArray: string[] = "tile shake,".repeat(gameSettings.wordLength).split(",");
-        //                             classArray.pop();
-        //                             setLineClassNames((prevLineClassNames) => {
-        //                                 let newLineClassNames = [...prevLineClassNames];
-        //                                 newLineClassNames[currentStage] = classArray;
-        //                                 return newLineClassNames;
-        //                             });
-        //                             if (
-        //                                 notificationsDivRef.current?.className.includes(
-        //                                     "notification_container_animate"
-        //                                 )
-        //                             )
-        //                                 resetGameNotificationAnimation();
-
-        //                             //alert("Word doesn't exist");
-        //                         }
-        //                     })
-        //                     .catch((error) => {
-        //                         console.log(error);
-        //                     });
-        //             } else {
-        //                 // if dictionary Api is not available, don't check if word exists and allow any word
-        //                 handleStageChange();
-        //             }
-        //         }
-        //     } else if (event.key === "Backspace") {
-        //         // After hitting backspace, if current row had className "shake", remove it so it can be added again to trigger animation
-        //         // if (lineClassNames[currentStage][0] === "tile shake") {
-        //         //     const newLineClassNamesRow: string[] = Array(gameSettings.wordLength).fill("tile");
-        //         //     setLineClassNames((prevLineClassNames) => {
-        //         //         let newLineClassNames = [...prevLineClassNames];
-        //         //         newLineClassNames[currentStage] = newLineClassNamesRow;
-        //         //         return newLineClassNames;
-        //         //     });
-        //         // }
-        //         setCurrentGuess((prevCurrentGuess) => {
-        //             if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
-        //             else return prevCurrentGuess;
-        //         });
-        //     }
-        // };
-
-        //console.log("Im in the big useEffect");
-
         // If random word hasn't been correctly guessed yet and if last stage hasn't been reached, let user keep typing guessess
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
             console.log(gameSettings.currentGameSettings.numberStages);
@@ -639,10 +522,11 @@ export default function App() {
                     console.log("I created new event listener");
                 }
             } else if(currentStage === gameSettings.currentGameSettings.numberStages) {
-                if ( // Probably this connditional isnt necessary anymore, because this will only run once on game loss and then currentStage won't be === gameSettings.currentGameSettings.numberStages anymore
-                    gameNotification.gameNotificationText !==
-                    `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
-                ) {
+                // if ( // Probably this connditional isnt necessary anymore, because this will only run once on game loss and then currentStage won't be === gameSettings.currentGameSettings.numberStages anymore
+                //     gameNotification.gameNotificationText !==
+                //     `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
+                // ) {
+
                     // Update player statistics with 1 more loss
                     setPlayerStatistics((prevPlayerStatistics) => ({
                         ...prevPlayerStatistics,
@@ -664,7 +548,7 @@ export default function App() {
 
                     setCurrentGuess("");
                     setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
-                }
+                // }
             } else return;
         }
 
@@ -687,10 +571,11 @@ export default function App() {
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
             if (currentStage < gameSettings.currentGameSettings.numberStages) handleKeydown(event, key);
             else if(currentStage === gameSettings.currentGameSettings.numberStages) {
-                if ( // Probably this connditional isnt necessary anymore, because this will only run once on game loss and then currentStage won't be === gameSettings.currentGameSettings.numberStages anymore
-                    gameNotification.gameNotificationText !==
-                    `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
-                ) {
+                // if ( // Probably this connditional isnt necessary anymore, because this will only run once on game loss and then currentStage won't be === gameSettings.currentGameSettings.numberStages anymore
+                //     gameNotification.gameNotificationText !==
+                //     `Word was: "${randomWordAndArray.randomWord}". Better luck next time`
+                // ) {
+
                     // Update player statistics with 1 more loss
                     setPlayerStatistics((prevPlayerStatistics) => ({
                         ...prevPlayerStatistics,
@@ -712,7 +597,7 @@ export default function App() {
 
                     setCurrentGuess("");
                     setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
-                }
+                // }
             } else return;
         }
     }
@@ -875,49 +760,9 @@ export default function App() {
         setIsHighContrastMode((prevIsHighContrastMode) => !prevIsHighContrastMode);
     }
 
-    // function handleLetterClick(letter: string) {
-    //     if (letter === "Enter") {
-    //         if (currentGuess.length === gameSettings.wordLength) {
-    //             fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
-    //                 .then((response) => {
-    //                     if (response.ok) console.log("handleStateChange"); //handleStageChange();
-    //                     else {
-    //                         let classArray: string[] = "tile shake,".repeat(5).split(",");
-    //                         classArray.pop();
-    //                         setLineClassNames((prevLineClassNames) => {
-    //                             let newLineClassNames = [...prevLineClassNames];
-    //                             newLineClassNames[currentStage] = classArray;
-    //                             return newLineClassNames;
-    //                         });
-
-    //                         if (notificationsDivRef.current?.className.includes("notification_container_animate"))
-    //                             resetGameNotificationAnimation();
-    //                     }
-    //                 })
-    //                 .catch((error) => {
-    //                     console.log(error);
-    //                 });
-    //         }
-    //     } else if (letter === "Backspace") {
-    //         setCurrentGuess((prevCurrentGuess) => {
-    //             if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
-    //             else return prevCurrentGuess;
-    //         });
-    //     } else if (currentGuess.length < gameSettings.wordLength)
-    //         setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + letter);
-    //     else return;
-    // }
-
     const notificationsDivRef = useRef<HTMLDivElement>(null);
 
     function resetGameNotificationAnimation() {
-        // if (notificationsDivRef.current)
-        //     notificationsDivRef.current.className = "notification_container notification_container_invisible";
-        // setTimeout(() => {
-        //     if (notificationsDivRef.current)
-        //         notificationsDivRef.current.className = "notification_container notification_container_animate";
-        // }, 100);
-
         if (notificationsDivRef.current)
             notificationsDivRef.current.className = "notification_container notification_container_invisible";
         setTimeout(() => {
@@ -961,8 +806,7 @@ export default function App() {
     // - Improve stats component
     // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has: { and array of all guessed words, the last guessed word}
     //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
-    // - Test localStorage on all state variables (remaining: lineClassNames); fix bug random word changing between page refreshes[line 214]; fix bug player statistics rerunning on page refresh, and thus updating statistics with one more game (only on game loss) (also statistics page comes up if game is lost after refresh every time) [line 690 and 642]
-    // - Fix bug where after game ending, if you click keyboard, it reshows notification (maybe prevent player from clicking keyboard, or dont do anything when he does)[line 597]
+    // - Test localStorage on all state variables (remaining: lineClassNames)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
@@ -972,7 +816,6 @@ export default function App() {
 
     console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
     console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
-    console.log(playerStatistics);
 
     return (
         <div
@@ -1038,17 +881,6 @@ export default function App() {
                             <p>WordApi is not available</p>
                         )} */}
                     </div>
-
-                    {/* <div
-                        ref={notificationsDivRef}
-                        className={
-                            lineClassNames[currentStage] != null && lineClassNames[currentStage][0].includes("shake")
-                                ? "notification_container notification_container_animate"
-                                : "notification_container notification_container_invisible"
-                        }
-                    >
-                        Word doesn't exist
-                    </div> */}
 
                     <div
                         ref={notificationsDivRef}
