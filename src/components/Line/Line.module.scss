@@ -16,6 +16,10 @@
         transition: all .05s ease-in-out;
         color: var(--keyboard-letter-text-color);
 
+        .letter {
+            margin: 0;
+        }
+
         &.border_highlight {
             border: .1rem solid var(--tile-hightlighted-border-color);
         }

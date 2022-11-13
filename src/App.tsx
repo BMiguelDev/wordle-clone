@@ -808,6 +808,7 @@ export default function App() {
     //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
     // - Test localStorage on all state variables (remaining: lineClassNames)
     // - Make stats color green the background of the graph of the number of stages of last win (if it was a win) (maybe state object about last game: isWin, arrayofGuesses, numberGuessesInputted)
+    // - Make tile animations twice faster if game has already finished (maybe use the state i mentioned above)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],

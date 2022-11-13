@@ -36,9 +36,7 @@ body {
     --popup-box-shadow-color: rgba(0, 0, 0, .375);
     --popup-text-description-color: #787c7e;
 
-
     --footer-bg-color: rgb(27, 27, 27);
-    
 }
 
 
@@ -57,10 +55,10 @@ body {
     --keyboard-letter-checked-color: #ffffff;
     --keyboard-letter-tile-bg-color: #818384;
     --keyboard-letter-highlight-color: #5c8d78;
-    --settings-popup-bg-color: #121213;
-    --settings-popup-border-color: #1a1a1b;
-    --settings-popup-box-shadow-color: rgba(0, 0, 0, .5);
-    --settings-text-description-color: #818384;
+    --popup-bg-color: #121213;
+    --popup-border-color: #1a1a1b;
+    --popup-box-shadow-color: rgba(0, 0, 0, .5);
+    --popup-text-description-color: #818384;
 
     --footer-bg-color: rgb(27, 27, 27);
 }
@@ -83,7 +81,6 @@ body {
     justify-content: space-between;
     background-color: var(--app-bg-color);
 }
-
 
 
 .main_container_loading {
@@ -166,5 +163,4 @@ body {
             display: none;
         }
     }
-
 }

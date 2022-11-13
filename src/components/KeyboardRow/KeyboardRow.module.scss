@@ -19,11 +19,10 @@
         font-weight: bold;
         cursor: pointer;
         position: relative;
+        color: var(--keyboard-letter-text-color);
 
         .keyboard_letter_text {
             margin: 0;
-            z-index: 3;
-            color: var(--keyboard-letter-text-color);
         }
 
         &.keyboard_letter_tile_green {
@@ -33,16 +32,13 @@
                 }
 
                 100% {
+                    color: var(--keyboard-letter-checked-color);
                     background-color: var(--tile-correct-color);
                 }
             }
 
             animation: turnToGreen .5s ease-in-out;
             animation-fill-mode: forwards;
-
-            p {
-                color: var(--keyboard-letter-checked-color);
-            }
         }
 
         &.keyboard_letter_tile_yellow {
@@ -52,16 +48,13 @@
                 }
 
                 100% {
+                    color: var(--keyboard-letter-checked-color);
                     background-color: var(--tile-present-color);
                 }
             }
 
             animation: turnToYellow .5s ease-in-out;
             animation-fill-mode: forwards;
-
-            p {
-                color: var(--keyboard-letter-checked-color);
-            }
         }
 
         &.keyboard_letter_tile_grey {
@@ -71,16 +64,13 @@
                 }
 
                 100% {
+                    color: var(--keyboard-letter-checked-color);
                     background-color: var(--tile-wrong-color);
                 }
             }
 
             animation: turnToGrey .5s ease-in-out;
             animation-fill-mode: forwards;
-            
-            p {
-                color: var(--keyboard-letter-checked-color);
-            }
         }
 
         &.keyboard_letter_tile_enter {

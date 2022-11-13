@@ -30,13 +30,6 @@
     }
     animation: slideIn .2s ease 0s;
 
-
-    & * {
-        outline: .01rem solid red;
-    }
-    outline: .01rem solid red;
-
-
     .stats_popup_stats_numbers {
         display: flex;
         flex-direction: column;
@@ -106,6 +99,7 @@
             flex-direction: column;
             //align-items: center;
             justify-content: space-evenly;
+            gap: .225rem;
             width: 100%;
 
             .singular_graph_line_container {
@@ -121,6 +115,10 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    font-weight: bold;
+                    font-size: .75rem;
+                    line-height: 1.15rem;
+                    letter-spacing: .1rem;
                 }
 
                 .singular_graph_bar {
@@ -131,6 +129,10 @@
                     p {
                         margin: 0;
                         color: var(--tile-text-color);
+                        padding-right: .35rem;
+                        font-weight: bold;
+                        font-size: .75rem;
+                        line-height: 1.15rem;
                     }
                 }
             }

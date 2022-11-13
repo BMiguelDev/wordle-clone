@@ -86,7 +86,7 @@ export default function StatsPopUp({ isStatsPopUpOpen, toggleIsPopUpOpen, player
                             <p className={styles.singular_graph_number}>
                                 {index+1}
                             </p>
-                            <div className={styles.singular_graph_bar} style={{width: numberWins>0 ? `${widthPerWin*numberWins}%` : `5%`}}>
+                            <div className={styles.singular_graph_bar} style={{width: numberWins>0 ? `${widthPerWin*numberWins}%` : `7.5%`}}>
                                 <p>{numberWins}</p>
                             </div>
                         </div>
