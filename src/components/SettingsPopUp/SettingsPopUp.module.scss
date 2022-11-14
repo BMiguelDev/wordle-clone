@@ -51,8 +51,9 @@
             border-bottom: 1px solid var(--tile-wrong-color);
 
             .singular_setting_text {
-
+                width: 65%;
                 padding: 1rem 0;
+
                 h4 {
                     margin: 0;
                     font-weight: lighter;
@@ -68,9 +69,45 @@
 
             // TODO: change according to toggler style
             .singular_setting_toggler {
-                background-color: blueviolet;
+                width: 25%;
+                height: 25%;
                 display: flex;
                 align-items: center;
+                justify-content: flex-end;
+
+
+                .singular_setting_toggler_area {
+                    width: 2rem;
+                    height: 1.25rem;
+                    background-color: var(--tile-hightlighted-border-color);
+                    border-radius: 2rem;
+                    position: relative;
+                    cursor: pointer;
+                    transition: all .2s ease-in-out;
+                    
+                    &.toggler_area_on {
+                        background-color: var(--tile-correct-color);
+                    }
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        top: 9%;
+                        left: 5%;
+                        width: 50%;
+                        height: 80%;
+                        background-color: var(--keyboard-letter-checked-color);
+                        border-radius: 2rem;
+                        translate: 77.5% 0;
+                        transition: all .2s ease-in-out;
+                    }
+
+                    &.toggler_area_off::before {
+                        translate: 0% 0%;
+                    }
+                }
+
+
 
                 // TODO: recheck if this is 100% correct (make opacity and not being able to click only on the buttons maybe?)
                 &.singular_setting_toggler_disabled {

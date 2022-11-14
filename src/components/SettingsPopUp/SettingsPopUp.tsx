@@ -5,7 +5,7 @@ import { gameSettingsType, isApiAvailableType } from "../../models/model";
 
 interface PropTypes {
     isSettingsPopUpOpen: boolean;
-    toggleIsPopUpOpen: (event: React.MouseEvent, popUpName: string) => void
+    toggleIsPopUpOpen: (event: React.MouseEvent, popUpName: string) => void;
     handleChangeGameSettings: (gameSetting: string, option: string) => void;
     gameSettings: gameSettingsType;
     isApiAvailable: isApiAvailableType;
@@ -30,14 +30,12 @@ export default function SettingsPopUp({
     resetButtonRef,
     resetGame,
 }: PropTypes) {
-
     const [isRender, setIsRender] = useState<boolean>(isSettingsPopUpOpen);
 
     useEffect(() => {
-        if(isSettingsPopUpOpen) setIsRender(true);
-    }, [isSettingsPopUpOpen])
+        if (isSettingsPopUpOpen) setIsRender(true);
+    }, [isSettingsPopUpOpen]);
 
-    
     const settingsPopupContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -57,16 +55,15 @@ export default function SettingsPopUp({
     }, [isSettingsPopUpOpen, toggleIsPopUpOpen]);
 
     function handleAnimationEnd() {
-        if(!isSettingsPopUpOpen) setIsRender(false);
+        if (!isSettingsPopUpOpen) setIsRender(false);
     }
 
-    return (
-        isRender ? (
+    return isRender ? (
         <div className={styles.settings_pop_up_wrapper}>
             <div
                 ref={settingsPopupContainerRef}
                 className={`${styles.settings_popup_container} ${
-                    isSettingsPopUpOpen ? '' : styles.settings_popup_container_hide
+                    isSettingsPopUpOpen ? "" : styles.settings_popup_container_hide
                 }`}
                 onAnimationEnd={handleAnimationEnd}
             >
@@ -81,7 +78,7 @@ export default function SettingsPopUp({
                                 isApiAvailable.isWordApiAvailable ? "" : styles.singular_setting_toggler_disabled
                             }`}
                         >
-                            {/* Toggler */}
+                            {/*  TODO: more beautiful design */}
                             <button onClick={() => handleChangeGameSettings("word-length", "increment")}>+</button>
                             {gameSettings.futureGameSettings.wordLength}
                             <button onClick={() => handleChangeGameSettings("word-length", "decrement")}>-</button>
@@ -92,7 +89,7 @@ export default function SettingsPopUp({
                             <h4>Number of Stages</h4>
                         </div>
                         <div className={styles.singular_setting_toggler}>
-                            {/* Toggler */}
+                            {/* TODO: more beautiful design */}
                             <button onClick={() => handleChangeGameSettings("stage-number", "increment")}>+</button>
                             {gameSettings.futureGameSettings.numberStages}
                             <button onClick={() => handleChangeGameSettings("stage-number", "decrement")}>-</button>
@@ -104,8 +101,14 @@ export default function SettingsPopUp({
                             <p>Any revealed hint letters must be used in subsequent guesses</p>
                         </div>
                         <div className={styles.singular_setting_toggler}>
-                            {/* Toggler */}
-                            <button onClick={() => handleChangeGameSettings("hard-mode", "")}>Toggle{gameSettings.currentGameSettings.hardMode ? "true" : "false"}</button>
+                            <div
+                                className={`${styles.singular_setting_toggler_area} ${
+                                    gameSettings.currentGameSettings.hardMode
+                                        ? styles.toggler_area_on
+                                        : styles.toggler_area_off
+                                }`}
+                                onClick={() => handleChangeGameSettings("hard-mode", "")}
+                            />
                         </div>
                     </div>
                     <div className={styles.singular_setting_container}>
@@ -114,8 +117,14 @@ export default function SettingsPopUp({
                             <p>Guessed words don't need to be in dictionary</p>
                         </div>
                         <div className={styles.singular_setting_toggler}>
-                            {/* Toggler */}
-                            <button onClick={() => handleChangeGameSettings("lazy-mode", "")}>Toggle{gameSettings.currentGameSettings.lazyMode ? "true" : "false"}</button>
+                            <div
+                                className={`${styles.singular_setting_toggler_area} ${
+                                    gameSettings.currentGameSettings.lazyMode
+                                        ? styles.toggler_area_on
+                                        : styles.toggler_area_off
+                                }`}
+                                onClick={() => handleChangeGameSettings("lazy-mode", "")}
+                            />
                         </div>
                     </div>
                     <div className={styles.singular_setting_container}>
@@ -124,8 +133,12 @@ export default function SettingsPopUp({
                             <p>For improved color vision</p>
                         </div>
                         <div className={styles.singular_setting_toggler}>
-                            {/* Toggler */}
-                            <button onClick={handleChangeHighContrastMode}>Toggle{isHighContrastMode ? "true" : "false"}</button>
+                            <div
+                                className={`${styles.singular_setting_toggler_area} ${
+                                    isHighContrastMode ? styles.toggler_area_on : styles.toggler_area_off
+                                }`}
+                                onClick={handleChangeHighContrastMode}
+                            />
                         </div>
                     </div>
 
@@ -134,8 +147,12 @@ export default function SettingsPopUp({
                             <h4>Dark Mode</h4>
                         </div>
                         <div className={styles.singular_setting_toggler}>
-                            {/* Toggler */}
-                            <button onClick={handleChangeDarkMode}>Toggle{isDarkMode ? "true" : "false"}</button>
+                            <div
+                                className={`${styles.singular_setting_toggler_area} ${
+                                    isDarkMode ? styles.toggler_area_on : styles.toggler_area_off
+                                }`}
+                                onClick={handleChangeDarkMode}
+                            />
                         </div>
                     </div>
                 </div>
@@ -153,7 +170,7 @@ export default function SettingsPopUp({
             This notification area should say "Restart game to apply New Settings" */}
             </div>
         </div>
-        ) : 
-        <div className={styles.settings_pop_up_hidden}/>
+    ) : (
+        <div className={styles.settings_pop_up_hidden} />
     );
 }
