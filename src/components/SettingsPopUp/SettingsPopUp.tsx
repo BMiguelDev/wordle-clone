@@ -170,12 +170,14 @@ export default function SettingsPopUp({
                     </button>
                 </div>
 
+                {
+                    (gameSettings.currentGameSettings.numberStages!==gameSettings.futureGameSettings.numberStages || gameSettings.currentGameSettings.wordLength !== gameSettings.futureGameSettings.wordLength) &&
+                    <div className={styles.settings_popup_notification_area}>Restart game to apply new settings</div>
+                }
+
                 <button className={styles.settings_popup_exit_button} onClick={(e) => toggleIsPopUpOpen(e, "settings")}>
                     <i className="fa-solid fa-xmark"></i>
                 </button>
-
-                {/* TODO: Maybe add an area of notification to the right of the restart button when a gameSetting is different from the currentGameSetting (being used in the current game).
-            This notification area should say "Restart game to apply New Settings" */}
             </div>
         </div>
     ) : (

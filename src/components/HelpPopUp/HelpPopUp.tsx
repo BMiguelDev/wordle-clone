@@ -1,20 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from "react";
 
 import styles from "./HelpPopUp.module.scss";
 
-
 interface PropTypes {
-  isHelpPopUpOpen: boolean;
-  toggleIsPopUpOpen: (event: React.MouseEvent, popUpName: string) => void;
+    isHelpPopUpOpen: boolean;
+    toggleIsPopUpOpen: (event: React.MouseEvent, popUpName: string) => void;
 }
 
-
 export default function HelpPopUp({ isHelpPopUpOpen, toggleIsPopUpOpen }: PropTypes) {
-  const [isRender, setIsRender] = useState<boolean>(isHelpPopUpOpen);
+    const [isRender, setIsRender] = useState<boolean>(isHelpPopUpOpen);
 
     useEffect(() => {
-        if(isHelpPopUpOpen) setIsRender(true);
-    }, [isHelpPopUpOpen])
+        if (isHelpPopUpOpen) setIsRender(true);
+    }, [isHelpPopUpOpen]);
 
     const helpPopupContainerRef = useRef<HTMLDivElement>(null);
 
@@ -35,75 +33,70 @@ export default function HelpPopUp({ isHelpPopUpOpen, toggleIsPopUpOpen }: PropTy
     }, [isHelpPopUpOpen, toggleIsPopUpOpen]);
 
     function handleAnimationEnd() {
-        if(!isHelpPopUpOpen) setIsRender(false);
+        if (!isHelpPopUpOpen) setIsRender(false);
     }
 
-    return (
-        isRender ? (
+    const exampleStrings: string[] = ["wordle", "but", "better"];
+
+    return isRender ? (
         <div className={styles.help_pop_up_wrapper}>
             <div
                 ref={helpPopupContainerRef}
-                className={`${styles.help_popup_container} ${
-                  isHelpPopUpOpen ? '' : styles.help_popup_container_hide
-                }`}
+                className={`${styles.help_popup_container} ${isHelpPopUpOpen ? "" : styles.help_popup_container_hide}`}
                 onAnimationEnd={handleAnimationEnd}
             >
-                <div className={styles.help_popup_title}>How to Play</div>
-                <div className={styles.help_popup_settings}>
-                    <div className={styles.singular_setting_container}>
-                        <div className={styles.singular_setting_text}>
-                            <h4>Word Length</h4>
-                            <p>Explanation of word Length (if necessary)</p>
+                <h3 className={styles.help_popup_title}>How to Play</h3>
+                <h4 className={styles.help_popup_subtitle}>Guess the Wordle before you run out of tries!</h4>
+                <ul className={styles.help_popup_description_list}>
+                    <li>Each guess should be a valid word.</li>
+                    <li>The color of the tiles will change to show how close your guess was to the word</li>
+                </ul>
+                <div className={styles.help_popup_examples_container}>
+                    <h6>Examples</h6>
+                    <div className={styles.help_popup_example_item}>
+                        <div className={styles.help_popup_example_tiles}>
+                            {exampleStrings[0].split("").map((letter, index) => (
+                                <div key={index} className={`${styles.popup_example_tile} ${letter === "w" ? styles.popup_example_tile_green : ""}`}>
+                                    <p className={styles.popup_example_letter}>{letter}</p>
+                                </div>
+                            ))}
                         </div>
-                        <div
-                            // className={`${styles.singular_setting_toggler} ${
-                            //     isApiAvailable.isWordApiAvailable ? "" : styles.singular_setting_toggler_disabled
-                            // }`}
-                        >
-                            {/* Toggler */}
-                            <button >+</button>
-                          
-                            <button>-</button>
-                        </div>
+                        <p>
+                            <span>W</span> is in the word and in the correct spot
+                        </p>
                     </div>
-                    <div className={styles.singular_setting_container}>
-                        <div className={styles.singular_setting_text}>
-                            <h4>Stage Number</h4>
-                            <p>Explanation of Stage Number (if necessary)</p>
+                    <div className={styles.help_popup_example_item}>
+                        <div className={styles.help_popup_example_tiles}>
+                            {exampleStrings[1].split("").map((letter, index) => (
+                                <div key={index} className={`${styles.popup_example_tile} ${letter === "u" ? styles.popup_example_tile_yellow : ""}`}>
+                                    <p className={styles.popup_example_letter}>{letter}</p>
+                                </div>
+                            ))}
                         </div>
-                        <div className={styles.singular_setting_toggler}>
-                            {/* Toggler */}
-                            <button>+</button>
-                            
-                            <button>-</button>
-                        </div>
+                        <p>
+                            <span>U</span> is in the word but in the wrong spot
+                        </p>
                     </div>
-                    <div className={styles.singular_setting_container}>
-                        <div className={styles.singular_setting_text}>
-                            <h4>Hard Mode</h4>
-                            <p>Any revealed hint letters must be used in subsequent guesses</p>
+                    <div className={styles.help_popup_example_item}>
+                        <div className={styles.help_popup_example_tiles}>
+                            {exampleStrings[2].split("").map((letter, index) => (
+                                <div key={index} className={`${styles.popup_example_tile} ${letter === "r" ? styles.popup_example_tile_grey : ""}`}>
+                                    <p className={styles.popup_example_letter}>{letter}</p>
+                                </div>
+                            ))}
                         </div>
-                        <div className={styles.singular_setting_toggler}>
-                            {/* Toggler */}
-                            <button >Toggle</button>
-                        </div>
+                        <p>
+                            <span>R</span> is not in the word in any spot
+                        </p>
                     </div>
-                </div>
-                <div className={styles.settings_popup_reset_button_container}>
-                    <button >
-                        Restart Game
-                    </button>
                 </div>
 
                 <button className={styles.help_popup_exit_button} onClick={(e) => toggleIsPopUpOpen(e, "help")}>
                     <i className="fa-solid fa-xmark"></i>
                 </button>
-
-                {/* TODO: Maybe add an area of notification to the right of the restart button when a gameSetting is different from the currentGameSetting (being used in the current game).
-            This notification area should say "Restart game to apply New Settings" */}
             </div>
         </div>
-        ) : 
-        <div className={styles.help_pop_up_hidden}/>
-    );  
+    ) : (
+        <div className={styles.help_pop_up_hidden} />
+    );
 }

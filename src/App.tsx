@@ -216,6 +216,7 @@ export default function App() {
             const checkWordsApi = await fetch("https://api.datamuse.com/words?sp=?????");
             if (checkWordsApi.ok)
                 setIsApiAvailable((prevIsApiAvailable) => ({ ...prevIsApiAvailable, isWordApiAvailable: true }));
+                
 
             if (!checkWordsApi.ok) {
                 const randomWord = WordData[Math.floor(Math.random() * WordData.length)].toLowerCase();
@@ -284,7 +285,8 @@ export default function App() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
+    
+    
     const handleStageChange = useCallback(() => {
         if (currentStage < gameSettings.currentGameSettings.numberStages) {
             //Make checks
@@ -808,6 +810,7 @@ export default function App() {
     // - Test localStorage on all state variables (remaining: lineClassNames)
     // - Make stats color green the background of the graph of the number of stages of last win (if it was a win) (maybe state object about last game: isWin, arrayofGuesses, numberGuessesInputted, isGameFinished(?))
     // - Make tile animations twice faster if game has already finished (maybe use the state i mentioned above)
+
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],

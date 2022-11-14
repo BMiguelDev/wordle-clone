@@ -67,10 +67,9 @@
                 }
             }
 
-            // TODO: change according to toggler style
             .singular_setting_toggler {
                 width: 25%;
-                height: 25%;
+                height: fit-content;
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
@@ -80,7 +79,6 @@
                 .singular_setting_toggler_decrement {
                     background-color: inherit;
                     color: var(--keyboard-letter-checked-color);
-                    //border: .05rem solid var(--tile-hightlighted-border-color);
                     border: none;
                     border-radius: .25rem;
                     background-color: var(--tile-hightlighted-border-color);
@@ -90,7 +88,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    align-self: flex-start;
+                    align-self: flex-end;
                     cursor: pointer;
                     transition: all .1s ease-in-out;
 
@@ -102,7 +100,6 @@
                 .singular_setting_toggler_increment {
                     background-color: inherit;
                     color: var(--keyboard-letter-checked-color);
-                    //border: .05rem solid var(--tile-hightlighted-border-color);
                     border: none;
                     border-radius: .25rem;
                     background-color: var(--tile-hightlighted-border-color);
@@ -112,7 +109,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    align-self: flex-end;
+                    align-self: flex-start;
                     cursor: pointer;
                     transition: all .1s ease-in-out;
 
@@ -152,9 +149,6 @@
                     }
                 }
 
-
-
-                // TODO: recheck if this is 100% correct (make opacity and not being able to click only on the buttons maybe?)
                 &.singular_setting_toggler_disabled {
                     opacity: .35;
                     position: relative;
@@ -184,6 +178,23 @@
             font-weight: bold;
             cursor: pointer;
         }
+    }
+
+    .settings_popup_notification_area {
+        position: absolute;
+        bottom: 2%;
+        right: 2.5%;
+        width: 25%;
+        height: 7.5%;
+        color: var(--tile-present-color);
+        background-color: var(--tile-wrong-color);
+        border-radius: .25rem;
+        font-size: .7rem;
+        padding: .5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
     }
 
     .settings_popup_exit_button {
