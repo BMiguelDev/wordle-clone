@@ -801,7 +801,6 @@ export default function App() {
 
     // TODO:
     // - Add remaining Dark Mode colors
-    // - Improve settings component (as pop up), including toggles and toggle animation
     // - Make help component
     // - Improve stats component
     // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has: { and array of all guessed words, the last guessed word}

@@ -92,6 +92,11 @@
                     justify-content: center;
                     align-self: flex-start;
                     cursor: pointer;
+                    transition: all .1s ease-in-out;
+
+                    &:active {
+                        translate: 0 20%;
+                    }
                 }
 
                 .singular_setting_toggler_increment {
@@ -109,6 +114,11 @@
                     justify-content: center;
                     align-self: flex-end;
                     cursor: pointer;
+                    transition: all .1s ease-in-out;
+
+                    &:active {
+                        translate: 0 -20%;
+                    }
                 }
 
                 .singular_setting_toggler_area {
