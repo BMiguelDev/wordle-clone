@@ -78,10 +78,14 @@ export default function SettingsPopUp({
                                 isApiAvailable.isWordApiAvailable ? "" : styles.singular_setting_toggler_disabled
                             }`}
                         >
-                            {/*  TODO: more beautiful design */}
-                            <button onClick={() => handleChangeGameSettings("word-length", "increment")}>+</button>
+                            <button className={styles.singular_setting_toggler_decrement} onClick={() => handleChangeGameSettings("word-length", "decrement")}>
+                                <i className="fa-solid fa-angle-down"></i>
+                            </button>
                             {gameSettings.futureGameSettings.wordLength}
-                            <button onClick={() => handleChangeGameSettings("word-length", "decrement")}>-</button>
+                            <button className={styles.singular_setting_toggler_increment} onClick={() => handleChangeGameSettings("word-length", "increment")}>
+                                <i className="fa-solid fa-angle-up"></i>
+                            </button>
+                            
                         </div>
                     </div>
                     <div className={styles.singular_setting_container}>
@@ -89,10 +93,14 @@ export default function SettingsPopUp({
                             <h4>Number of Stages</h4>
                         </div>
                         <div className={styles.singular_setting_toggler}>
-                            {/* TODO: more beautiful design */}
-                            <button onClick={() => handleChangeGameSettings("stage-number", "increment")}>+</button>
+                            <button className={styles.singular_setting_toggler_decrement} onClick={() => handleChangeGameSettings("stage-number", "decrement")}>
+                                <i className="fa-solid fa-angle-down"></i>
+                            </button>
                             {gameSettings.futureGameSettings.numberStages}
-                            <button onClick={() => handleChangeGameSettings("stage-number", "decrement")}>-</button>
+                            <button className={styles.singular_setting_toggler_increment} onClick={() => handleChangeGameSettings("stage-number", "increment")}>
+                                <i className="fa-solid fa-angle-up"></i>
+                            </button>
+
                         </div>
                     </div>
                     <div className={styles.singular_setting_container}>
