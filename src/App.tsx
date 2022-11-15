@@ -9,14 +9,16 @@ import {
     isPopUpOpenType,
     playerStatisticsType,
     randomWordAndArrayType,
+    gameDescriptionType
 } from "./models/model";
 import Line from "./components/Line/Line";
-import Footer from "./components/Footer/Footer";
+//import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import KeyboardRow from "./components/KeyboardRow/KeyboardRow";
 import SettingsPopUp from "./components/SettingsPopUp/SettingsPopUp";
 import HelpPopUp from "./components/HelpPopUp/HelpPopUp";
 import StatsPopUp from "./components/StatsPopUp/StatsPopUp";
+import ExtraMenu from "./components/ExtraMenu/ExtraMenu";
 
 const LOCAL_STORAGE_KEY_GAME_SETTINGS = "WordleCloneApp.gameSettings";
 const LOCAL_STORAGE_KEY_RANDOM_WORD_AND_ARRAY = "WordleCloneApp.randomWordAndArray";
@@ -30,6 +32,7 @@ const LOCAL_STORAGE_KEY_IS_DARK_MODE = "WordleCloneApp.isDarkMode";
 const LOCAL_STORAGE_KEY_IS_HIGH_CONTRAST_MODE = "WordleCloneApp.isHighContrastMode";
 const LOCAL_STORAGE_KEY_IS_POPUP_OPEN = "WordleCloneApp.isPopUpOpen";
 const LOCAL_STORAGE_KEY_PLAYER_STATISTICS = "WordleCloneApp.playerStatistics";
+const LOCAL_STORAGE_KEY_GAME_DESCRIPTION = "WordleCloneApp.gameDescription";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
 
@@ -91,7 +94,7 @@ export default function App() {
             );
     });
 
-    // Object state variable holding a boolean for each API used, true is the api is available and false if it's not available
+    // Object state variable holding a boolean for the availability of each API used
     const [isApiAvailable, setIsApiAvailable] = useState<isApiAvailableType>(() => {
         const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_IS_WORD_API_AVAILABLE);
         if (localStorageItem)
@@ -137,6 +140,7 @@ export default function App() {
                 isSettingsPopUpOpen: false,
                 isStatsPopUpOpen: false,
                 isHelpPopUpOpen: false,
+                isExtraMenuOpen: false
             };
     });
 
@@ -155,7 +159,19 @@ export default function App() {
             };
     });
 
-    // useEffect hooks to store state variables ini local storage whenever they update
+    // Object state variable to hold game description
+    const [gameDescription, setGameDescription] = useState<gameDescriptionType>(() => {
+        const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_GAME_DESCRIPTION);
+        if(localStorageItem) return JSON.parse(localStorageItem);
+        else return {
+            isGameFinished: false,
+            isGameWin: false,
+            attemptedGuesses: [],
+            numberGuessesNeededToWin: 0
+        }
+    })
+
+    // useEffect hooks to store state variables in local storage whenever they update
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_KEY_GAME_SETTINGS, JSON.stringify(gameSettings));
     }, [gameSettings]);
@@ -206,6 +222,11 @@ export default function App() {
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_KEY_PLAYER_STATISTICS, JSON.stringify(playerStatistics));
     }, [playerStatistics]);
+
+    useEffect(() => {
+      localStorage.setItem(LOCAL_STORAGE_KEY_GAME_DESCRIPTION, JSON.stringify(gameDescription));
+    }, [gameDescription])
+    
 
     // Ref variable to access reset button
     const resetButtonRef = useRef<HTMLButtonElement>(null);
@@ -317,6 +338,15 @@ export default function App() {
                 return newStageWordArray;
             });
 
+            setGameDescription((prevGameDescription) => {
+                let newAttemptedGuesses = [...prevGameDescription.attemptedGuesses];
+                newAttemptedGuesses.push(currentGuess);
+                return {
+                    ...prevGameDescription,
+                    attemptedGuesses: newAttemptedGuesses,
+                };
+            });
+
             // Handle game win
             if (currentGuess === randomWordAndArray.randomWord) {
                 // Set notification for game end
@@ -365,10 +395,18 @@ export default function App() {
                     };
                 });
 
+                setGameDescription((prevGameDescription) => ({
+                    ...prevGameDescription,
+                    isGameFinished: true,
+                    isGameWin: true,
+                    numberGuessesNeededToWin: currentStage + 1,
+                }));
+
                 // After a short delay, show the statistics pop up
                 setTimeout(() => {
                     setIsPopUpOpen((prevIsPopUpOpen) => ({ ...prevIsPopUpOpen, isStatsPopUpOpen: true }));
-                }, gameSettings.currentGameSettings.wordLength * 200 + 500);
+                }, gameSettings.currentGameSettings.wordLength * 200 + gameSettings.currentGameSettings.wordLength * 100 + 500);
+                //gameSettings.currentGameSettings.wordLength * 200 + 500); TODO: fine tune this delay
             }
             setCurrentGuess("");
             setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
@@ -433,6 +471,15 @@ export default function App() {
                                 gameNotificationText: "Word must include all hinted letters",
                                 isGameNotification: true,
                             });
+
+                            setGameDescription((prevGameDescription) => {
+                                let newAttemptedGuesses = [...prevGameDescription.attemptedGuesses];
+                                newAttemptedGuesses.push(currentGuess);
+                                return {
+                                    ...prevGameDescription,
+                                    attemptedGuesses: newAttemptedGuesses,
+                                };
+                            });
                         } else {
                             if (isApiAvailable.isDictionaryApiAvailable) {
                                 fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
@@ -453,6 +500,15 @@ export default function App() {
                                             setGameNotification({
                                                 gameNotificationText: "Word doesn't exist",
                                                 isGameNotification: true,
+                                            });
+
+                                            setGameDescription((prevGameDescription) => {
+                                                let newAttemptedGuesses = [...prevGameDescription.attemptedGuesses];
+                                                newAttemptedGuesses.push(currentGuess);
+                                                return {
+                                                    ...prevGameDescription,
+                                                    attemptedGuesses: newAttemptedGuesses,
+                                                };
                                             });
                                         }
                                     })
@@ -483,6 +539,15 @@ export default function App() {
                                     setGameNotification({
                                         gameNotificationText: "Word doesn't exist",
                                         isGameNotification: true,
+                                    });
+
+                                    setGameDescription((prevGameDescription) => {
+                                        let newAttemptedGuesses = [...prevGameDescription.attemptedGuesses];
+                                        newAttemptedGuesses.push(currentGuess);
+                                        return {
+                                            ...prevGameDescription,
+                                            attemptedGuesses: newAttemptedGuesses,
+                                        };
                                     });
                                 }
                             })
@@ -519,7 +584,7 @@ export default function App() {
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
             console.log(gameSettings.currentGameSettings.numberStages);
             if (currentStage < gameSettings.currentGameSettings.numberStages) {
-                if (!isPopUpOpen.isSettingsPopUpOpen && !isPopUpOpen.isStatsPopUpOpen && !isPopUpOpen.isHelpPopUpOpen) {
+                if (!isPopUpOpen.isSettingsPopUpOpen && !isPopUpOpen.isStatsPopUpOpen && !isPopUpOpen.isHelpPopUpOpen && !isPopUpOpen.isExtraMenuOpen) {
                     window.addEventListener("keydown", handleKeydown);
                     console.log("I created new event listener");
                 }
@@ -536,6 +601,8 @@ export default function App() {
                         gamesLost: prevPlayerStatistics.gamesLost + 1,
                         currentStreak: 0,
                     }));
+
+                    setGameDescription((prevGameDescription) => ({...prevGameDescription, isGameFinished: true, isGameWin: false, numberGuessesNeededToWin: 0}));
 
                     // After a short delay, show the statistics pop up
                     setTimeout(() => {
@@ -586,6 +653,8 @@ export default function App() {
                         currentStreak: 0,
                     }));
 
+                    setGameDescription((prevGameDescription) => ({...prevGameDescription, isGameFinished: true, isGameWin: false, numberGuessesNeededToWin: 0}));
+
                     // After a short delay, show the statistics pop up
                     setTimeout(() => {
                         setIsPopUpOpen((prevIsPopUpOpen) => ({ ...prevIsPopUpOpen, isStatsPopUpOpen: true }));
@@ -604,7 +673,6 @@ export default function App() {
         }
     }
 
-    console.log(gameNotification);
 
     function resetGame() {
         // If word length setting has been changed, get new array of random words from api
@@ -686,6 +754,7 @@ export default function App() {
                 lazyMode: prevgameSettings.currentGameSettings.lazyMode,
             },
         }));
+        setGameDescription({attemptedGuesses: [], isGameFinished: false, isGameWin: false, numberGuessesNeededToWin: 0})
         setIsPopUpOpen((prevIsPopUpOpen) => ({ ...prevIsPopUpOpen, isSettingsPopUpOpen: false }));
     }
 
@@ -795,6 +864,13 @@ export default function App() {
                     isHelpPopUpOpen: !prevIsPopUpOpen.isHelpPopUpOpen,
                 }));
                 break;
+            
+            case "extramenu":
+                setIsPopUpOpen((prevIsPopUpOpen) => ({
+                    ...prevIsPopUpOpen,
+                    isExtraMenuOpen: !prevIsPopUpOpen.isExtraMenuOpen,
+                }));
+                break;    
 
             default:
                 break;
@@ -802,15 +878,10 @@ export default function App() {
     }
 
     // TODO:
-    // - Add remaining Dark Mode colors
-    // - Make help component
-    // - Improve stats component
-    // - Consider having state to keep track of if the last guess submitted was correct or incorrect. That state could actually be an object that has: { and array of all guessed words, the last guessed word}
-    //      the last guessed word could then be used to improve the highlighting of the backspace and enter keys in the Keyboard component (if last guess is the same as current guess, keep highlighting backspace key)
-    // - Test localStorage on all state variables (remaining: lineClassNames)
-    // - Make stats color green the background of the graph of the number of stages of last win (if it was a win) (maybe state object about last game: isWin, arrayofGuesses, numberGuessesInputted, isGameFinished(?))
-    // - Make tile animations twice faster if game has already finished (maybe use the state i mentioned above)
-
+    // - Make game win animation (tiles translate up a bit with a bit of delay between them) (Fix this not working correctly (only right when player wins))
+    // - improve extra menu burger
+    // - fix footer removal consequences
+    // - make app responsive
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
@@ -848,6 +919,9 @@ export default function App() {
                                         wordLength={gameSettings.currentGameSettings.wordLength}
                                         numberStages={gameSettings.currentGameSettings.numberStages}
                                         setLineClassNames={setLineClassNames}
+                                        isGameFinished={gameDescription.isGameFinished}
+                                        randomWord={randomWordAndArray.randomWord}
+                                        isGameNotification={gameNotification.isGameNotification}
                                     />
                                 );
                             })}
@@ -866,6 +940,7 @@ export default function App() {
                                     currentGuess={currentGuess}
                                     currentStage={currentStage}
                                     gameNotification={gameNotification}
+                                    gameDescription={gameDescription}
                                 />
                             ))}
                         </div>
@@ -885,6 +960,7 @@ export default function App() {
                             <p>WordApi is not available</p>
                         )} */}
                     </div>
+
 
                     <div
                         ref={notificationsDivRef}
@@ -914,18 +990,18 @@ export default function App() {
                         resetButtonRef={resetButtonRef}
                         resetGame={resetGame}
                     />
-
                     <StatsPopUp
                         isStatsPopUpOpen={isPopUpOpen.isStatsPopUpOpen}
                         toggleIsPopUpOpen={toggleIsPopUpOpen}
                         playerStatistics={playerStatistics}
+                        gameDescription={gameDescription}
                     />
-
                     <HelpPopUp isHelpPopUpOpen={isPopUpOpen.isHelpPopUpOpen} toggleIsPopUpOpen={toggleIsPopUpOpen} />
+                    <ExtraMenu isExtraMenuOpen={isPopUpOpen.isExtraMenuOpen} toggleIsPopUpOpen={toggleIsPopUpOpen}/>
                 </main>
             )}
 
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 }

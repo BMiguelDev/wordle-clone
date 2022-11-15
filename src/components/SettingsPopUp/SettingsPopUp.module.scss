@@ -195,6 +195,29 @@
         align-items: center;
         justify-content: center;
         text-align: center;
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 0rem 0rem var(--tile-present-color);
+            }
+
+            25% {
+                box-shadow: 0 0 .5rem .3rem var(--tile-present-color);
+            }
+
+            50% {
+                box-shadow: 0 0 0.15rem .05rem var(--tile-present-color);
+            }
+
+            75% {
+                box-shadow: 0 0 .5rem .3rem var(--tile-present-color);
+            }
+
+            100% {
+                box-shadow: 0 0 0rem 0rem var(--tile-present-color);
+            }
+        }
+        animation: glow 1.5s ease-in-out;
     }
 
     .settings_popup_exit_button {
@@ -203,7 +226,7 @@
         right: 3%;
         font-size: 1.3rem;
         background-color: var(--popup-bg-color);
-        color: var(--tile-text-color);
+        color: var(--keyboard-letter-text-color);
         border: none;
         cursor: pointer;
     }

@@ -35,6 +35,7 @@ export interface isPopUpOpenType {
     isSettingsPopUpOpen: boolean;
     isStatsPopUpOpen: boolean;
     isHelpPopUpOpen: boolean;
+    isExtraMenuOpen: boolean;
 }
 
 //Type definition of the <playerStatistics> state variable
@@ -47,4 +48,12 @@ export interface playerStatisticsType {
     // This array holds, in index 0, the number of wins with 1 guess, in index 1, the number of wins with 2 guesses, and
     // so on until index 12, with the number of wins with 13 guesses.
     NumberWinsWithXGuesses: number[];
+}
+
+// Type definition of the <gameDescription> state variable
+export interface gameDescriptionType {
+    isGameFinished: boolean;
+    isGameWin: boolean;
+    attemptedGuesses: string[];
+    numberGuessesNeededToWin: number
 }

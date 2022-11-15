@@ -1,0 +1,155 @@
+// Help Pop Up content
+.extramenu_popup_container {
+    position: absolute;
+    top: 9%;
+    left: 0%;
+    width: 24.5%;
+    //height: 66%;
+    //height: fit-content;
+    max-height: 66%;
+    border: 1px solid var(--popup-border-color);
+    background-color: var(--popup-bg-color);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: .5rem;
+    //box-shadow: 0 0 10px 2000px var(--popup-box-shadow-color);
+    box-shadow: 3px 5px 5px var(--extra-menu-box-shadow-color);
+    border-radius: .5rem;
+    padding-top: 2rem;
+
+    @keyframes slideIn {
+        0% {
+            translate: -75% 0;
+            opacity: 0;
+        }
+
+        100% {
+            translate: 0 0;
+            opacity: 1;
+        }
+    }
+
+    animation: slideIn .2s ease 0s;
+
+
+    .extramenu_popup_games {
+        color: var(--keyboard-letter-text-color);
+        //border-bottom: .01rem solid var(--extra-menu-border-color);
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 1.5rem;
+
+        .extramenu_popup_games_item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            gap: .75rem;
+           
+            &:nth-child(1) {
+                border-bottom: .01rem solid var(--extra-menu-border-color);
+            }
+
+            &>h6 {
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: .725rem;
+                margin: 0;
+                padding: 0 1rem 0 1rem;
+            }
+
+            .games_item_clickable {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                transition: all .1s ease-in-out;
+                cursor: pointer;
+                padding: 1rem;
+                margin-bottom: .15rem;
+
+                .games_item_icon_container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    i {
+                        font-size: 1.20rem;
+                        color: var(--tile-correct-color);
+                    }
+                }
+
+                &>p {
+                    font-size: 1rem;
+                    margin: 0;
+                    letter-spacing: -.025rem;
+                }
+
+                &:hover {
+                    background-color: var(--extra-menu-clickable-hover-color);
+                }
+            }
+        }
+
+    }
+
+    .extramenu_popup_footer_content {
+        border-top: .01rem solid var(--extra-menu-border-color);
+        width: 90%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+    }
+
+
+    .extramenu_popup_exit_button {
+        position: absolute;
+        top: 3.15%;
+        right: 3%;
+        font-size: 1.3rem;
+        background-color: var(--popup-bg-color);
+        color: var(--keyboard-letter-text-color);
+        border: none;
+        cursor: pointer;
+    }
+
+    &.extramenu_popup_container_hide {
+
+        @keyframes slideOut {
+            0% {
+                translate: 0 0;
+                opacity: 1;
+            }
+
+            100% {
+                translate: -75% 0%;
+                opacity: 0;
+            }
+        }
+
+        animation: slideOut .2s ease 0s;
+        animation-fill-mode: forwards;
+    }
+}
+
+
+// Wrapper element to prevent user from clicking outside the settings box
+.extramenu_pop_up_wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 4;
+}
+
+
+.extramenu_pop_up_hidden {
+    display: none;
+}

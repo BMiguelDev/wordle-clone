@@ -1,15 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { playerStatisticsType } from "../../models/model";
+import { gameDescriptionType, playerStatisticsType } from "../../models/model";
 import styles from "./StatsPopUp.module.scss";
 
 interface PropTypes {
     isStatsPopUpOpen: boolean;
     toggleIsPopUpOpen: (event: React.MouseEvent, popUpName: string) => void;
     playerStatistics: playerStatisticsType;
+    gameDescription: gameDescriptionType;
 }
 
-export default function StatsPopUp({ isStatsPopUpOpen, toggleIsPopUpOpen, playerStatistics }: PropTypes) {
+export default function StatsPopUp({
+    isStatsPopUpOpen,
+    toggleIsPopUpOpen,
+    playerStatistics,
+    gameDescription,
+}: PropTypes) {
     const [isRender, setIsRender] = useState<boolean>(isStatsPopUpOpen);
 
     useEffect(() => {
@@ -37,12 +43,12 @@ export default function StatsPopUp({ isStatsPopUpOpen, toggleIsPopUpOpen, player
     function handleAnimationEnd() {
         if (!isStatsPopUpOpen) setIsRender(false);
     }
-    
+
     let maxGraphWins = 0;
-    playerStatistics.NumberWinsWithXGuesses.forEach(numberWins => {
-        if(numberWins>maxGraphWins) maxGraphWins=numberWins;
-    })
-    const widthPerWin = Math.floor(90/maxGraphWins);
+    playerStatistics.NumberWinsWithXGuesses.forEach((numberWins) => {
+        if (numberWins > maxGraphWins) maxGraphWins = numberWins;
+    });
+    const widthPerWin = Math.floor(90 / maxGraphWins);
 
     return isRender ? (
         <div className={styles.stats_pop_up_wrapper}>
@@ -62,7 +68,9 @@ export default function StatsPopUp({ isStatsPopUpOpen, toggleIsPopUpOpen, player
                         </div>
                         <div className={styles.singular_stat_container}>
                             <h4 className={styles.singular_stat_number}>
-                                {Math.round((playerStatistics.gamesWon / playerStatistics.gamesFinished)*100)}
+                                {playerStatistics.gamesFinished > 0
+                                    ? Math.round((playerStatistics.gamesWon / playerStatistics.gamesFinished) * 100)
+                                    : 0}
                             </h4>
                             <div className={styles.singular_stat_text}>% Win</div>
                         </div>
@@ -80,18 +88,24 @@ export default function StatsPopUp({ isStatsPopUpOpen, toggleIsPopUpOpen, player
                 <div className={styles.stats_popup_stats_graph}>
                     <div className={styles.stats_popup_stats_graph_title}>Guess Distribution</div>
                     <div className={styles.stats_graph_column_container}>
-                    {
-                        playerStatistics.NumberWinsWithXGuesses.map((numberWins, index) => (
-                        <div key={index} className={styles.singular_graph_line_container}>
-                            <p className={styles.singular_graph_number}>
-                                {index+1}
-                            </p>
-                            <div className={styles.singular_graph_bar} style={{width: numberWins>0 ? `${widthPerWin*numberWins}%` : `7.5%`}}>
-                                <p>{numberWins}</p>
+                        {playerStatistics.NumberWinsWithXGuesses.map((numberWins, index) => (
+                            <div key={index} className={styles.singular_graph_line_container}>
+                                <p className={styles.singular_graph_number}>{index + 1}</p>
+                                <div
+                                    className={styles.singular_graph_bar}
+                                    style={{
+                                        width: numberWins > 0 ? `${widthPerWin * numberWins}%` : `7.5%`,
+                                        backgroundColor:
+                                            gameDescription.isGameWin &&
+                                            gameDescription.numberGuessesNeededToWin === index + 1
+                                                ? `var(--tile-correct-color)`
+                                                : `var(--tile-wrong-color)`,
+                                    }}
+                                >
+                                    <p>{numberWins}</p>
+                                </div>
                             </div>
-                        </div>
-                        ))
-                    }
+                        ))}
                     </div>
                 </div>
 

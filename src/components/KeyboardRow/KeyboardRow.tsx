@@ -1,6 +1,6 @@
 import React from "react";
 
-import { gameNotificationType } from "../../models/model";
+import { gameDescriptionType, gameNotificationType } from "../../models/model";
 import styles from "./KeyboardRow.module.scss";
 
 interface PropTypes {
@@ -13,6 +13,7 @@ interface PropTypes {
     currentGuess: string;
     currentStage: number;
     gameNotification: gameNotificationType;
+    gameDescription: gameDescriptionType;
     wordLength: number;
 }
 
@@ -25,6 +26,7 @@ export default function KeyboardRow({
     currentGuess,
     currentStage,
     gameNotification,
+    gameDescription,
     wordLength,
 }: PropTypes) {
     return (
@@ -32,12 +34,11 @@ export default function KeyboardRow({
             {keyboardRowString[0] === "z" && (
                 <p
                     className={
-                        // TODO: improve highlighting based on previousGuess state variable
-                        currentGuess.length === 5 && !gameNotification.isGameNotification
+                        currentGuess.length === 5 && gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length-1]!==currentGuess && !stageWordArray.includes(currentGuess)
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter}`
                     }
-                    onClick={(e) => handleKeyClick(e, "Enter") /*handleLetterClick("Enter")*/}
+                    onClick={(e) => handleKeyClick(e, "Enter")}
                 >
                     Enter
                 </p>
@@ -63,7 +64,7 @@ export default function KeyboardRow({
                 });
                 return (
                     <div
-                        onClick={(e) => handleKeyClick(e, letter) /*handleLetterClick(letter)*/}
+                        onClick={(e) => handleKeyClick(e, letter)}
                         key={index}
                         className={letterClassName}
                         style={{ animationDelay: `${wordLength * 0.2}s` }}
@@ -75,12 +76,11 @@ export default function KeyboardRow({
             {keyboardRowString[0] === "z" && (
                 <p
                     className={
-                        // TODO: improve highlighting based on previousGuess state variable
-                        currentGuess.length === 5 && gameNotification.isGameNotification //lineClassNames[currentStage][0].includes("shake")
+                        currentGuess.length === 5 && gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length-1]===currentGuess && !stageWordArray.includes(currentGuess)
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace}`
                     }
-                    onClick={(e) => handleKeyClick(e, "Backspace") /*handleLetterClick("Backspace")*/}
+                    onClick={(e) => handleKeyClick(e, "Backspace")}
                 >
                     <i className="fa-solid fa-delete-left"></i>
                 </p>
