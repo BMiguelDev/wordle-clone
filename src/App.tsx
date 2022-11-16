@@ -111,7 +111,10 @@ export default function App() {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
         const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_IS_DARK_MODE);
         if (localStorageItem) return JSON.parse(localStorageItem);
-        else return true;
+        else {
+             // Set isDarkMode based on browser's settings
+            return (window.matchMedia('(prefers-color-scheme: dark)').matches ? true : false);
+        }
     });
 
     const [isHighContrastMode, setIsHighContrastMode] = useState<boolean>(() => {
