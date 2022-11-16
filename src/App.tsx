@@ -12,7 +12,6 @@ import {
     gameDescriptionType,
 } from "./models/model";
 import Line from "./components/Line/Line";
-//import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import KeyboardRow from "./components/KeyboardRow/KeyboardRow";
 import SettingsPopUp from "./components/SettingsPopUp/SettingsPopUp";
@@ -401,7 +400,10 @@ export default function App() {
             // Handle game win
             if (currentGuess === randomWordAndArray.randomWord) {
                 // Set notification for game end
-                if (gameNotification.isGameNotification) resetGameNotificationAnimation();
+                if (gameNotification.isGameNotification)
+                    setTimeout(() => {
+                        resetGameNotificationAnimation();
+                    }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 600);
                 if (currentStage === 0) {
                     // Show the notification after a short delay, to leave time for tile animations to end
                     setTimeout(() => {
@@ -480,7 +482,6 @@ export default function App() {
                 setTimeout(() => {
                     setIsPopUpOpen((prevIsPopUpOpen) => ({ ...prevIsPopUpOpen, isStatsPopUpOpen: true }));
                 }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 600 + (gameSettings.currentGameSettings.wordLength - 1) * 100  + 500 + 200);
-                // TODO: fine tune this delay
             }
             setCurrentGuess("");
             setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
@@ -690,16 +691,18 @@ export default function App() {
                 // After a short delay, show the statistics pop up
                 setTimeout(() => {
                     setIsPopUpOpen((prevIsPopUpOpen) => ({ ...prevIsPopUpOpen, isStatsPopUpOpen: true }));
-                }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 600 + 200);
-                // TODO: fine tune this delay
+                }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 500 + 1000);
 
-                if (gameNotification.isGameNotification) resetGameNotificationAnimation();
+                if (gameNotification.isGameNotification)
+                    setTimeout(() => {
+                        resetGameNotificationAnimation();
+                    }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 500);
                 setTimeout(() => {
                     setGameNotification({
                         gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
                         isGameNotification: true,
                     });
-                }, (gameSettings.currentGameSettings.wordLength - 1) * 200);
+                }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 500);
 
                 setCurrentGuess("");
                 setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
@@ -743,16 +746,18 @@ export default function App() {
                 // After a short delay, show the statistics pop up
                 setTimeout(() => {
                     setIsPopUpOpen((prevIsPopUpOpen) => ({ ...prevIsPopUpOpen, isStatsPopUpOpen: true }));
-                }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 600 + 200);
-                // TODO: Fine tune this delay
+                }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 500 + 1000);
 
-                if (gameNotification.isGameNotification) resetGameNotificationAnimation();
+                if (gameNotification.isGameNotification)
+                    setTimeout(() => {
+                        resetGameNotificationAnimation();
+                    }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 500);
                 setTimeout(() => {
                     setGameNotification({
                         gameNotificationText: `Word was: "${randomWordAndArray.randomWord}". Better luck next time`,
                         isGameNotification: true,
                     });
-                }, (gameSettings.currentGameSettings.wordLength - 1) * 200);
+                }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 500);
 
                 setCurrentGuess("");
                 setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
@@ -969,12 +974,9 @@ export default function App() {
     }
 
     // TODO:
-    // - Improve tile game win animation
-    // - improve extra menu burger
-    // - fix footer removal consequences
     // - make app responsive
-    // - Improve game loss notification timeout duration (after all tiles have flipped)
     // - handle when apis arent available [like line 601]
+    // - Improve dynamic styles of game tiles
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
@@ -1075,8 +1077,6 @@ export default function App() {
                     <ExtraMenu isExtraMenuOpen={isPopUpOpen.isExtraMenuOpen} toggleIsPopUpOpen={toggleIsPopUpOpen} />
                 </main>
             )}
-
-            {/* <Footer /> */}
         </div>
     );
 }

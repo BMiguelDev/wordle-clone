@@ -186,8 +186,8 @@
         right: 2.5%;
         width: 25%;
         height: 7.5%;
-        color: var(--tile-present-color);
-        background-color: var(--tile-wrong-color);
+        color: var(--keyboard-letter-checked-color);
+        background-color: var(--settings-popup-notification-bg-color);
         border-radius: .25rem;
         font-size: .7rem;
         padding: .5rem;
@@ -198,23 +198,23 @@
 
         @keyframes glow {
             0% {
-                box-shadow: 0 0 0rem 0rem var(--tile-present-color);
+                box-shadow: 0 0 0rem 0rem var(--settings-popup-notification-box-shadow-color);
             }
 
             25% {
-                box-shadow: 0 0 .5rem .3rem var(--tile-present-color);
+                box-shadow: 0 0 .85rem .3rem var(--settings-popup-notification-box-shadow-color);
             }
 
             50% {
-                box-shadow: 0 0 0.15rem .05rem var(--tile-present-color);
+                box-shadow: 0 0 0.15rem .05rem var(--settings-popup-notification-box-shadow-color);
             }
 
             75% {
-                box-shadow: 0 0 .5rem .3rem var(--tile-present-color);
+                box-shadow: 0 0 .85rem .3rem var(--settings-popup-notification-box-shadow-color);
             }
 
             100% {
-                box-shadow: 0 0 0rem 0rem var(--tile-present-color);
+                box-shadow: 0 0 0rem 0rem var(--settings-popup-notification-box-shadow-color);
             }
         }
         animation: glow 1.5s ease-in-out;

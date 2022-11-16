@@ -42,6 +42,9 @@ export default function FooterDescription() {
                     <a href="https://google.com" target="_blank" rel="noreferrer">
                         <i className="fa-brands fa-github"></i>
                     </a>
+                    <a href="https://google.com" target="_blank" rel="noreferrer">
+                        <i className="fa-solid fa-laptop-code"></i>
+                    </a>
                 </div>
             </div>
         </div>

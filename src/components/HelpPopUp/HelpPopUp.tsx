@@ -49,7 +49,8 @@ export default function HelpPopUp({ isHelpPopUpOpen, toggleIsPopUpOpen }: PropTy
                 <h4 className={styles.help_popup_subtitle}>Guess the Wordle before you run out of tries!</h4>
                 <ul className={styles.help_popup_description_list}>
                     <li>Each guess should be a valid word.</li>
-                    <li>The color of the tiles will change to show how close your guess was to the word</li>
+                    <li>You can change the word length and number of tries in the game settings.</li>
+                    <li>The color of the tiles will change to show how close your guess was to the word.</li>
                 </ul>
                 <div className={styles.help_popup_examples_container}>
                     <h6>Examples</h6>

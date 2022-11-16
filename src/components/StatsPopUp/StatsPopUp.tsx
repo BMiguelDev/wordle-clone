@@ -94,7 +94,7 @@ export default function StatsPopUp({
                                 <div
                                     className={styles.singular_graph_bar}
                                     style={{
-                                        width: numberWins > 0 ? `${widthPerWin * numberWins}%` : `7.5%`,
+                                        width: numberWins > 0 ? (widthPerWin * numberWins>7.5 ? `${widthPerWin * numberWins}%` : `7.5%`) : `7.5%`,
                                         backgroundColor:
                                             gameDescription.isGameWin &&
                                             gameDescription.numberGuessesNeededToWin === index + 1

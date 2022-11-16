@@ -48,22 +48,22 @@ export default function ExtraMenu({ isExtraMenuOpen, toggleIsPopUpOpen }: PropTy
             >
                 <div className={styles.extramenu_popup_games}>
                     <div className={styles.extramenu_popup_games_item}>
-                        <h6>Check the original game</h6>
-                        <div className={styles.games_item_clickable}>
+                        <h6>Check out the original game</h6>
+                        <a className={styles.games_item_clickable} href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noreferrer">
                             <div className={styles.games_item_icon_container}>
                                 <i className="fa-solid fa-table-cells"></i>
                             </div>
                             <p>Wordle</p>
-                        </div>
+                        </a>
                     </div>
                     <div className={styles.extramenu_popup_games_item}>
-                        <h6>More from Me</h6>
-                        <div className={styles.games_item_clickable}>
+                        <h6>More Games from Me</h6>
+                        <a className={styles.games_item_clickable} href="https://bmigueldev.github.io/quizz-challenge/" target="_blank" rel="noreferrer">
                             <div className={styles.games_item_icon_container}>
                                 <i className="fa-solid fa-award"></i>
                             </div>
                             <p>Trivia Challenge</p>
-                        </div>
+                        </a>
                     </div>
                 </div>
 

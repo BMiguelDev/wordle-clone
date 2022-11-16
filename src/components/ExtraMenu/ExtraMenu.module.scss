@@ -14,10 +14,9 @@
     flex-direction: column;
     justify-content: center;
     gap: .5rem;
-    //box-shadow: 0 0 10px 2000px var(--popup-box-shadow-color);
     box-shadow: 3px 5px 5px var(--extra-menu-box-shadow-color);
     border-radius: .5rem;
-    padding-top: 2rem;
+    padding-top: 2.5rem;
 
     @keyframes slideIn {
         0% {
@@ -33,16 +32,15 @@
 
     animation: slideIn .2s ease 0s;
 
-
     .extramenu_popup_games {
         color: var(--keyboard-letter-text-color);
-        //border-bottom: .01rem solid var(--extra-menu-border-color);
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
         gap: 1.5rem;
+        padding-bottom: .5rem;
 
         .extramenu_popup_games_item {
             display: flex;
@@ -50,9 +48,13 @@
             justify-content: center;
             width: 100%;
             gap: .75rem;
-           
+
             &:nth-child(1) {
                 border-bottom: .01rem solid var(--extra-menu-border-color);
+            }
+
+            &:nth-child(2) {
+                padding-top: .5rem;
             }
 
             &>h6 {
@@ -66,11 +68,14 @@
             .games_item_clickable {
                 display: flex;
                 align-items: center;
+                color: var(--keyboard-letter-text-color);
+                text-decoration: none;
                 gap: 1rem;
                 transition: all .1s ease-in-out;
                 cursor: pointer;
                 padding: 1rem;
-                margin-bottom: .15rem;
+                border-radius: .15rem;
+                margin-bottom: .25rem;
 
                 .games_item_icon_container {
                     display: flex;
@@ -94,7 +99,6 @@
                 }
             }
         }
-
     }
 
     .extramenu_popup_footer_content {
@@ -103,9 +107,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        
+        padding-top: .5rem;
     }
-
 
     .extramenu_popup_exit_button {
         position: absolute;

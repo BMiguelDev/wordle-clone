@@ -1,22 +1,22 @@
 // Footer content
 .footer_container {
     width: 100%;
-    color: var(--tile-wrong-color);
-    padding: 1.5rem .25rem 1.5rem .25rem;
+    color: var(--popup-text-description-color);
+    padding: 1.5rem .25rem 1rem .25rem;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
-    gap: 1rem;
+    gap: .7rem;
     font-size: .75rem;
 
     .footer_api_description {
 
-        p { 
+        p {
             margin: 0;
 
             a {
-                color: var(--tile-wrong-color);
+                color: var(--popup-text-description-color);
             }
         }
     }
@@ -27,17 +27,17 @@
             margin: 0;
 
             a {
-                color: var(--tile-wrong-color);
+                color: var(--popup-text-description-color);
             }
         }
     }
 
     .footer_text_description {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
+        flex-direction: column;
         gap: .75rem;
-        align-self: center;
 
         .footer_text {
             p {
@@ -45,7 +45,7 @@
                 letter-spacing: .015rem;
                 word-spacing: .025rem;
                 font-size: .75rem;
-                color: var(--tile-wrong-color);
+                color: var(--popup-text-description-color);
             }
         }
 
@@ -59,7 +59,6 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: var(--keyboard-letter-text-color);
                 width: 1.5rem;
                 height: 1.5rem;
                 padding: 1rem;
@@ -67,7 +66,7 @@
                 text-decoration: none;
 
                 i {
-                    color: var(--extra-menu-clickable-hover-color);
+                    color: var(--extra-menu-icon-color);
                     font-size: 1.2rem;
                     transition: all .2s ease;
                 }

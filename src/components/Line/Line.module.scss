@@ -103,8 +103,12 @@
                     translate: 0 0;
                 }
 
-                50% {
-                    translate: 0 -20%;
+                33% {
+                    translate: 0 -12.5%;
+                }
+
+                66% {
+                    translate: 0 12.5%;
                 }
 
                 100% {
@@ -131,7 +135,7 @@
             }
 
             animation: flipBoardTile .6s ease-in-out,
-            turnToGreen .85s ease-in-out, translateBoardTile .5s ease-in-out;
+            turnToGreen .85s ease-in-out, translateBoardTile .5s ease;
             animation-fill-mode: forwards;
         }
 

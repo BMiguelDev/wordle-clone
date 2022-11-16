@@ -35,14 +35,15 @@ body {
     --popup-border-color: #f6f7f8;
     --popup-box-shadow-color: rgba(0, 0, 0, .375);
     --popup-text-description-color: #787c7e;
+    --settings-popup-notification-bg-color: #aeb1b4;
+    --settings-popup-notification-box-shadow-color: #ad9900;
     --extra-menu-box-shadow-color: rgba(0, 0, 0, .15);
     --extra-menu-border-color: #dcdcdc;
-    --extra-menu-clickable-hover-color: #2f2f31;
+    --extra-menu-clickable-hover-color: #d3d6da;
+    --extra-menu-icon-color: #2f2f31;
     --notification-bg-color: #ffffff;
     --notification-color: #000000;
     --notification-box-shadow-color: #000000;
-
-    --footer-bg-color: rgb(27, 27, 27);
 }
 
 
@@ -65,14 +66,15 @@ body {
     --popup-border-color: #1a1a1b;
     --popup-box-shadow-color: rgba(0, 0, 0, .5);
     --popup-text-description-color: #818384;
+    --settings-popup-notification-bg-color: #3a3a3c;
+    --settings-popup-notification-box-shadow-color: #b59f3b;
     --extra-menu-box-shadow-color: rgba(0, 0, 0, .15);
     --extra-menu-border-color: #dcdcdc;
     --extra-menu-clickable-hover-color: #2f2f31;
+    --extra-menu-icon-color: #818384;
     --notification-bg-color: #ffffff;
     --notification-color: #000000;
     --notification-box-shadow-color: #000000;
-
-    --footer-bg-color: rgb(27, 27, 27);
 }
 
 
@@ -90,7 +92,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 2.75rem;
     background-color: var(--app-bg-color);
 }
 
@@ -105,7 +108,7 @@ body {
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        gap: 2rem;
+        gap: 2.75rem;
 
         .gameboard_container {
             display: flex;
@@ -136,7 +139,6 @@ body {
         border-radius: .25rem;
         width: fit-content;
         z-index: 4;
-
 
         @keyframes popInAndOut {
             0% {
