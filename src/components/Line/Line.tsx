@@ -9,9 +9,6 @@ interface PropTypes {
     wordLength: number;
     numberStages: number;
     setLineClassNames: React.Dispatch<React.SetStateAction<string[][]>>;
-    isGameFinished: boolean;
-    randomWord: string;
-    isGameNotification: boolean;
 }
 
 const MAX_GAME_BOARD_HEIGHT: number = 23;
@@ -23,12 +20,9 @@ export default function Line({
     index,
     wordLength,
     numberStages,
-    setLineClassNames,
-    //isGameFinished,
-    randomWord,
-    //isGameNotification,
-}: PropTypes) {
-
+    setLineClassNames
+}:
+PropTypes) {
     const tileDivRef = useRef<HTMLDivElement>(null);
 
     function handleAnimationEnd(i: number) {
@@ -46,7 +40,6 @@ export default function Line({
             });
         } else return;
     }
-    console.log("Random Word", randomWord);
 
     function getClassName(i: number) {
         // For each class in lineClassNames[index][i] string, we need a singular `styles.thatString`, hence the confusing code below
@@ -63,14 +56,14 @@ export default function Line({
         return !lineClassNames[index][i].includes("shake") && !lineClassNames[index][i].includes("tick")
             ? !lineClassNames[index][i].includes("green_correct_animation")
                 ? {
-                      animationDelay: !lineClassNames[index][i].includes("faster_animation") ? `${i * 0.2}s` : `${i*0.1}s`,
+                      animationDelay: !lineClassNames[index][i].includes("faster_animation")
+                          ? `${i * 0.2}s`
+                          : `${i * 0.1}s`,
                       width: `${MAX_GAME_BOARD_WIDTH / maxWidthHeightMultiplier}rem`,
                       height: `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`,
                   }
                 : {
-                      animationDelay:
-                          //isGameFinished && !isGameNotification ? `${i * 0.1}s` : `${i * 0.2}s, ${wordLength * 0.2}s`,
-                          `${i * 0.2}s, ${i * 0.2}s, ${(wordLength-1)*0.2 + 0.6 + i*0.1}s`,
+                      animationDelay: `${i * 0.2}s, ${i * 0.2}s, ${(wordLength - 1) * 0.2 + 0.6 + i * 0.1}s`,
                       width: `${MAX_GAME_BOARD_WIDTH / maxWidthHeightMultiplier}rem`,
                       height: `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`,
                   }
@@ -79,7 +72,6 @@ export default function Line({
                   height: `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`,
               };
     }
-
 
     let tileArray = [];
     for (let i = 0; i < wordLength; i++) {

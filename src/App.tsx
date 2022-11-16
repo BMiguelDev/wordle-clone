@@ -263,7 +263,6 @@ export default function App() {
                 const randomWord = WordData[Math.floor(Math.random() * WordData.length)].toLowerCase();
                 setRandomWordAndArray({ randomWord: randomWord, randomWordArray: WordData });
             } else if (checkWordsApi?.ok) {
-
                 setIsApiAvailable((prevIsApiAvailable) => ({ ...prevIsApiAvailable, isWordApiAvailable: true }));
                 // Get 4 random letters that can't be part of the retrieved words, because API doesn't return random words.
                 let randomLettersArray: string[] = [];
@@ -589,6 +588,11 @@ export default function App() {
                                     })
                                     .catch((error) => {
                                         console.log(error);
+                                        setIsApiAvailable((prevIsApiAvailable) => ({
+                                            ...prevIsApiAvailable,
+                                            isDictionaryApiAvailable: false,
+                                        }));
+                                        handleStageChange();
                                     });
                             } else {
                                 // if dictionary Api is not available, don't check if word exists and allow any word
@@ -632,6 +636,7 @@ export default function App() {
                                     ...prevIsApiAvailable,
                                     isDictionaryApiAvailable: false,
                                 }));
+                                handleStageChange();
                             });
                     } else {
                         // if dictionary Api is not available or lazy mode is on, don't check if word exists and allow any word
@@ -661,7 +666,6 @@ export default function App() {
     useEffect(() => {
         // If random word hasn't been correctly guessed yet and if last stage hasn't been reached, let user keep typing guessess
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
-            console.log(gameSettings.currentGameSettings.numberStages);
             if (currentStage < gameSettings.currentGameSettings.numberStages) {
                 if (
                     !isPopUpOpen.isSettingsPopUpOpen &&
@@ -984,8 +988,8 @@ export default function App() {
         ALPHABET_LETTERS.split("l")[1],
     ];
 
-    console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
-    console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
+    // console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
+    // console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
 
     return (
         <div
@@ -1014,9 +1018,6 @@ export default function App() {
                                         wordLength={gameSettings.currentGameSettings.wordLength}
                                         numberStages={gameSettings.currentGameSettings.numberStages}
                                         setLineClassNames={setLineClassNames}
-                                        isGameFinished={gameDescription.isGameFinished}
-                                        randomWord={randomWordAndArray.randomWord}
-                                        isGameNotification={gameNotification.isGameNotification}
                                     />
                                 );
                             })}
@@ -1031,8 +1032,6 @@ export default function App() {
                                     wordLength={gameSettings.currentGameSettings.wordLength}
                                     handleKeyClick={handleKeyClick}
                                     currentGuess={currentGuess}
-                                    currentStage={currentStage}
-                                    gameNotification={gameNotification}
                                     gameDescription={gameDescription}
                                 />
                             ))}

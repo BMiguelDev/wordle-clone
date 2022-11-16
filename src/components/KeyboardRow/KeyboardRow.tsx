@@ -9,8 +9,6 @@ interface PropTypes {
     lineClassNames: string[][];
     handleKeyClick: (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>, key: string) => void;
     currentGuess: string;
-    currentStage: number;
-    gameNotification: gameNotificationType;
     gameDescription: gameDescriptionType;
     wordLength: number;
 }
@@ -21,8 +19,6 @@ export default function KeyboardRow({
     lineClassNames,
     handleKeyClick,
     currentGuess,
-    //currentStage,
-    //gameNotification,
     gameDescription,
     wordLength,
 }: PropTypes) {
