@@ -24,26 +24,6 @@
             border: .1rem solid var(--tile-hightlighted-border-color);
         }
 
-        &.correct_animation {
-
-            @keyframes translateBoardTile {
-                0% {
-                    translate: 0 0;
-                }
-
-                50% {
-                    translate: 0 -10%;
-                }
-
-                100% {
-                    translate: 0 0;
-                }
-            }
-
-            animation: translateBoardTile .3s ease-in-out;
-            //animation-fill-mode: forwards;
-        }
-
         &.tick {
             @keyframes tick {
                 0% {
@@ -115,6 +95,44 @@
                 border: none;
                 color: var(--tile-text-color);
             }
+        }
+
+        &.green_correct_animation {
+            @keyframes translateBoardTile {
+                0% {
+                    translate: 0 0;
+                }
+
+                50% {
+                    translate: 0 -20%;
+                }
+
+                100% {
+                    translate: 0 0;
+                }
+            }
+
+            @keyframes turnToGreen {
+                0% {
+                    background-color: var(--app-bg-color);
+                }
+
+                25% {
+                    background-color: var(--app-bg-color);
+                }
+
+                50% {
+                    background-color: var(--tile-correct-color);
+                }
+
+                100% {
+                    background-color: var(--tile-correct-color);
+                }
+            }
+
+            animation: flipBoardTile .6s ease-in-out,
+            turnToGreen .85s ease-in-out, translateBoardTile .5s ease-in-out;
+            animation-fill-mode: forwards;
         }
 
         &.green {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import styles from "./Line.module.scss";
 
@@ -24,10 +24,13 @@ export default function Line({
     wordLength,
     numberStages,
     setLineClassNames,
-    isGameFinished,
+    //isGameFinished,
     randomWord,
-    isGameNotification,
+    //isGameNotification,
 }: PropTypes) {
+
+    const tileDivRef = useRef<HTMLDivElement>(null);
+
     function handleAnimationEnd(i: number) {
         if (lineClassNames[index][i].includes("shake")) {
             setLineClassNames((prevLineClassNames) => {
@@ -39,20 +42,6 @@ export default function Line({
             setLineClassNames((prevLineClassNames) => {
                 let newLineClassNames = [...prevLineClassNames];
                 newLineClassNames[index][i] = "tile";
-                return newLineClassNames;
-            });
-        } else if (lineClassNames[index][i].includes("correct_animation") && isGameFinished) {
-            console.log("Im in if 111111");
-            setLineClassNames((prevLineClassNames) => {
-                let newLineClassNames = [...prevLineClassNames];
-                newLineClassNames[index][i] = "tile green";
-                return newLineClassNames;
-            });
-        } else if (line === randomWord && isGameFinished && isGameNotification) {
-            console.log("Im in if 2222222");
-            setLineClassNames((prevLineClassNames) => {
-                let newLineClassNames = [...prevLineClassNames];
-                newLineClassNames[index][i] = "tile green correct_animation";
                 return newLineClassNames;
             });
         } else return;
@@ -71,17 +60,17 @@ export default function Line({
 
     function getStyle(i: number) {
         const maxWidthHeightMultiplier = Math.max(wordLength, numberStages);
-        return !lineClassNames[index][i].includes("shake") && !lineClassNames[index][i].includes("tick") // Probably add a condition here to make translate animation only start after the others have stopped
-            ? !lineClassNames[index][i].includes("correct_animation")
+        return !lineClassNames[index][i].includes("shake") && !lineClassNames[index][i].includes("tick")
+            ? !lineClassNames[index][i].includes("green_correct_animation")
                 ? {
-                      animationDelay: isGameFinished && !isGameNotification ? `${i * 0.1}s` : `${i * 0.2}s`,
+                      animationDelay: !lineClassNames[index][i].includes("faster_animation") ? `${i * 0.2}s` : `${i*0.1}s`,
                       width: `${MAX_GAME_BOARD_WIDTH / maxWidthHeightMultiplier}rem`,
                       height: `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`,
                   }
                 : {
                       animationDelay:
                           //isGameFinished && !isGameNotification ? `${i * 0.1}s` : `${i * 0.2}s, ${wordLength * 0.2}s`,
-                          `${i * 0.2}s, ${wordLength * 0.2}s`,
+                          `${i * 0.2}s, ${i * 0.2}s, ${(wordLength-1)*0.2 + 0.6 + i*0.1}s`,
                       width: `${MAX_GAME_BOARD_WIDTH / maxWidthHeightMultiplier}rem`,
                       height: `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`,
                   }
@@ -96,6 +85,7 @@ export default function Line({
     for (let i = 0; i < wordLength; i++) {
         tileArray.push(
             <div
+                ref={tileDivRef}
                 key={i}
                 style={getStyle(i)}
                 onAnimationEnd={() => handleAnimationEnd(i)}

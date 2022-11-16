@@ -95,14 +95,7 @@ body {
 }
 
 
-.main_container_loading {
-    i {
-        font-size: 5rem;
-        color: var(--tile-text-color);
-    }
-}
-
-
+// Main content
 .main_container {
     position: relative;
     width: 100%;
@@ -128,13 +121,6 @@ body {
             align-items: center;
             gap: .5rem;
         }
-    }
-
-    .api_warnings {
-        position: absolute;
-        top: 30%;
-        left: 20%;
-        color: var(--tile-text-color);
     }
 
 
@@ -177,5 +163,13 @@ body {
         &.notification_container_invisible {
             display: none;
         }
+    }
+}
+
+
+.main_container_loading {
+    i {
+        font-size: 5rem;
+        color: var(--tile-text-color);
     }
 }
