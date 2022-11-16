@@ -166,6 +166,52 @@ body {
             display: none;
         }
     }
+
+    .reset_game_button {
+        position: absolute;
+        top: 40%;
+        right: 15%;
+        opacity: 0;
+        background-color: var(--tile-present-color);
+        color: var(--popup-bg-color);
+        border: 0.05rem solid var(--popup-text-description-color);
+        font-size: 0.9rem;
+        border-radius: 0.25rem;
+        font-weight: bold;
+        padding: 0.7rem 1.2rem;
+        cursor: pointer;
+
+        @keyframes slowAppear {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes buttonGlow {
+            0% {
+                box-shadow: 0 0 .1rem .05rem var(--tile-present-color); 
+            }
+            33% {
+                box-shadow: 0 0 .875rem .25rem var(--tile-present-color);
+            }
+            66% {
+                box-shadow: 0 0 .1rem .05rem var(--tile-present-color);
+            }
+            100% {
+                box-shadow: 0 0 .875rem .25rem var(--tile-present-color);
+            }
+        }
+
+        animation: slowAppear .5s ease-in-out 5s, buttonGlow 3.5s ease-in-out 0s alternate-reverse infinite;
+        animation-fill-mode: forwards;
+
+        &.reset_game_button_hide {
+            display: none;
+        }
+    }
 }
 
 

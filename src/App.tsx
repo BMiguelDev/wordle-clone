@@ -1077,6 +1077,8 @@ export default function App() {
                     />
                     <HelpPopUp isHelpPopUpOpen={isPopUpOpen.isHelpPopUpOpen} toggleIsPopUpOpen={toggleIsPopUpOpen} />
                     <ExtraMenu isExtraMenuOpen={isPopUpOpen.isExtraMenuOpen} toggleIsPopUpOpen={toggleIsPopUpOpen} />
+
+                    <button className={`reset_game_button ${!gameDescription.isGameFinished ? "reset_game_button_hide" : ""}`} onClick={resetGame}>Restart Game</button>
                 </main>
             )}
         </div>
