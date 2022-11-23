@@ -13,6 +13,7 @@ interface PropTypes {
 
 const MAX_GAME_BOARD_HEIGHT: number = 23;
 const MAX_GAME_BOARD_WIDTH: number = 23.125;
+const MAX_TILE_FONT_SIZE: number = 12;
 
 export default function Line({
     line,
@@ -59,18 +60,21 @@ PropTypes) {
                       animationDelay: !lineClassNames[index][i].includes("faster_animation")
                           ? `${i * 0.2}s`
                           : `${i * 0.1}s`,
-                      width: `${MAX_GAME_BOARD_WIDTH / maxWidthHeightMultiplier}rem`,
-                      height: `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`,
+                      width: numberStages<8 ? (wordLength>numberStages*1.75 ? `${(MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier+2)}rem` : `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`) : `${MAX_GAME_BOARD_WIDTH / (maxWidthHeightMultiplier+1)}rem`,
+                      height: numberStages<8 ? (wordLength>numberStages*1.75 ? `${(MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier+2)}rem` : `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`) : `${MAX_GAME_BOARD_HEIGHT / (maxWidthHeightMultiplier+1)}rem`,
+                      'font-size': `${MAX_TILE_FONT_SIZE/maxWidthHeightMultiplier}rem`
                   }
                 : {
                       animationDelay: `${i * 0.2}s, ${i * 0.2}s, ${(wordLength - 1) * 0.2 + 0.6 + i * 0.1}s`,
-                      width: `${MAX_GAME_BOARD_WIDTH / maxWidthHeightMultiplier}rem`,
-                      height: `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`,
+                      width: numberStages<8 ? (wordLength>numberStages*1.75 ? `${(MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier+2)}rem` : `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`) : `${MAX_GAME_BOARD_WIDTH / (maxWidthHeightMultiplier+1)}rem`,
+                      height: numberStages<8 ? (wordLength>numberStages*1.75 ? `${(MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier+2)}rem` : `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`) : `${MAX_GAME_BOARD_HEIGHT / (maxWidthHeightMultiplier+1)}rem`,
+                      'font-size': `${MAX_TILE_FONT_SIZE/maxWidthHeightMultiplier}rem`
                   }
             : {
-                  width: `${MAX_GAME_BOARD_WIDTH / maxWidthHeightMultiplier}rem`,
-                  height: `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`,
-              };
+                width: numberStages<8 ? (wordLength>numberStages*1.75 ? `${(MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier+2)}rem` : `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`) : `${MAX_GAME_BOARD_WIDTH / (maxWidthHeightMultiplier+1)}rem`,
+                height: numberStages<8 ? (wordLength>numberStages*1.75 ? `${(MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier+2)}rem` : `${MAX_GAME_BOARD_HEIGHT / maxWidthHeightMultiplier}rem`) : `${MAX_GAME_BOARD_HEIGHT / (maxWidthHeightMultiplier+1)}rem`,
+                'font-size': `${MAX_TILE_FONT_SIZE/maxWidthHeightMultiplier}rem`
+                };
     }
 
     let tileArray = [];

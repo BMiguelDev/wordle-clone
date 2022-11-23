@@ -34,6 +34,10 @@ const LOCAL_STORAGE_KEY_PLAYER_STATISTICS = "WordleCloneApp.playerStatistics";
 const LOCAL_STORAGE_KEY_GAME_DESCRIPTION = "WordleCloneApp.gameDescription";
 
 const ALPHABET_LETTERS = "qwertyuiopasdfghjklzxcvbnm";
+const MAX_NUMBER_STAGES = 12;
+const MIN_NUMBER_STAGES = 1;
+const MAX_WORD_LENGTH = 10;
+const MIN_WORD_LENGTH = 2;
 
 export default function App() {
     // Object state variable to hold the current and future game settings
@@ -147,7 +151,7 @@ export default function App() {
                 gamesLost: 0,
                 currentStreak: 0,
                 maxStreak: 0,
-                NumberWinsWithXGuesses: Array(13).fill(0),
+                NumberWinsWithXGuesses: Array(MAX_NUMBER_STAGES).fill(0),
             };
     });
 
@@ -864,7 +868,7 @@ export default function App() {
     function handleChangeGameSettings(gameSetting: string, option: string) {
         switch (gameSetting) {
             case "word-length":
-                if (option === "increment" && gameSettings.futureGameSettings.wordLength < 10)
+                if (option === "increment" && gameSettings.futureGameSettings.wordLength < MAX_WORD_LENGTH)
                     setgameSettings((prevgameSettings) => ({
                         ...prevgameSettings,
                         futureGameSettings: {
@@ -872,7 +876,7 @@ export default function App() {
                             wordLength: prevgameSettings.futureGameSettings.wordLength + 1,
                         },
                     }));
-                else if (option === "decrement" && gameSettings.futureGameSettings.wordLength > 2)
+                else if (option === "decrement" && gameSettings.futureGameSettings.wordLength > MIN_WORD_LENGTH)
                     setgameSettings((prevgameSettings) => ({
                         ...prevgameSettings,
                         futureGameSettings: {
@@ -883,7 +887,7 @@ export default function App() {
                 return;
 
             case "stage-number":
-                if (option === "increment" && gameSettings.futureGameSettings.numberStages < 13)
+                if (option === "increment" && gameSettings.futureGameSettings.numberStages < MAX_NUMBER_STAGES)
                     setgameSettings((prevgameSettings) => ({
                         ...prevgameSettings,
                         futureGameSettings: {
@@ -891,7 +895,7 @@ export default function App() {
                             numberStages: prevgameSettings.futureGameSettings.numberStages + 1,
                         },
                     }));
-                else if (option === "decrement" && gameSettings.futureGameSettings.numberStages > 1)
+                else if (option === "decrement" && gameSettings.futureGameSettings.numberStages > MIN_NUMBER_STAGES)
                     setgameSettings((prevgameSettings) => ({
                         ...prevgameSettings,
                         futureGameSettings: {
@@ -983,7 +987,7 @@ export default function App() {
     // TODO:
     // - make app responsive
     // - handle when apis arent available [like line 601]
-    // - Improve dynamic styles of game tiles
+    // - Improve dynamic styles of game tiles (Fix: if word lenght is 2x more than number of stages, increase tile size (divide by less) (refactor function getStyle) (why +1 and not -1?))
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],

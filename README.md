@@ -5,11 +5,13 @@
 
 #### Check the app: https://bmigueldev.github.io/wordle-clone/
 
+###### Note: The app's functionality may be hindered by the APIs used
+
 ## App functionalities:
 - Play wordle in whatever difficulty you want:
-    -- Change the word length to play with smaller or longer words
-    -- Change the number of stages to have more or less tries at guessing the word
-    -- Change the game mode (hard mode or lazy mode) to control how hard the game is, even during a game
+    * Change the word length to play with smaller or longer words
+    * Change the number of stages to have more or less tries at guessing the word
+    * Change the game mode (hard mode or lazy mode) to control how hard the game is, even during a game
 - Keep track of your game stats
 
 ## Skills shown in this project:
@@ -17,6 +19,3 @@
 - Design Cloning
 - API Manipulation
 - Responsive Design
-
-##### Note: The app's functionality may be hindered by the APIs used
-
