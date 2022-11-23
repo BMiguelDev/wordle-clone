@@ -6,12 +6,11 @@
 #### Check the app: https://bmigueldev.github.io/wordle-clone/
 
 ## App functionalities:
-- Create, Read, Update, and Delete (CRUD) projects and todo items
-- Move (drag) todo/task items between tabs
-- Change priority status of todo item
-- Tab sorting (alphabetically and by priority)
-- Dynamically search for tasks in a tab
-- Create and access different projects, each with their own todo lists
+- Play wordle in whatever difficulty you want:
+    -- Change the word length to play with smaller or longer words
+    -- Change the number of stages to have more or less tries at guessing the word
+    -- Change the game mode (hard mode or lazy mode) to control how hard the game is, even during a game
+- Keep track of your game stats
 
 ## Skills shown in this project:
 - React, Typescript, Sass
