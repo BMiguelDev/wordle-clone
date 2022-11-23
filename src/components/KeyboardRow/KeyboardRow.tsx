@@ -1,6 +1,6 @@
 import React from "react";
 
-import { gameDescriptionType, gameNotificationType } from "../../models/model";
+import { gameDescriptionType } from "../../models/model";
 import styles from "./KeyboardRow.module.scss";
 
 interface PropTypes {
