@@ -987,7 +987,6 @@ export default function App() {
     // TODO:
     // - make app responsive
     // - handle when apis arent available [like line 601]
-    // - Improve dynamic styles of game tiles (Fix: if word lenght is 2x more than number of stages, increase tile size (divide by less) (refactor function getStyle) (why +1 and not -1?))
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
