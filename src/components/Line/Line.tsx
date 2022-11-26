@@ -11,9 +11,13 @@ interface PropTypes {
     setLineClassNames: React.Dispatch<React.SetStateAction<string[][]>>;
 }
 
-const MAX_GAME_BOARD_HEIGHT: number = 23;
-const MAX_GAME_BOARD_WIDTH: number = 23.125;
-const MAX_TILE_FONT_SIZE: number = 12;
+const MAX_GAME_BOARD_HEIGHT: number = window.innerWidth > 500 ? 23 : 16;
+const MAX_GAME_BOARD_WIDTH: number = window.innerWidth > 500 ? 23.125 : 16;
+const MAX_TILE_FONT_SIZE: number = window.innerWidth > 500 ? 12 : 7.5;
+
+// const MAX_GAME_BOARD_HEIGHT: number = 23;
+// const MAX_GAME_BOARD_WIDTH: number = 23.125;
+// const MAX_TILE_FONT_SIZE: number = 12;
 
 export default function Line({ line, lineClassNames, index, wordLength, numberStages, setLineClassNames }: PropTypes) {
     const tileDivRef = useRef<HTMLDivElement>(null);

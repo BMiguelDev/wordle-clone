@@ -985,7 +985,7 @@ export default function App() {
     }
 
     // TODO:
-    // - make app responsive
+    // - make app responsive (Fix tile size when word legnth bigger than number of stages. Maybe add to tsx file a conditional to descrease a bit the max height and max width when the device's screen is x pixels) 
     // - handle when apis arent available [like line 601]
 
     const keyboardLetterRowsArray: string[] = [

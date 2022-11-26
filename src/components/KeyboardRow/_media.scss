@@ -1,0 +1,112 @@
+// Media query for mobile content (portrait)
+@media screen and (max-width: 500px) and (min-height: 501px) {
+
+    // Keyboard content
+    .keyboard_row {
+        display: flex;
+        align-items: center;
+        gap: .3rem;
+
+        .keyboard_letter_tile {
+            margin: 0;
+            padding: .75rem .5rem;
+            width: 1.8rem;
+            height: 2.75rem;
+            // display: flex;
+            // align-items: center;
+            // justify-content: center;
+            // background-color: var(--keyboard-letter-tile-bg-color);
+            // border-radius: .25rem;
+            // text-transform: uppercase;
+            font-size: .725rem;
+            // font-weight: bold;
+            // cursor: pointer;
+            // position: relative;
+            // color: var(--keyboard-letter-text-color);
+
+            // .keyboard_letter_text {
+            //     margin: 0;
+            // }
+
+            // &.keyboard_letter_tile_green {
+            //     @keyframes turnToGreen {
+            //         0% {
+            //             background-color: var(--keyboard-letter-tile-bg-color);
+            //         }
+
+            //         100% {
+            //             color: var(--keyboard-letter-checked-color);
+            //             background-color: var(--tile-correct-color);
+            //         }
+            //     }
+
+            //     animation: turnToGreen .5s ease-in-out;
+            //     animation-fill-mode: forwards;
+            // }
+
+            // &.keyboard_letter_tile_yellow {
+            //     @keyframes turnToYellow {
+            //         0% {
+            //             background-color: var(--keyboard-letter-tile-bg-color);
+            //         }
+
+            //         100% {
+            //             color: var(--keyboard-letter-checked-color);
+            //             background-color: var(--tile-present-color);
+            //         }
+            //     }
+
+            //     animation: turnToYellow .5s ease-in-out;
+            //     animation-fill-mode: forwards;
+            // }
+
+            // &.keyboard_letter_tile_grey {
+            //     @keyframes turnToGrey {
+            //         0% {
+            //             background-color: var(--keyboard-letter-tile-bg-color);
+            //         }
+
+            //         100% {
+            //             color: var(--keyboard-letter-checked-color);
+            //             background-color: var(--tile-wrong-color);
+            //         }
+            //     }
+
+            //     animation: turnToGrey .5s ease-in-out;
+            //     animation-fill-mode: forwards;
+            // }
+
+            &.keyboard_letter_tile_enter {
+                width: 2.8rem;
+                // color: var(--keyboard-letter-text-color);
+                // letter-spacing: .05rem;
+                font-size: .635rem;
+            }
+
+            &.keyboard_letter_tile_backspace {
+                width: 2.8rem;
+                color: var(--keyboard-letter-text-color);
+                font-size: 1rem;
+            }
+
+            // &.keyboard_letter_tile_highlight {
+            //     @keyframes scaleUpAndDown {
+            //         0% {
+            //             scale: 1;
+            //         }
+
+            //         50% {
+            //             scale: 1.1;
+            //             background-color: var(--keyboard-letter-highlight-color);
+            //         }
+
+            //         100% {
+            //             scale: 1;
+            //         }
+            //     }
+
+            //     animation: scaleUpAndDown 1s ease-in-out 0s alternate-reverse infinite;
+            // }
+        }
+    }
+}

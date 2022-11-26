@@ -1,3 +1,4 @@
+// Gameboard content
 .tile_row {
     display: flex;
     gap: .35rem;
@@ -212,3 +213,6 @@
         }
     }
 }
+
+
+@import './media';
