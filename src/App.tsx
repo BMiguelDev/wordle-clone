@@ -39,6 +39,8 @@ const MIN_NUMBER_STAGES = 1;
 const MAX_WORD_LENGTH = 10;
 const MIN_WORD_LENGTH = 2;
 
+const DUMMY_DATA_WORD_LENGTH = 5;
+
 export default function App() {
     // Object state variable to hold the current and future game settings
     const [gameSettings, setgameSettings] = useState<gameSettingsType>(() => {
@@ -116,8 +118,8 @@ export default function App() {
         const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_IS_DARK_MODE);
         if (localStorageItem) return JSON.parse(localStorageItem);
         else {
-             // Set isDarkMode based on browser's settings
-            return (window.matchMedia('(prefers-color-scheme: dark)').matches ? true : false);
+            // Set isDarkMode based on browser's settings
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? true : false;
         }
     });
 
@@ -170,13 +172,13 @@ export default function App() {
 
     const [lineClassNames, setLineClassNames] = useState<string[][]>(() => {
         const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_LINE_CLASS_NAMES);
-        // If upon page refresh game had already ended, add "faster_animation" to make tiles animate faster and replace 
+        // If upon page refresh game had already ended, add "faster_animation" to make tiles animate faster and replace
         // "green_correct_animation" with just "green" to avoid repeating winning animation
         if (localStorageItem) {
             let newLineClassNames: string[][] = JSON.parse(localStorageItem);
             return newLineClassNames.map((line) => {
                 return line.map((classString) => {
-                    if(gameDescription.isGameFinished) {
+                    if (gameDescription.isGameFinished) {
                         classString += " faster_animation";
                     }
                     if (classString.includes("green_correct_animation"))
@@ -188,6 +190,10 @@ export default function App() {
             return Array(gameSettings.currentGameSettings.numberStages).fill(
                 Array(gameSettings.currentGameSettings.wordLength).fill("tile")
             );
+    });
+
+    const [isDeviceSmartphoneLandscape, setIsDeviceSmartphoneLandscape] = useState<boolean>(() => {
+        return window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651 ? true : false;
     });
 
     // useEffect hooks to store state variables in local storage whenever they update
@@ -252,12 +258,12 @@ export default function App() {
     useEffect(() => {
         const fetchData = async () => {
             // Check if words Api is available
-            const checkWordsApi = await fetch("https://api.datamuse.com/words?sp=?????")
+            const checkWordsApi = await fetch("https://api.datamuse.com/words?sp=?????", { cache: "no-store" })
                 .then((response) => {
                     return response;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log("Error: Word API Unavailable");
                     setIsApiAvailable((prevIsApiAvailable) => ({
                         ...prevIsApiAvailable,
                         isWordApiAvailable: false,
@@ -286,7 +292,6 @@ export default function App() {
                         gameSettings.currentGameSettings.wordLength
                     )}-1234567890${randomLettersString}&max=25`
                 );
-                console.log("HEY1", randomWordsData1);
                 const randomWordsArray1 = await randomWordsData1.json();
 
                 // Get 75 words from API that don't include "a" (due to most words gotten from API call including and starting with "a")
@@ -295,7 +300,6 @@ export default function App() {
                         gameSettings.currentGameSettings.wordLength
                     )}-1234567890aA${randomLettersString}&max=75`
                 );
-                console.log("HEYY2", randomWordsData2);
                 const randomWordsArray2 = await randomWordsData2.json();
 
                 // Join both arrays and keep only the words
@@ -321,33 +325,85 @@ export default function App() {
             }
         };
 
-        // // Check if dictionary Api is available
-        // const checkDictionaryApi = async () => {
-        //     const dictionaryTestData = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/hello");
-        //     if (dictionaryTestData.ok)
-        //         setIsApiAvailable((prevIsApiAvailable) => ({ ...prevIsApiAvailable, isDictionaryApiAvailable: true }));
-        // };
-
         // Check if dictionary Api is available
         const checkDictionaryApi = async () => {
-            const dictionaryTestData = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/hello")
+            const dictionaryTestData = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/hello", {
+                cache: "no-store",
+            })
                 .then((response) => {
                     return response;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log("Error: Dictionary API Unavailable");
                     setIsApiAvailable((prevIsApiAvailable) => ({
                         ...prevIsApiAvailable,
                         isDictionaryApiAvailable: false,
                     }));
+                    setgameSettings((prevGameSettings) => ({
+                        ...prevGameSettings,
+                        currentGameSettings: {
+                            ...prevGameSettings.currentGameSettings,
+                            lazyMode: true,
+                        },
+                    }));
                 });
             if (dictionaryTestData?.ok)
                 setIsApiAvailable((prevIsApiAvailable) => ({ ...prevIsApiAvailable, isDictionaryApiAvailable: true }));
+            else if (!dictionaryTestData?.ok) {
+                setIsApiAvailable((prevIsApiAvailable) => ({
+                    ...prevIsApiAvailable,
+                    isDictionaryApiAvailable: false,
+                }));
+                setgameSettings((prevGameSettings) => ({
+                    ...prevGameSettings,
+                    currentGameSettings: {
+                        ...prevGameSettings.currentGameSettings,
+                        lazyMode: true,
+                    },
+                }));
+            }
+        };
+
+        // Check if words Api is available
+        const checkWordsApi = () => {
+            fetch("https://api.datamuse.com/words?sp=?????", { cache: "no-store" })
+                .then((response) => {
+                    if (response.ok) {
+                        setIsApiAvailable((prevIsApiAvailable) => ({
+                            ...prevIsApiAvailable,
+                            isWordApiAvailable: true,
+                        }));
+                    } else {
+                        setIsApiAvailable((prevIsApiAvailable) => ({
+                            ...prevIsApiAvailable,
+                            isWordApiAvailable: false,
+                        }));
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error: Word API Unavailable");
+                    setIsApiAvailable((prevIsApiAvailable) => ({
+                        ...prevIsApiAvailable,
+                        isWordApiAvailable: false,
+                    }));
+                });
+        };
+
+        const handleResize = () => {
+            setIsDeviceSmartphoneLandscape(
+                window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651 ? true : false
+            );
         };
 
         if (randomWordAndArray.randomWordArray.length === 0) fetchData();
+        checkWordsApi();
         checkDictionaryApi();
+        window.addEventListener("resize", handleResize);
         setIsLoading(false);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -487,7 +543,7 @@ export default function App() {
                 // After a short delay, show the statistics pop up
                 setTimeout(() => {
                     setIsPopUpOpen((prevIsPopUpOpen) => ({ ...prevIsPopUpOpen, isStatsPopUpOpen: true }));
-                }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 600 + (gameSettings.currentGameSettings.wordLength - 1) * 100  + 500 + 200);
+                }, (gameSettings.currentGameSettings.wordLength - 1) * 200 + 600 + (gameSettings.currentGameSettings.wordLength - 1) * 100 + 500 + 200);
             }
             setCurrentGuess("");
             setCurrentStage((prevCurrentStage) => prevCurrentStage + 1);
@@ -521,7 +577,7 @@ export default function App() {
                         for (let i = 0; i < currentStage; i++) {
                             // For each tile class of stage
                             lineClassNames[i].forEach((classText, index) => {
-                                console.log(classText);
+                                //console.log("hello", classText);
                                 if (classText.includes("green") || classText.includes("yellow")) {
                                     const hintedLetter = stageWordArray[i][index];
                                     if (!arrayOfHintedLetters.includes(hintedLetter))
@@ -594,11 +650,22 @@ export default function App() {
                                         }
                                     })
                                     .catch((error) => {
-                                        console.log(error);
+                                        console.log("Error: Dictionary API Unavailable");
                                         setIsApiAvailable((prevIsApiAvailable) => ({
                                             ...prevIsApiAvailable,
                                             isDictionaryApiAvailable: false,
                                         }));
+                                        setgameSettings((prevGameSettings) => ({
+                                            ...prevGameSettings,
+                                            currentGameSettings: {
+                                                ...prevGameSettings.currentGameSettings,
+                                                lazyMode: true,
+                                            },
+                                        }));
+                                        setGameNotification({
+                                            gameNotificationText: "Dictionary API unavailable. Lazy mode turned on",
+                                            isGameNotification: true,
+                                        });
                                         handleStageChange();
                                     });
                             } else {
@@ -638,11 +705,22 @@ export default function App() {
                                 }
                             })
                             .catch((error) => {
-                                console.log(error);
+                                console.log("Error: Dictionary API Unavailable");
                                 setIsApiAvailable((prevIsApiAvailable) => ({
                                     ...prevIsApiAvailable,
                                     isDictionaryApiAvailable: false,
                                 }));
+                                setgameSettings((prevGameSettings) => ({
+                                    ...prevGameSettings,
+                                    currentGameSettings: {
+                                        ...prevGameSettings.currentGameSettings,
+                                        lazyMode: true,
+                                    },
+                                }));
+                                setGameNotification({
+                                    gameNotificationText: "Dictionary API unavailable. Lazy mode turned on",
+                                    isGameNotification: true,
+                                });
                                 handleStageChange();
                             });
                     } else {
@@ -681,7 +759,7 @@ export default function App() {
                     !isPopUpOpen.isExtraMenuOpen
                 ) {
                     window.addEventListener("keydown", handleKeydown);
-                    console.log("I created new event listener");
+                    //console.log("I created new event listener");
                 }
             } else if (currentStage === gameSettings.currentGameSettings.numberStages) {
                 // Update player statistics with 1 more loss
@@ -722,7 +800,7 @@ export default function App() {
 
         return () => {
             window.removeEventListener("keydown", handleKeydown);
-            console.log("I removed event listener");
+            //console.log("I removed event listener");
         };
     }, [
         currentGuess,
@@ -830,32 +908,197 @@ export default function App() {
                     randomWordArray: newJointRandomWordsArrayNoWhiteSpaces,
                 });
             };
-            fetchNewData();
+
+            // First check if words api is still available. If yes, proceed to getting new random words.
+            // If no, get dummy data and update isApiAvailable state
+            fetch("https://api.datamuse.com/words?sp=?????", { cache: "no-store" })
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("here");
+                        // setIsApiAvailable((prevIsApiAvailable) => ({
+                        //     ...prevIsApiAvailable,
+                        //     isWordApiAvailable: true,
+                        // }));
+                        fetchNewData();
+                        const newLineClassNames: string[][] = Array(gameSettings.futureGameSettings.numberStages).fill(
+                            Array(gameSettings.futureGameSettings.wordLength).fill("tile")
+                        );
+                        setLineClassNames(newLineClassNames);
+                        setgameSettings((prevgameSettings) => ({
+                            ...prevgameSettings,
+                            currentGameSettings: {
+                                ...prevgameSettings.futureGameSettings,
+                                hardMode: prevgameSettings.currentGameSettings.hardMode,
+                                lazyMode: prevgameSettings.currentGameSettings.lazyMode,
+                            },
+                        }));
+                        const newStageWordArray: string[] = Array(gameSettings.futureGameSettings.numberStages).fill(
+                            ""
+                        );
+                        setStageWordArray(newStageWordArray);
+                    } else {
+                        setIsApiAvailable((prevIsApiAvailable) => ({
+                            ...prevIsApiAvailable,
+                            isWordApiAvailable: false,
+                        }));
+                        const randomWord = WordData[Math.floor(Math.random() * WordData.length)].toLowerCase();
+                        setRandomWordAndArray({ randomWord: randomWord, randomWordArray: WordData });
+                        setGameNotification({
+                            gameNotificationText: `Word API unavailable. Playing with ${DUMMY_DATA_WORD_LENGTH} letter random word`,
+                            isGameNotification: true,
+                        });
+
+                        const newLineClassNames: string[][] = Array(gameSettings.futureGameSettings.numberStages).fill(
+                            Array(DUMMY_DATA_WORD_LENGTH).fill("tile")
+                        );
+                        setLineClassNames(newLineClassNames);
+                        setgameSettings((prevgameSettings) => ({
+                            futureGameSettings: {
+                                ...prevgameSettings.futureGameSettings,
+                                wordLength: DUMMY_DATA_WORD_LENGTH,
+                            },
+                            currentGameSettings: {
+                                ...prevgameSettings.futureGameSettings,
+                                wordLength: DUMMY_DATA_WORD_LENGTH,
+                                hardMode: prevgameSettings.currentGameSettings.hardMode,
+                                lazyMode: prevgameSettings.currentGameSettings.lazyMode,
+                            },
+                        }));
+                        const newStageWordArray: string[] = Array(gameSettings.futureGameSettings.numberStages).fill(
+                            ""
+                        );
+                        setStageWordArray(newStageWordArray);
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error: Word API Unavailable");
+                    setIsApiAvailable((prevIsApiAvailable) => ({
+                        ...prevIsApiAvailable,
+                        isWordApiAvailable: false,
+                    }));
+                    const randomWord = WordData[Math.floor(Math.random() * WordData.length)].toLowerCase();
+                    setRandomWordAndArray({ randomWord: randomWord, randomWordArray: WordData });
+                    setGameNotification({
+                        gameNotificationText: "Word API unavailable. Playing with 5 letter random word",
+                        isGameNotification: true,
+                    });
+
+                    const newLineClassNames: string[][] = Array(gameSettings.futureGameSettings.numberStages).fill(
+                        Array(DUMMY_DATA_WORD_LENGTH).fill("tile")
+                    );
+                    setLineClassNames(newLineClassNames);
+                    setgameSettings((prevgameSettings) => ({
+                        futureGameSettings: {
+                            ...prevgameSettings.futureGameSettings,
+                            wordLength: DUMMY_DATA_WORD_LENGTH,
+                        },
+                        currentGameSettings: {
+                            ...prevgameSettings.futureGameSettings,
+                            wordLength: DUMMY_DATA_WORD_LENGTH,
+                            hardMode: prevgameSettings.currentGameSettings.hardMode,
+                            lazyMode: prevgameSettings.currentGameSettings.lazyMode,
+                        },
+                    }));
+                    const newStageWordArray: string[] = Array(gameSettings.futureGameSettings.numberStages).fill("");
+                    setStageWordArray(newStageWordArray);
+                });
+
             setIsLoading(false);
         } else {
+            // check if words api is available first (in order to set state correctly and prevent user from changing settings from here forward if api is unavailable)
+            // then simply get another random word from the randomArray variable.
+            fetch("https://api.datamuse.com/words?sp=?????", { cache: "no-store" })
+                .then((response) => {
+                    if (response.ok)
+                        setIsApiAvailable((prevIsApiAvailable) => ({
+                            ...prevIsApiAvailable,
+                            isWordApiAvailable: true,
+                        }));
+                    else
+                        setIsApiAvailable((prevIsApiAvailable) => ({
+                            ...prevIsApiAvailable,
+                            isWordApiAvailable: false,
+                        }));
+                })
+                .catch((error) => {
+                    console.log("Error: Word API Unavailable");
+                    setIsApiAvailable((prevIsApiAvailable) => ({
+                        ...prevIsApiAvailable,
+                        isWordApiAvailable: false,
+                    }));
+                });
+
             const newRandomWord =
                 randomWordAndArray.randomWordArray[
                     Math.floor(Math.random() * randomWordAndArray.randomWordArray.length)
                 ].toLowerCase();
             setRandomWordAndArray((prevRandomWordArray) => ({ ...prevRandomWordArray, randomWord: newRandomWord }));
+
+            const newLineClassNames: string[][] = Array(gameSettings.futureGameSettings.numberStages).fill(
+                Array(gameSettings.futureGameSettings.wordLength).fill("tile")
+            );
+            setLineClassNames(newLineClassNames);
+            setgameSettings((prevgameSettings) => ({
+                ...prevgameSettings,
+                currentGameSettings: {
+                    ...prevgameSettings.futureGameSettings,
+                    hardMode: prevgameSettings.currentGameSettings.hardMode,
+                    lazyMode: prevgameSettings.currentGameSettings.lazyMode,
+                },
+            }));
+            const newStageWordArray: string[] = Array(gameSettings.futureGameSettings.numberStages).fill("");
+            setStageWordArray(newStageWordArray);
         }
 
-        const newStageWordArray: string[] = Array(gameSettings.futureGameSettings.numberStages).fill("");
-        setStageWordArray(newStageWordArray);
-        const newLineClassNames: string[][] = Array(gameSettings.futureGameSettings.numberStages).fill(
-            Array(gameSettings.futureGameSettings.wordLength).fill("tile")
-        );
-        setLineClassNames(newLineClassNames);
+        // check if dictionary api is available (to set state correctly and prevent user from changing settings if api is unavailable)
+        fetch("https://api.dictionaryapi.dev/api/v2/entries/en/hello", { cache: "no-store" })
+            .then((response) => {
+                if (response.ok)
+                    setIsApiAvailable((prevIsApiAvailable) => ({
+                        ...prevIsApiAvailable,
+                        isDictionaryApiAvailable: true,
+                    }));
+                else {
+                    setIsApiAvailable((prevIsApiAvailable) => ({
+                        ...prevIsApiAvailable,
+                        isDictionaryApiAvailable: false,
+                    }));
+                    setgameSettings((prevgameSettings) => ({
+                        ...prevgameSettings,
+                        currentGameSettings: {
+                            //...prevgameSettings.futureGameSettings,
+                            ...prevgameSettings.currentGameSettings,
+                            lazyMode: true,
+                        },
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.log("Error: Dictionary API Unavailable");
+                setIsApiAvailable((prevIsApiAvailable) => ({
+                    ...prevIsApiAvailable,
+                    isDictionaryApiAvailable: false,
+                }));
+                setgameSettings((prevgameSettings) => ({
+                    ...prevgameSettings,
+                    currentGameSettings: {
+                        //...prevgameSettings.futureGameSettings,
+                        ...prevgameSettings.currentGameSettings,
+                        lazyMode: true,
+                    },
+                }));
+            });
+
         setCurrentGuess("");
         setCurrentStage(0);
-        setgameSettings((prevgameSettings) => ({
-            ...prevgameSettings,
-            currentGameSettings: {
-                ...prevgameSettings.futureGameSettings,
-                hardMode: prevgameSettings.currentGameSettings.hardMode,
-                lazyMode: prevgameSettings.currentGameSettings.lazyMode,
-            },
-        }));
+        // setgameSettings((prevgameSettings) => ({
+        //     ...prevgameSettings,
+        //     currentGameSettings: {
+        //         ...prevgameSettings.futureGameSettings,
+        //         hardMode: prevgameSettings.currentGameSettings.hardMode,
+        //         lazyMode: prevgameSettings.currentGameSettings.lazyMode,
+        //     },
+        // }));
         setGameDescription({
             attemptedGuesses: [],
             isGameFinished: false,
@@ -985,8 +1228,7 @@ export default function App() {
     }
 
     // TODO:
-    // - make app responsive (Fix tile size when word legnth bigger than number of stages. Maybe add to tsx file a conditional to descrease a bit the max height and max width when the device's screen is x pixels) 
-    // - handle when apis arent available [like line 601]
+    // - make app responsive (Fix tile size when word legnth bigger than number of stages. Maybe add to tsx file a conditional to descrease a bit the max height and max width when the device's screen is x pixels)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
@@ -994,8 +1236,10 @@ export default function App() {
         ALPHABET_LETTERS.split("l")[1],
     ];
 
-    // console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
-    // console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
+    console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
+    console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
+    console.log("------random Word", randomWordAndArray.randomWord);
+    console.log("--------------------------------------");
 
     return (
         <div
@@ -1012,7 +1256,16 @@ export default function App() {
             ) : (
                 <main className="main_container">
                     <div className="game_container">
-                        <div className="gameboard_container">
+                        <div
+                            className="gameboard_container"
+                            // Change style specifically if device screen is mobile sized and in landscape mode
+                            style={{
+                                flexDirection:
+                                    isDeviceSmartphoneLandscape && gameSettings.currentGameSettings.numberStages > 6
+                                        ? "row"
+                                        : "column",
+                            }}
+                        >
                             {stageWordArray.map((line, index) => {
                                 const isCurrentStage = index === currentStage;
                                 return (
@@ -1081,7 +1334,14 @@ export default function App() {
                     <HelpPopUp isHelpPopUpOpen={isPopUpOpen.isHelpPopUpOpen} toggleIsPopUpOpen={toggleIsPopUpOpen} />
                     <ExtraMenu isExtraMenuOpen={isPopUpOpen.isExtraMenuOpen} toggleIsPopUpOpen={toggleIsPopUpOpen} />
 
-                    <button className={`reset_game_button ${!gameDescription.isGameFinished ? "reset_game_button_hide" : ""}`} onClick={resetGame}>Restart Game</button>
+                    <button
+                        className={`reset_game_button ${
+                            !gameDescription.isGameFinished ? "reset_game_button_hide" : ""
+                        }`}
+                        onClick={resetGame}
+                    >
+                        Restart Game
+                    </button>
                 </main>
             )}
         </div>

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./Line.module.scss";
 
@@ -11,15 +11,70 @@ interface PropTypes {
     setLineClassNames: React.Dispatch<React.SetStateAction<string[][]>>;
 }
 
-const MAX_GAME_BOARD_HEIGHT: number = window.innerWidth > 500 ? 23 : 16;
-const MAX_GAME_BOARD_WIDTH: number = window.innerWidth > 500 ? 23.125 : 16;
-const MAX_TILE_FONT_SIZE: number = window.innerWidth > 500 ? 12 : 7.5;
+// const MAX_GAME_BOARD_HEIGHT: number = window.innerWidth > 500 ? 23 : 16;
+// const MAX_GAME_BOARD_WIDTH: number = window.innerWidth > 500 ? 23.125 : 16;
+// const MAX_TILE_FONT_SIZE: number = window.innerWidth > 500 ? 12 : 7.5;
 
 // const MAX_GAME_BOARD_HEIGHT: number = 23;
 // const MAX_GAME_BOARD_WIDTH: number = 23.125;
 // const MAX_TILE_FONT_SIZE: number = 12;
 
 export default function Line({ line, lineClassNames, index, wordLength, numberStages, setLineClassNames }: PropTypes) {
+    // Function that returns the optimal game board sizes (in rem) based on window width and height
+    const getMaxGameBoardSizes = useCallback(() => {
+        if (window.innerWidth < 501 && window.innerHeight > 500)
+            return {
+                maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 12 : 16,
+                maxGameBoardWidth: 16,
+                maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 5.5 : 7.5,
+            };
+        else if (window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651)
+            if (numberStages > 6) {
+                return numberStages < 9
+                    ? {
+                          maxGameBoardHeight: 18,
+                          maxGameBoardWidth: 18,
+                          maxTileFontSize: 7.5,
+                      }
+                    : numberStages < 11
+                    ? {
+                          maxGameBoardHeight: 22,
+                          maxGameBoardWidth: 22,
+                          maxTileFontSize: 9.5,
+                      }
+                    : {
+                          maxGameBoardHeight: 24,
+                          maxGameBoardWidth: 24,
+                          maxTileFontSize: 12,
+                      };
+            } else
+                return {
+                    maxGameBoardHeight: 12,
+                    maxGameBoardWidth: 12,
+                    maxTileFontSize: 5.75,
+                };
+        /* TODO */ else
+            return {
+                maxGameBoardHeight: 23,
+                maxGameBoardWidth: 23.125,
+                maxTileFontSize: 12,
+            };
+    }, [numberStages, wordLength]);
+
+    const [gameBoardMaxSizes, setgameBoardMaxSizes] = useState(getMaxGameBoardSizes());
+
+    useEffect(() => {
+        const handleChangeGameboardMaxSizes = () => setgameBoardMaxSizes(getMaxGameBoardSizes());
+        setgameBoardMaxSizes(getMaxGameBoardSizes());
+
+        window.addEventListener("resize", handleChangeGameboardMaxSizes);
+
+        return () => {
+            window.removeEventListener("resize", handleChangeGameboardMaxSizes);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getMaxGameBoardSizes]);
+
     const tileDivRef = useRef<HTMLDivElement>(null);
 
     function handleAnimationEnd(i: number) {
@@ -124,9 +179,16 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
             }
         } else dynamicDivisor = maxWidthHeightMultiplier + 1;
 
-        const widthStyle: string = `${MAX_GAME_BOARD_WIDTH / dynamicDivisor}rem`;
-        const heightStyle: string = `${MAX_GAME_BOARD_HEIGHT / dynamicDivisor}rem`;
-        const fontSizeStyle: string = `${MAX_TILE_FONT_SIZE / dynamicDivisor}rem`;
+        // const widthStyle: string = `${MAX_GAME_BOARD_WIDTH / dynamicDivisor}rem`;
+        // const heightStyle: string = `${MAX_GAME_BOARD_HEIGHT / dynamicDivisor}rem`;
+        // const fontSizeStyle: string = `${MAX_TILE_FONT_SIZE / dynamicDivisor}rem`;
+
+        if (window.innerWidth < 501 && window.innerHeight > 500) dynamicDivisor = dynamicDivisor * 0.725;
+        //else if (window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651) dynamicDivisor = dynamicDivisor * 0.725;
+
+        const widthStyle: string = `${gameBoardMaxSizes.maxGameBoardWidth / dynamicDivisor}rem`;
+        const heightStyle: string = `${gameBoardMaxSizes.maxGameBoardHeight / dynamicDivisor}rem`;
+        const fontSizeStyle: string = `${gameBoardMaxSizes.maxTileFontSize / dynamicDivisor}rem`;
 
         const animationDelayStyle =
             !lineClassNames[index][i].includes("shake") && !lineClassNames[index][i].includes("tick")

@@ -75,17 +75,24 @@ export default function SettingsPopUp({
                         </div>
                         <div
                             className={`${styles.singular_setting_toggler} ${
-                                isApiAvailable.isWordApiAvailable ? "" : styles.singular_setting_toggler_disabled
+                                isApiAvailable.isWordApiAvailable
+                                    ? ""
+                                    : `${styles.singular_setting_toggler_disabled} ${styles.singular_setting_toggler_word_length}`
                             }`}
                         >
-                            <button className={styles.singular_setting_toggler_decrement} onClick={() => handleChangeGameSettings("word-length", "decrement")}>
+                            <button
+                                className={styles.singular_setting_toggler_decrement}
+                                onClick={() => handleChangeGameSettings("word-length", "decrement")}
+                            >
                                 <i className="fa-solid fa-angle-down"></i>
                             </button>
                             {gameSettings.futureGameSettings.wordLength}
-                            <button className={styles.singular_setting_toggler_increment} onClick={() => handleChangeGameSettings("word-length", "increment")}>
+                            <button
+                                className={styles.singular_setting_toggler_increment}
+                                onClick={() => handleChangeGameSettings("word-length", "increment")}
+                            >
                                 <i className="fa-solid fa-angle-up"></i>
                             </button>
-                            
                         </div>
                     </div>
                     <div className={styles.singular_setting_container}>
@@ -93,14 +100,19 @@ export default function SettingsPopUp({
                             <h4>Number of Stages</h4>
                         </div>
                         <div className={styles.singular_setting_toggler}>
-                            <button className={styles.singular_setting_toggler_decrement} onClick={() => handleChangeGameSettings("stage-number", "decrement")}>
+                            <button
+                                className={styles.singular_setting_toggler_decrement}
+                                onClick={() => handleChangeGameSettings("stage-number", "decrement")}
+                            >
                                 <i className="fa-solid fa-angle-down"></i>
                             </button>
                             {gameSettings.futureGameSettings.numberStages}
-                            <button className={styles.singular_setting_toggler_increment} onClick={() => handleChangeGameSettings("stage-number", "increment")}>
+                            <button
+                                className={styles.singular_setting_toggler_increment}
+                                onClick={() => handleChangeGameSettings("stage-number", "increment")}
+                            >
                                 <i className="fa-solid fa-angle-up"></i>
                             </button>
-
                         </div>
                     </div>
                     <div className={styles.singular_setting_container}>
@@ -124,7 +136,13 @@ export default function SettingsPopUp({
                             <h4>Lazy Mode</h4>
                             <p>Guessed words don't need to be in dictionary</p>
                         </div>
-                        <div className={styles.singular_setting_toggler}>
+                        <div
+                            className={`${styles.singular_setting_toggler} ${
+                                isApiAvailable.isDictionaryApiAvailable
+                                    ? ""
+                                    : `${styles.singular_setting_toggler_disabled} ${styles.singular_setting_toggler_lazy_mode}`
+                            }`}
+                        >
                             <div
                                 className={`${styles.singular_setting_toggler_area} ${
                                     gameSettings.currentGameSettings.lazyMode
@@ -170,10 +188,10 @@ export default function SettingsPopUp({
                     </button>
                 </div>
 
-                {
-                    (gameSettings.currentGameSettings.numberStages!==gameSettings.futureGameSettings.numberStages || gameSettings.currentGameSettings.wordLength !== gameSettings.futureGameSettings.wordLength) &&
+                {(gameSettings.currentGameSettings.numberStages !== gameSettings.futureGameSettings.numberStages ||
+                    gameSettings.currentGameSettings.wordLength !== gameSettings.futureGameSettings.wordLength) && (
                     <div className={styles.settings_popup_notification_area}>Restart game to apply new settings</div>
-                }
+                )}
 
                 <button className={styles.settings_popup_exit_button} onClick={(e) => toggleIsPopUpOpen(e, "settings")}>
                     <i className="fa-solid fa-xmark"></i>

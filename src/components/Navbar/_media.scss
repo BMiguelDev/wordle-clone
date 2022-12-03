@@ -42,3 +42,45 @@
         }
     }
 }
+
+
+// Media queries for mobile content (landscape)
+@media screen and (max-height: 650px) and (min-width: 501px) and (max-width: 1000px) {
+
+    // Navbar content
+    .navbar_container {
+        // color: var(--header-color);
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
+        // width: 100%;
+        // border-bottom: .01rem solid var(--header-border-color);
+        padding: .15rem .75rem;
+
+        .navbar_menu_container {
+            font-size: 1.05rem;
+            // cursor: pointer;
+        }
+
+        .navbar_title {
+            // margin: 0;
+            font-size: 1.55rem;
+            // font-weight: bolder;
+            // font-family: 'Volkhov', serif;
+            letter-spacing: -.1rem;
+            //margin-left: 4.4rem;
+        }
+
+        .navbar_icons_container {
+            // display: flex;
+            // align-items: center;
+            // width: fit-content;
+            // gap: 1rem;
+            font-size: 1.05rem;
+
+            // .navbar_icon_container {
+            //     cursor: pointer;
+            // }
+        }
+    }
+}

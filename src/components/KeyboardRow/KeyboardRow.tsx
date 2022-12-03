@@ -27,7 +27,7 @@ export default function KeyboardRow({
             {keyboardRowString[0] === "z" && (
                 <p
                     className={
-                        currentGuess.length === 5 && gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length-1]!==currentGuess && !stageWordArray.includes(currentGuess)
+                        currentGuess.length === wordLength && gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length-1]!==currentGuess && !stageWordArray.includes(currentGuess)
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter}`
                     }
@@ -69,7 +69,7 @@ export default function KeyboardRow({
             {keyboardRowString[0] === "z" && (
                 <p
                     className={
-                        currentGuess.length === 5 && gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length-1]===currentGuess && !stageWordArray.includes(currentGuess)
+                        currentGuess.length === wordLength && gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length-1]===currentGuess && !stageWordArray.includes(currentGuess)
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace}`
                     }

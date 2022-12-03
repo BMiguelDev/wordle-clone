@@ -1,0 +1,544 @@
+// Media query for mobile content (portrait)
+@media screen and (max-width: 500px) and (min-height: 501px) {
+
+    // Help Pop Up content
+    .help_popup_container {
+        // position: absolute;
+
+        top: unset;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        //height: 75%;
+        height: fit-content;
+
+        // top: 19.3%;
+        // left: 33.75%;
+        // width: 32.5%;
+        // height: 70%;
+        //height: fit-content;
+        // border: 1px solid var(--popup-border-color);
+        // background-color: var(--popup-bg-color);
+        // display: flex;
+        // align-items: flex-start;
+        // flex-direction: column;
+        justify-content: center;
+        gap: 1.5rem;
+        //gap: 2rem;
+        // box-shadow: 0 0 10px 1000px var(--popup-box-shadow-color);
+        // border-radius: .5rem;
+        padding: 1rem;
+
+        // @keyframes slideIn {
+        //     0% {
+        //         translate: 0 7.5%;
+        //         opacity: 0;
+        //     }
+
+        //     100% {
+        //         translate: 0 0;
+        //         opacity: 1;
+        //     }
+        // }
+
+        // animation: slideIn .2s ease 0s;
+
+        .help_popup_title {
+            // color: var(--keyboard-letter-text-color);
+            // text-transform: capitalize;
+            // margin: 0;
+            font-size: 1.3rem;
+            // font-weight: bolder;
+            // font-family: 'Volkhov', serif;
+            // letter-spacing: -.05rem;
+            // word-spacing: .05rem;
+        }
+
+        .help_popup_subtitle {
+            // color: var(--keyboard-letter-text-color);
+            // margin: 0;
+            font-size: .85rem;
+            // font-weight: lighter;
+        }
+
+        .help_popup_description_list {
+            color: var(--keyboard-letter-text-color);
+            // margin: 0;
+            padding: 0 0 0 1rem;
+
+            li {
+                padding-top: .25rem;
+                font-size: .735rem;
+                line-height: 1rem;
+                // font-weight: 200;
+            }
+        }
+
+        .help_popup_examples_container {
+            // display: flex;
+            // flex-direction: column;
+            // justify-content: flex-start;
+            gap: .5rem;
+
+            h6 {
+                font-size: .9rem;
+                // color: var(--keyboard-letter-text-color);
+                // margin: 0;
+                // font-weight: bold;
+            }
+
+            .help_popup_example_items_container {
+                display: flex;
+                flex-direction: column;
+                gap: .5rem;
+
+                .help_popup_example_item {
+                    // display: flex;
+                    // flex-direction: column;
+                    // align-items: flex-start;
+                    // justify-content: flex-start;
+                    gap: .35rem;
+                    padding-bottom: .5rem;
+
+                    .help_popup_example_tiles {
+                        // display: flex;
+                        // align-items: flex-start;
+                        // justify-content: flex-start;
+                        gap: .25rem;
+
+                        .popup_example_tile {
+                            // background-color: var(--app-bg-color);
+                            width: 1.5rem;
+                            height: 1.5rem;
+                            // display: flex;
+                            // align-items: center;
+                            // justify-content: center;
+                            // text-transform: uppercase;
+                            font-size: 1.1rem;
+                            // border: .1rem solid var(--tile-hightlighted-border-color);
+                            // font-weight: bold;
+                            // transition: all .05s ease-in-out;
+                            // color: var(--keyboard-letter-text-color);
+
+                            // @keyframes flipHelpTile {
+                            //     0% {
+                            //         rotate: x 0deg;
+                            //     }
+
+                            //     47.5% {
+                            //         rotate: x 90deg;
+                            //     }
+
+                            //     52.5% {
+                            //         rotate: x 90deg;
+                            //     }
+
+                            //     100% {
+                            //         rotate: x 0deg;
+                            //         border: none;
+                            //         color: var(--tile-text-color);
+                            //     }
+                            // }
+
+                            // &.popup_example_tile_green {
+                            //     @keyframes turnHelpTileToGreen {
+                            //         0% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         25% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         50% {
+                            //             background-color: var(--tile-correct-color);
+                            //         }
+
+                            //         100% {
+                            //             background-color: var(--tile-correct-color);
+                            //         }
+                            //     }
+
+                            //     animation: flipHelpTile .6s ease-in-out,
+                            //     turnHelpTileToGreen .85s ease-in-out;
+                            //     animation-fill-mode: forwards;
+                            // }
+
+                            // &.popup_example_tile_yellow {
+                            //     @keyframes turnHelpTileToYellow {
+                            //         0% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         25% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         50% {
+                            //             background-color: var(--tile-present-color);
+                            //         }
+
+                            //         100% {
+                            //             background-color: var(--tile-present-color);
+                            //         }
+                            //     }
+
+                            //     animation: flipHelpTile .6s ease-in-out,
+                            //     turnHelpTileToYellow .85s ease-in-out;
+                            //     animation-fill-mode: forwards;
+                            // }
+
+                            // &.popup_example_tile_grey {
+                            //     @keyframes turnHelpTileToGrey {
+                            //         0% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         25% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         50% {
+                            //             background-color: var(--tile-wrong-color);
+                            //             color: var(--keyboard-letter-checked-color);
+                            //         }
+
+                            //         100% {
+                            //             background-color: var(--tile-wrong-color);
+                            //             color: var(--keyboard-letter-checked-color);
+                            //         }
+                            //     }
+
+                            //     animation: flipHelpTile .6s ease-in-out,
+                            //     turnHelpTileToGrey .85s ease-in-out;
+                            //     animation-fill-mode: forwards;
+                            // }
+
+                            // .popup_example_letter {
+                            //     margin: 0;
+                            // }
+                        }
+                    }
+
+                    &>p {
+                        span {
+                            font-size: .85rem;
+                            // font-weight: bold;
+                        }
+
+                        font-size: .8rem;
+                        // margin: 0;
+                        // color: var(--keyboard-letter-text-color);
+                    }
+                }
+            }
+        }
+
+        .help_popup_exit_button {
+            // position: absolute;
+            top: 3%;
+            right: 3%;
+            font-size: 1.15rem;
+            // background-color: var(--settings-popup-bg-color);
+            // color: var(--keyboard-letter-text-color);
+            // border: none;
+            // cursor: pointer;
+        }
+
+        // &.help_popup_container_hide {
+
+        //     @keyframes slideOut {
+        //         0% {
+        //             translate: 0 0;
+        //             opacity: 1;
+        //         }
+
+        //         100% {
+        //             translate: 0 7.5%;
+        //             opacity: 0;
+        //         }
+        //     }
+
+        //     animation: slideOut .2s ease 0s;
+        //     animation-fill-mode: forwards;
+        // }
+    }
+}
+
+
+// Media queries for mobile content (landscape)
+@media screen and (max-height: 650px) and (min-width: 501px) and (max-width: 1000px) {
+
+    // Help Pop Up content
+    .help_popup_container {
+        position: absolute;
+        // top: 19.3%;
+        // left: 33.75%;
+        // width: 32.5%;
+        // height: 70%;
+
+
+        //top: 0;
+        top: unset;
+        bottom: 0;
+        left: 10%;
+        width: 80%;
+        //height: 75%;
+        height: fit-content;
+        //height: 90%;
+        justify-content: center;
+        gap: .35rem;
+        padding: 1rem 1rem .75rem 1rem;
+
+
+        //height: fit-content;
+        // border: 1px solid var(--popup-border-color);
+        // background-color: var(--popup-bg-color);
+        // display: flex;
+        // align-items: flex-start;
+        // flex-direction: column;
+        // justify-content: space-evenly;
+        // box-shadow: 0 0 10px 1000px var(--popup-box-shadow-color);
+        // border-radius: .5rem;
+        // padding: 2rem;
+
+        // @keyframes slideIn {
+        //     0% {
+        //         translate: 0 7.5%;
+        //         opacity: 0;
+        //     }
+
+        //     100% {
+        //         translate: 0 0;
+        //         opacity: 1;
+        //     }
+        // }
+
+        // animation: slideIn .2s ease 0s;
+
+        .help_popup_title {
+            // color: var(--keyboard-letter-text-color);
+            // text-transform: capitalize;
+            // margin: 0;
+            font-size: 1.325rem;
+            // font-weight: bolder;
+            // font-family: 'Volkhov', serif;
+            letter-spacing: -.025rem;
+            word-spacing: .05rem;
+        }
+
+        .help_popup_subtitle {
+            // color: var(--keyboard-letter-text-color);
+            // margin: 0;
+            font-size: .8rem;
+            // font-weight: lighter;
+        }
+
+        .help_popup_description_list {
+            // color: var(--keyboard-letter-text-color);
+            // margin: 0;
+            padding: .5rem 0 .5rem 1rem;
+
+            li {
+                font-size: .725rem;
+                line-height: 1.15rem;
+                // font-weight: 200;
+                padding-bottom: .125rem;
+            }
+        }
+
+        .help_popup_examples_container {
+            // display: flex;
+            // flex-direction: column;
+            // justify-content: flex-start;
+            gap: .85rem;
+
+            h6 {
+                font-size: .85rem;
+                // color: var(--keyboard-letter-text-color);
+                // margin: 0;
+                // font-weight: bold;
+                padding-bottom: .1rem;
+            }
+
+            .help_popup_example_items_container {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0;
+                padding-right: 2.5%;
+
+                .help_popup_example_item {
+                    // display: flex;
+                    // flex-direction: column;
+                    // align-items: flex-start;
+                    // justify-content: flex-start;
+                    gap: .35rem;
+                    padding-bottom: .25rem;
+                    width: 28.5%;
+
+                    .help_popup_example_tiles {
+                        // display: flex;
+                        // align-items: flex-start;
+                        // justify-content: flex-start;
+                        gap: .15rem;
+
+                        .popup_example_tile {
+                            // background-color: var(--app-bg-color);
+                            width: 1.3rem;
+                            height: 1.3rem;
+                            // display: flex;
+                            // align-items: center;
+                            // justify-content: center;
+                            // text-transform: uppercase;
+                            font-size: .875rem;
+                            // border: .1rem solid var(--tile-hightlighted-border-color);
+                            // font-weight: bold;
+                            // transition: all .05s ease-in-out;
+                            // color: var(--keyboard-letter-text-color);
+
+                            // @keyframes flipHelpTile {
+                            //     0% {
+                            //         rotate: x 0deg;
+                            //     }
+
+                            //     47.5% {
+                            //         rotate: x 90deg;
+                            //     }
+
+                            //     52.5% {
+                            //         rotate: x 90deg;
+                            //     }
+
+                            //     100% {
+                            //         rotate: x 0deg;
+                            //         border: none;
+                            //         color: var(--tile-text-color);
+                            //     }
+                            // }
+
+                            // &.popup_example_tile_green {
+                            //     @keyframes turnHelpTileToGreen {
+                            //         0% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         25% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         50% {
+                            //             background-color: var(--tile-correct-color);
+                            //         }
+
+                            //         100% {
+                            //             background-color: var(--tile-correct-color);
+                            //         }
+                            //     }
+
+                            //     animation: flipHelpTile .6s ease-in-out,
+                            //     turnHelpTileToGreen .85s ease-in-out;
+                            //     animation-fill-mode: forwards;
+                            // }
+
+                            // &.popup_example_tile_yellow {
+                            //     @keyframes turnHelpTileToYellow {
+                            //         0% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         25% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         50% {
+                            //             background-color: var(--tile-present-color);
+                            //         }
+
+                            //         100% {
+                            //             background-color: var(--tile-present-color);
+                            //         }
+                            //     }
+
+                            //     animation: flipHelpTile .6s ease-in-out,
+                            //     turnHelpTileToYellow .85s ease-in-out;
+                            //     animation-fill-mode: forwards;
+                            // }
+
+                            // &.popup_example_tile_grey {
+                            //     @keyframes turnHelpTileToGrey {
+                            //         0% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         25% {
+                            //             background-color: var(--app-bg-color);
+                            //         }
+
+                            //         50% {
+                            //             background-color: var(--tile-wrong-color);
+                            //             color: var(--keyboard-letter-checked-color);
+                            //         }
+
+                            //         100% {
+                            //             background-color: var(--tile-wrong-color);
+                            //             color: var(--keyboard-letter-checked-color);
+                            //         }
+                            //     }
+
+                            //     animation: flipHelpTile .6s ease-in-out,
+                            //     turnHelpTileToGrey .85s ease-in-out;
+                            //     animation-fill-mode: forwards;
+                            // }
+
+                            // .popup_example_letter {
+                            //     margin: 0;
+                            // }
+                        }
+                    }
+
+                    &>p {
+                        span {
+                            font-size: .725rem;
+                            // font-weight: bold;
+                        }
+
+                        font-size: .675rem;
+                        // margin: 0;
+                        // color: var(--keyboard-letter-text-color);
+                    }
+                }
+            }
+        }
+
+        .help_popup_exit_button {
+            // position: absolute;
+            top: 3.15%;
+            right: 2%;
+            font-size: 1.15rem;
+            // background-color: var(--settings-popup-bg-color);
+            // color: var(--keyboard-letter-text-color);
+            // border: none;
+            // cursor: pointer;
+        }
+
+        // &.help_popup_container_hide {
+
+        //     @keyframes slideOut {
+        //         0% {
+        //             translate: 0 0;
+        //             opacity: 1;
+        //         }
+
+        //         100% {
+        //             translate: 0 7.5%;
+        //             opacity: 0;
+        //         }
+        //     }
+
+        //     animation: slideOut .2s ease 0s;
+        //     animation-fill-mode: forwards;
+        // }
+    }
+}

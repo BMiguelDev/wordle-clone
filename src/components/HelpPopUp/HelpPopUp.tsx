@@ -54,41 +54,58 @@ export default function HelpPopUp({ isHelpPopUpOpen, toggleIsPopUpOpen }: PropTy
                 </ul>
                 <div className={styles.help_popup_examples_container}>
                     <h6>Examples</h6>
-                    <div className={styles.help_popup_example_item}>
-                        <div className={styles.help_popup_example_tiles}>
-                            {exampleStrings[0].split("").map((letter, index) => (
-                                <div key={index} className={`${styles.popup_example_tile} ${letter === "w" ? styles.popup_example_tile_green : ""}`}>
-                                    <p className={styles.popup_example_letter}>{letter}</p>
-                                </div>
-                            ))}
+                    <div className={styles.help_popup_example_items_container}>
+                        <div className={styles.help_popup_example_item}>
+                            <div className={styles.help_popup_example_tiles}>
+                                {exampleStrings[0].split("").map((letter, index) => (
+                                    <div
+                                        key={index}
+                                        className={`${styles.popup_example_tile} ${
+                                            letter === "w" ? styles.popup_example_tile_green : ""
+                                        }`}
+                                    >
+                                        <p className={styles.popup_example_letter}>{letter}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            <p>
+                                <span>W</span> is in the word and in the correct spot
+                            </p>
                         </div>
-                        <p>
-                            <span>W</span> is in the word and in the correct spot
-                        </p>
-                    </div>
-                    <div className={styles.help_popup_example_item}>
-                        <div className={styles.help_popup_example_tiles}>
-                            {exampleStrings[1].split("").map((letter, index) => (
-                                <div key={index} className={`${styles.popup_example_tile} ${letter === "u" ? styles.popup_example_tile_yellow : ""}`}>
-                                    <p className={styles.popup_example_letter}>{letter}</p>
-                                </div>
-                            ))}
+                        <div className={styles.help_popup_example_item}>
+                            <div className={styles.help_popup_example_tiles}>
+                                {exampleStrings[1].split("").map((letter, index) => (
+                                    <div
+                                        key={index}
+                                        className={`${styles.popup_example_tile} ${
+                                            letter === "u" ? styles.popup_example_tile_yellow : ""
+                                        }`}
+                                    >
+                                        <p className={styles.popup_example_letter}>{letter}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            <p>
+                                <span>U</span> is in the word but in the wrong spot
+                            </p>
                         </div>
-                        <p>
-                            <span>U</span> is in the word but in the wrong spot
-                        </p>
-                    </div>
-                    <div className={styles.help_popup_example_item}>
-                        <div className={styles.help_popup_example_tiles}>
-                            {exampleStrings[2].split("").map((letter, index) => (
-                                <div key={index} className={`${styles.popup_example_tile} ${letter === "r" ? styles.popup_example_tile_grey : ""}`}>
-                                    <p className={styles.popup_example_letter}>{letter}</p>
-                                </div>
-                            ))}
+                        <div className={styles.help_popup_example_item}>
+                            <div className={styles.help_popup_example_tiles}>
+                                {exampleStrings[2].split("").map((letter, index) => (
+                                    <div
+                                        key={index}
+                                        className={`${styles.popup_example_tile} ${
+                                            letter === "r" ? styles.popup_example_tile_grey : ""
+                                        }`}
+                                    >
+                                        <p className={styles.popup_example_letter}>{letter}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            <p>
+                                <span>R</span> is not in the word in any spot
+                            </p>
                         </div>
-                        <p>
-                            <span>R</span> is not in the word in any spot
-                        </p>
                     </div>
                 </div>
 
