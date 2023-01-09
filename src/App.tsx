@@ -196,6 +196,8 @@ export default function App() {
         return window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651 ? true : false;
     });
 
+    const [somth, setSomth] = useState<number>(window.innerHeight);
+
     // useEffect hooks to store state variables in local storage whenever they update
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_KEY_GAME_SETTINGS, JSON.stringify(gameSettings));
@@ -398,7 +400,8 @@ export default function App() {
             );
 
             // Update height to prevent 100vh bug where page may be covered by the browser's UI (in mobile) 
-            if(appDivRef.current) appDivRef.current.style.height=`${window.innerHeight}px`;
+            //if(appDivRef.current) appDivRef.current.style.height=`${window.innerHeight}px`;
+            setSomth(window.innerHeight);
         };
 
         if (randomWordAndArray.randomWordArray.length === 0) fetchData();
@@ -1251,7 +1254,8 @@ export default function App() {
 
     return (
         <div
-            ref={appDivRef}
+            //ref={appDivRef}
+            style={{ height: `${somth}px`}}
             className={`app_container ${isDarkMode ? "dark_mode" : ""} ${
                 isHighContrastMode ? "high_contrast_mode" : ""
             }`}
