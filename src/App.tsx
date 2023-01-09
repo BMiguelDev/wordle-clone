@@ -258,7 +258,7 @@ export default function App() {
     const resetButtonRef = useRef<HTMLButtonElement>(null);
 
     // Ref variable to access app container div
-    const appDivRef = useRef<HTMLDivElement>(null);
+    
 
     useEffect(() => {
         const fetchData = async () => {
