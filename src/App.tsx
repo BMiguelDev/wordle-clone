@@ -255,6 +255,9 @@ export default function App() {
     // Ref variable to access reset button
     const resetButtonRef = useRef<HTMLButtonElement>(null);
 
+    // Ref variable to access app container div
+    const appDivRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         const fetchData = async () => {
             // Check if words Api is available
@@ -393,12 +396,16 @@ export default function App() {
             setIsDeviceSmartphoneLandscape(
                 window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651 ? true : false
             );
+
+            // Update height to prevent 100vh bug where page may be covered by the browser's UI (in mobile) 
+            if(appDivRef.current) appDivRef.current.style.height=`${window.innerHeight}px`;
         };
 
         if (randomWordAndArray.randomWordArray.length === 0) fetchData();
         checkWordsApi();
         checkDictionaryApi();
         window.addEventListener("resize", handleResize);
+        handleResize();
         setIsLoading(false);
 
         return () => {
@@ -577,7 +584,6 @@ export default function App() {
                         for (let i = 0; i < currentStage; i++) {
                             // For each tile class of stage
                             lineClassNames[i].forEach((classText, index) => {
-                                //console.log("hello", classText);
                                 if (classText.includes("green") || classText.includes("yellow")) {
                                     const hintedLetter = stageWordArray[i][index];
                                     if (!arrayOfHintedLetters.includes(hintedLetter))
@@ -914,7 +920,6 @@ export default function App() {
             fetch("https://api.datamuse.com/words?sp=?????", { cache: "no-store" })
                 .then((response) => {
                     if (response.ok) {
-                        console.log("here");
                         // setIsApiAvailable((prevIsApiAvailable) => ({
                         //     ...prevIsApiAvailable,
                         //     isWordApiAvailable: true,
@@ -1236,13 +1241,17 @@ export default function App() {
         ALPHABET_LETTERS.split("l")[1],
     ];
 
-    console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
-    console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
-    console.log("------random Word", randomWordAndArray.randomWord);
-    console.log("--------------------------------------");
+    // console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
+    // console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
+    // console.log("------random Word", randomWordAndArray.randomWord);
+    // console.log("--------------------------------------");
+
+
+
 
     return (
         <div
+            ref={appDivRef}
             className={`app_container ${isDarkMode ? "dark_mode" : ""} ${
                 isHighContrastMode ? "high_contrast_mode" : ""
             }`}
