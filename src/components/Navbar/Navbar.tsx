@@ -11,13 +11,45 @@ function Navbar({ isDeviceSmartphoneLandscape, toggleIsPopUpOpen, toggleFullScre
     const fullscreenButtonRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // If device screen is mobile landscape, trigger popup to suggest toggling full screen
-        if (isDeviceSmartphoneLandscape)
+
+        const setCookie = (cookieName: string, value: string, exdays: number) => {
+            var expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + exdays);
+            var cookieValue = encodeURIComponent(value) + (exdays == null ? "" : "; expires=" + expirationDate.toUTCString());
+            document.cookie = cookieName + "=" + cookieValue;
+        }
+    
+        const getCookie = (cookieName: string) => {
+            var c_value = document.cookie;
+            var c_start = c_value.indexOf(" " + cookieName + "=");
+            if (c_start === -1) {
+                c_start = c_value.indexOf(cookieName + "=");
+            }
+            if (c_start === -1) {
+                c_value = "";
+            } else {
+                c_start = c_value.indexOf("=", c_start) + 1;
+                var c_end = c_value.indexOf(";", c_start);
+                if (c_end === -1) {
+                    c_end = c_value.length;
+                }
+                c_value = decodeURIComponent(c_value.substring(c_start, c_end));
+            }
+            return c_value;
+        }
+
+        // If device screen is mobile landscape and first visiting web app, trigger popup to suggest toggling full screen
+        var cookieValue = getCookie("visited");
+        if (isDeviceSmartphoneLandscape && cookieValue !== "yes") {
             setTimeout(() => {
                 if (!document.fullscreenElement)
                     fullscreenButtonRef.current?.classList.add(styles.fullscreen_suggestion);
             }, 2000);
-            
+
+            // Add first visit cookie only if device screen is a mobile landscape device
+            setCookie("visited", "yes", 365);
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
