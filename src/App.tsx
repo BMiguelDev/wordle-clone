@@ -396,14 +396,15 @@ export default function App() {
         };
 
         const handleResize = () => {
-            setIsDeviceSmartphoneLandscape(
-                window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651 ? true : false
-            );
+            const isSmartphoneLandscapeScreen = window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651;
+            setIsDeviceSmartphoneLandscape(isSmartphoneLandscapeScreen);
 
             // Update height to prevent 100vh bug where page may be covered by the browser's UI (in mobile)
             if (appDivRef.current) appDivRef.current.style.height = `${window.innerHeight}px`;
 
-            //console.log(window.innerHeight); 
+            if (!isSmartphoneLandscapeScreen && document.fullscreenElement) toggleFullScreen();
+
+            //console.log(window.innerHeight);
             // TODO: remove this
             setSmth(window.innerHeight);
         };
@@ -747,7 +748,7 @@ export default function App() {
                     if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
                     else return prevCurrentGuess;
                 });
-            }
+            } else if (keyValue === "F5") window.location.reload();
         },
         [
             currentStage,
