@@ -78,9 +78,96 @@
             // gap: 1rem;
             font-size: 1.05rem;
 
-            // .navbar_icon_container {
-            //     cursor: pointer;
-            // }
+            .navbar_icon_container {
+
+                &.fullscreen_suggestion {
+                    position: relative;
+
+                    i {
+                        @keyframes iconBlink {
+                            0% {
+                                color: var(--header-color);
+                            }
+
+                            8% {
+                                color: var(--settings-popup-notification-box-shadow-color);
+                                scale: 1.1;
+                            }
+
+                            15% {
+                                scale: 1;
+                                color: var(--header-color);
+                            }
+
+                            23% {
+                                color: var(--settings-popup-notification-box-shadow-color);
+                                scale: 1.1;
+                            }
+
+                            30% {
+                                scale: 1;
+                                color: var(--header-color);
+                            }
+
+                            100% {
+                                color: var(--header-color);
+                            }
+                        }
+
+                        animation: iconBlink 5s ease-in-out;
+                    }
+
+                    &::after {
+                        position: absolute;
+                        content: 'Tap for Fullscreen Mode';
+                        left: 50%;
+                        top: 120%;
+                        height: fit-content;
+                        width: 6rem;
+                        opacity: 0;
+                        translate: -50% 0;
+                        font-size: .65rem;
+                        border-radius: .25rem;
+                        padding: .35rem .2rem;
+                        text-align: center;
+                        background-color: var(--settings-popup-notification-bg-color);
+                        color: var(--keyboard-letter-checked-color);
+                        z-index: 4;
+
+                        @keyframes textGlow {
+                            0% {
+                                opacity: 0;
+                                box-shadow: 0 0 0rem 0rem var(--settings-popup-notification-box-shadow-color);
+                            }
+
+                            8% {
+                                opacity: 1;
+                                box-shadow: 0 0 .85rem .3rem var(--settings-popup-notification-box-shadow-color);
+                            }
+
+                            15% {
+                                box-shadow: 0 0 0.15rem .05rem var(--settings-popup-notification-box-shadow-color);
+                            }
+
+                            23% {
+                                box-shadow: 0 0 .85rem .3rem var(--settings-popup-notification-box-shadow-color);
+                            }
+
+                            30% {
+                                opacity: 1;
+                                box-shadow: 0 0 0rem 0rem var(--settings-popup-notification-box-shadow-color);
+                            }
+
+                            100% {
+                                opacity: 0;
+                                box-shadow: 0 0 0rem 0rem var(--settings-popup-notification-box-shadow-color);
+                            }
+                        }
+
+                        animation: textGlow 5s ease-in-out;
+                    }
+                }
+            }
         }
     }
 }

@@ -28,7 +28,32 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                 maxGameBoardWidth: 16,
                 maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 5.5 : 7.5,
             };
-        else if (window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651)
+        else if (window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 351) {
+            if (numberStages > 6) {
+                return numberStages < 9
+                    ? {
+                          maxGameBoardHeight: 14,
+                          maxGameBoardWidth: 14,
+                          maxTileFontSize: 6.5,
+                      }
+                    : numberStages < 11
+                    ? {
+                          maxGameBoardHeight: 16,
+                          maxGameBoardWidth: 16,
+                          maxTileFontSize: 7,
+                      }
+                    : {
+                          maxGameBoardHeight: 16,
+                          maxGameBoardWidth: 16,
+                          maxTileFontSize: 9,
+                      };
+            } else
+                return {
+                    maxGameBoardHeight: 8.5,
+                    maxGameBoardWidth: 8.5,
+                    maxTileFontSize: 4.25,
+                };
+        } else if (window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {
@@ -43,17 +68,18 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                           maxTileFontSize: 9.5,
                       }
                     : {
-                          maxGameBoardHeight: 24,
-                          maxGameBoardWidth: 24,
-                          maxTileFontSize: 12,
+                          maxGameBoardHeight: 22,
+                          maxGameBoardWidth: 22,
+                          maxTileFontSize: 11,
                       };
             } else
                 return {
-                    maxGameBoardHeight: 12,
-                    maxGameBoardWidth: 12,
-                    maxTileFontSize: 5.75,
+                    maxGameBoardHeight: 11.5,
+                    maxGameBoardWidth: 11.5,
+                    maxTileFontSize: 5.25,
                 };
-        /* TODO */ else
+        } else
+        /* TODO */
             return {
                 maxGameBoardHeight: 23,
                 maxGameBoardWidth: 23.125,

@@ -196,6 +196,9 @@ export default function App() {
         return window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651 ? true : false;
     });
 
+    // TODO: remove this
+    const [smth, setSmth] = useState<number>(0);
+
     // useEffect hooks to store state variables in local storage whenever they update
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_KEY_GAME_SETTINGS, JSON.stringify(gameSettings));
@@ -309,7 +312,7 @@ export default function App() {
                 const jointRandomWordsArray = [...randomWordsArray1, ...randomWordsArray2];
                 const newJointRandomWordsArray: string[] = jointRandomWordsArray.map((element) => {
                     const elementWord: string = element.word;
-                    if (elementWord.includes(" ")) {
+                    if (elementWord.includes(" ") || elementWord.includes("-")) {
                         return undefined;
                     }
                     return element.word;
@@ -397,8 +400,12 @@ export default function App() {
                 window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651 ? true : false
             );
 
-            // Update height to prevent 100vh bug where page may be covered by the browser's UI (in mobile) 
-            if(appDivRef.current) appDivRef.current.style.height=`${window.innerHeight}px`;
+            // Update height to prevent 100vh bug where page may be covered by the browser's UI (in mobile)
+            if (appDivRef.current) appDivRef.current.style.height = `${window.innerHeight}px`;
+
+            //console.log(window.innerHeight); 
+            // TODO: remove this
+            setSmth(window.innerHeight);
         };
 
         if (randomWordAndArray.randomWordArray.length === 0) fetchData();
@@ -558,7 +565,8 @@ export default function App() {
     }, [currentGuess, currentStage, randomWordAndArray, gameNotification, gameSettings.currentGameSettings]);
 
     const handleKeydown = useCallback(
-        (event: KeyboardEvent | React.MouseEvent<HTMLParagraphElement, MouseEvent>, key: string = "") => {
+        (event: KeyboardEvent | React.MouseEvent<HTMLDivElement, MouseEvent>, key: string = "") => {
+            event.preventDefault();
             const keyValue: string = key !== "" ? key : (event as KeyboardEvent).key;
             if (
                 currentGuess.length < gameSettings.currentGameSettings.wordLength &&
@@ -819,7 +827,7 @@ export default function App() {
         gameNotification,
     ]);
 
-    function handleKeyClick(event: React.MouseEvent<HTMLParagraphElement, MouseEvent>, key: string) {
+    function handleKeyClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, key: string) {
         if (!stageWordArray.includes(randomWordAndArray.randomWord)) {
             if (currentStage < gameSettings.currentGameSettings.numberStages) handleKeydown(event, key);
             else if (currentStage === gameSettings.currentGameSettings.numberStages) {
@@ -894,7 +902,7 @@ export default function App() {
                 const jointRandomWordsArray = [...randomWordsArray1, ...randomWordsArray2];
                 const newJointRandomWordsArray: string[] = jointRandomWordsArray.map((element) => {
                     const elementWord: string = element.word;
-                    if (elementWord.includes(" ")) {
+                    if (elementWord.includes(" ") || elementWord.includes("-")) {
                         // Remove words that have spaces
                         return undefined;
                     }
@@ -1232,8 +1240,20 @@ export default function App() {
         }
     }
 
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+
     // TODO:
-    // - make app responsive (Fix tile size when word legnth bigger than number of stages. Maybe add to tsx file a conditional to descrease a bit the max height and max width when the device's screen is x pixels)
+    // - make app responsive (Fix tile size when word legnth bigger than number of stages. Maybe add to tsx file a conditional to decrease a bit the max height and max width when the device's screen is x pixels)
+    //      (make breakpoints account for situations where browser is covering page (in portrait the page is more square, in landscape the page is even more "esticada"))
+    //      (mobile landscape screens good at max:height >= 270px)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
@@ -1246,7 +1266,6 @@ export default function App() {
     // console.log("------random Word", randomWordAndArray.randomWord);
     // console.log("--------------------------------------");
 
-    
     return (
         <div
             ref={appDivRef}
@@ -1254,7 +1273,11 @@ export default function App() {
                 isHighContrastMode ? "high_contrast_mode" : ""
             }`}
         >
-            <Navbar toggleIsPopUpOpen={toggleIsPopUpOpen} />
+            <Navbar
+                isDeviceSmartphoneLandscape={isDeviceSmartphoneLandscape}
+                toggleIsPopUpOpen={toggleIsPopUpOpen}
+                toggleFullScreen={toggleFullScreen}
+            />
 
             {isLoading ? (
                 <main className="main_container_loading">
@@ -1348,6 +1371,8 @@ export default function App() {
                         onClick={resetGame}
                     >
                         Restart Game
+                        {/* TODO:REMOVE THIS */}
+                        {smth}
                     </button>
                 </main>
             )}
