@@ -22,7 +22,13 @@ interface PropTypes {
 export default function Line({ line, lineClassNames, index, wordLength, numberStages, setLineClassNames }: PropTypes) {
     // Function that returns the optimal game board sizes (in rem) based on window width and height
     const getMaxGameBoardSizes = useCallback(() => {
-        if (window.innerWidth < 501 && window.innerHeight > 500)
+        if (window.innerWidth < 501 &&  window.innerHeight > 500 && window.innerHeight < 626)
+            return {
+                maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 7 : 11,
+                maxGameBoardWidth: 11,
+                maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 3 : 5,
+            };  
+        else if (window.innerWidth < 501 && window.innerHeight > 625)
             return {
                 maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 12 : 16,
                 maxGameBoardWidth: 16,
