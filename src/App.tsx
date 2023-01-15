@@ -192,8 +192,10 @@ export default function App() {
             );
     });
 
-    const [isDeviceSmartphoneLandscape, setIsDeviceSmartphoneLandscape] = useState<boolean>(() => {
-        return window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651 ? true : false;
+    const [screenOrientation, setScreenOrientation] = useState<string>(() => {
+        if(window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651) return "landscape";
+        else if(window.innerHeight > 500 && window.innerWidth < 500) return "portrait";
+        else return "normal";
     });
 
     // TODO: remove this
@@ -396,8 +398,11 @@ export default function App() {
         };
 
         const handleResize = () => {
-            const isSmartphoneLandscapeScreen = window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651;
-            setIsDeviceSmartphoneLandscape(isSmartphoneLandscapeScreen);
+            const isSmartphoneLandscapeScreen = window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651;
+
+            if(isSmartphoneLandscapeScreen) setScreenOrientation("landscape");
+            else if(window.innerHeight > 500 && window.innerWidth < 500) setScreenOrientation("portrait");
+            else setScreenOrientation("normal");
 
             // Update height to prevent 100vh bug where page may be covered by the browser's UI (in mobile)
             if (appDivRef.current) appDivRef.current.style.height = `${window.innerHeight}px`;
@@ -1267,6 +1272,10 @@ export default function App() {
     // console.log("------random Word", randomWordAndArray.randomWord);
     // console.log("--------------------------------------");
 
+    useEffect(() => {
+        console.log(screenOrientation);
+    }, [screenOrientation])
+
     return (
         <div
             ref={appDivRef}
@@ -1275,7 +1284,7 @@ export default function App() {
             }`}
         >
             <Navbar
-                isDeviceSmartphoneLandscape={isDeviceSmartphoneLandscape}
+                screenOrientation={screenOrientation}
                 toggleIsPopUpOpen={toggleIsPopUpOpen}
                 toggleFullScreen={toggleFullScreen}
             />
@@ -1292,9 +1301,9 @@ export default function App() {
                             // Change style specifically if device screen is mobile sized and in landscape mode
                             style={{
                                 flexDirection:
-                                    isDeviceSmartphoneLandscape && gameSettings.currentGameSettings.numberStages > 6
-                                        ? "row"
-                                        : "column",
+                                    screenOrientation==="landscape" && gameSettings.currentGameSettings.numberStages > 6
+                                    ? "row"
+                                    : "column",
                             }}
                         >
                             {stageWordArray.map((line, index) => {
@@ -1371,9 +1380,12 @@ export default function App() {
                         }`}
                         onClick={resetGame}
                     >
-                        Restart Game
-                        {/* TODO:REMOVE THIS */}
-                        {smth}
+                        { screenOrientation==="portrait" ? <i className="fa-solid fa-rotate-right"></i> : 
+                       
+                        "Restart" + smth
+                        /* TODO:REMOVE THIS */
+                        //smth
+                    }
                     </button>
                 </main>
             )}

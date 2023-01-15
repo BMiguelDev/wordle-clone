@@ -22,19 +22,22 @@ interface PropTypes {
 export default function Line({ line, lineClassNames, index, wordLength, numberStages, setLineClassNames }: PropTypes) {
     // Function that returns the optimal game board sizes (in rem) based on window width and height
     const getMaxGameBoardSizes = useCallback(() => {
-        if (window.innerWidth < 501 &&  window.innerHeight > 500 && window.innerHeight < 626)
+        // Mobile portrait (low height) screens
+        if (window.innerWidth < 500 &&  window.innerHeight > 500 && window.innerHeight < 626)
             return {
-                maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 7 : 11,
-                maxGameBoardWidth: 11,
-                maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 3 : 5,
+                maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 5.5 : 9.5,
+                maxGameBoardWidth: 9.5,
+                maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 2 : 4,
             };  
-        else if (window.innerWidth < 501 && window.innerHeight > 625)
+        // Mobile portrait screens
+        else if (window.innerWidth < 500 && window.innerHeight > 625)
             return {
-                maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 12 : 16,
-                maxGameBoardWidth: 16,
-                maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 5.5 : 7.5,
+                maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 11 : 15,
+                maxGameBoardWidth: 15,
+                maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 5 : 7,
             };
-        else if (window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 351) {
+        // Mobile landscape (low height) screens
+        else if (window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 351) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {
@@ -59,7 +62,9 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                     maxGameBoardWidth: 8.5,
                     maxTileFontSize: 4.25,
                 };
-        } else if (window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651) {
+        } 
+        // Mobile landscape screens 
+        else if (window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {

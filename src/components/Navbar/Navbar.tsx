@@ -2,23 +2,23 @@ import React, { useEffect, useRef } from "react";
 import styles from "./Navbar.module.scss";
 
 interface PropTypes {
-    isDeviceSmartphoneLandscape: boolean;
+    screenOrientation: string;
     toggleIsPopUpOpen: (event: React.MouseEvent, popUpName: string) => void;
     toggleFullScreen: () => void;
 }
 
-function Navbar({ isDeviceSmartphoneLandscape, toggleIsPopUpOpen, toggleFullScreen }: PropTypes) {
+function Navbar({ screenOrientation, toggleIsPopUpOpen, toggleFullScreen }: PropTypes) {
     const fullscreenButtonRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-
         const setCookie = (cookieName: string, value: string, exdays: number) => {
             var expirationDate = new Date();
             expirationDate.setDate(expirationDate.getDate() + exdays);
-            var cookieValue = encodeURIComponent(value) + (exdays == null ? "" : "; expires=" + expirationDate.toUTCString());
+            var cookieValue =
+                encodeURIComponent(value) + (exdays == null ? "" : "; expires=" + expirationDate.toUTCString());
             document.cookie = cookieName + "=" + cookieValue;
-        }
-    
+        };
+
         const getCookie = (cookieName: string) => {
             var c_value = document.cookie;
             var c_start = c_value.indexOf(" " + cookieName + "=");
@@ -36,11 +36,11 @@ function Navbar({ isDeviceSmartphoneLandscape, toggleIsPopUpOpen, toggleFullScre
                 c_value = decodeURIComponent(c_value.substring(c_start, c_end));
             }
             return c_value;
-        }
+        };
 
         // If device screen is mobile landscape and first visiting web app, trigger popup to suggest toggling full screen
         var cookieValue = getCookie("visited");
-        if (isDeviceSmartphoneLandscape && cookieValue !== "yes") {
+        if (screenOrientation === "landscape" && cookieValue !== "yes") {
             setTimeout(() => {
                 if (!document.fullscreenElement)
                     fullscreenButtonRef.current?.classList.add(styles.fullscreen_suggestion);
@@ -60,7 +60,7 @@ function Navbar({ isDeviceSmartphoneLandscape, toggleIsPopUpOpen, toggleFullScre
             </div>
             <h2 className={styles.navbar_title}>Wordle</h2>
             <div className={styles.navbar_icons_container}>
-                {isDeviceSmartphoneLandscape && (
+                {screenOrientation === "landscape" && (
                     <div
                         ref={fullscreenButtonRef}
                         className={styles.navbar_icon_container}
