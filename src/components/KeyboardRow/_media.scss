@@ -117,6 +117,125 @@
 }
 
 
+// // Media query for very small screens (mobile)
+// @media screen and (max-width: 500px) and (max-height: 500px)  {
+
+//     // Keyboard content
+//     .keyboard_row {
+//         display: flex;
+//         align-items: center;
+//         justify-content: center;
+
+//         gap: .2rem;
+//         //height: 100%;
+//         width: 100%;
+
+//         .keyboard_letter_tile {
+//             margin: 0;
+//             padding: 0;
+//             width: 1.8rem;
+//             height: 2rem;
+//             //height: 100%;
+//             // display: flex;
+//             // align-items: center;
+//             // justify-content: center;
+//             // background-color: var(--keyboard-letter-tile-bg-color);
+//             // border-radius: .25rem;
+//             // text-transform: uppercase;
+//             font-size: .525rem;
+//             // font-weight: bold;
+//             // cursor: pointer;
+//             // position: relative;
+//             // color: var(--keyboard-letter-text-color);
+
+//             // .keyboard_letter_text {
+//             //     margin: 0;
+//             // }
+
+//             // &.keyboard_letter_tile_green {
+//             //     @keyframes turnToGreen {
+//             //         0% {
+//             //             background-color: var(--keyboard-letter-tile-bg-color);
+//             //         }
+
+//             //         100% {
+//             //             color: var(--keyboard-letter-checked-color);
+//             //             background-color: var(--tile-correct-color);
+//             //         }
+//             //     }
+
+//             //     animation: turnToGreen .5s ease-in-out;
+//             //     animation-fill-mode: forwards;
+//             // }
+
+//             // &.keyboard_letter_tile_yellow {
+//             //     @keyframes turnToYellow {
+//             //         0% {
+//             //             background-color: var(--keyboard-letter-tile-bg-color);
+//             //         }
+
+//             //         100% {
+//             //             color: var(--keyboard-letter-checked-color);
+//             //             background-color: var(--tile-present-color);
+//             //         }
+//             //     }
+
+//             //     animation: turnToYellow .5s ease-in-out;
+//             //     animation-fill-mode: forwards;
+//             // }
+
+//             // &.keyboard_letter_tile_grey {
+//             //     @keyframes turnToGrey {
+//             //         0% {
+//             //             background-color: var(--keyboard-letter-tile-bg-color);
+//             //         }
+
+//             //         100% {
+//             //             color: var(--keyboard-letter-checked-color);
+//             //             background-color: var(--tile-wrong-color);
+//             //         }
+//             //     }
+
+//             //     animation: turnToGrey .5s ease-in-out;
+//             //     animation-fill-mode: forwards;
+//             // }
+
+//             &.keyboard_letter_tile_enter {
+//                 width: 2.8rem;
+//                 // color: var(--keyboard-letter-text-color);
+//                 // letter-spacing: .05rem;
+//                 font-size: .525rem;
+//             }
+
+//             &.keyboard_letter_tile_backspace {
+//                 width: 2.8rem;
+//                 color: var(--keyboard-letter-text-color);
+//                 font-size: .825rem;
+//             }
+
+//             // &.keyboard_letter_tile_highlight {
+//             //     @keyframes scaleUpAndDown {
+//             //         0% {
+//             //             scale: 1;
+//             //         }
+
+//             //         50% {
+//             //             scale: 1.1;
+//             //             background-color: var(--keyboard-letter-highlight-color);
+//             //         }
+
+//             //         100% {
+//             //             scale: 1;
+//             //         }
+//             //     }
+
+//             //     animation: scaleUpAndDown 1s ease-in-out 0s alternate-reverse infinite;
+//             // }
+//         }
+//     }
+// }
+
+// For 300px height
 // Media query for very small screens (mobile)
 @media screen and (max-width: 500px) and (max-height: 500px)  {
 
@@ -126,7 +245,7 @@
         align-items: center;
         justify-content: center;
 
-        gap: .2rem;
+        gap: .15rem;
         //height: 100%;
         width: 100%;
 
@@ -134,7 +253,7 @@
             margin: 0;
             padding: 0;
             width: 1.8rem;
-            height: 2rem;
+            height: 1.3rem;
             //height: 100%;
             // display: flex;
             // align-items: center;
@@ -142,7 +261,7 @@
             // background-color: var(--keyboard-letter-tile-bg-color);
             // border-radius: .25rem;
             // text-transform: uppercase;
-            font-size: .525rem;
+            font-size: .475rem;
             // font-weight: bold;
             // cursor: pointer;
             // position: relative;
@@ -201,16 +320,16 @@
             // }
 
             &.keyboard_letter_tile_enter {
-                width: 2.8rem;
+                width: 3.25rem;
                 // color: var(--keyboard-letter-text-color);
                 // letter-spacing: .05rem;
-                font-size: .525rem;
+                font-size: .435rem;
             }
 
             &.keyboard_letter_tile_backspace {
-                width: 2.8rem;
+                width: 3.25rem;
                 color: var(--keyboard-letter-text-color);
-                font-size: .825rem;
+                font-size: .7rem;
             }
 
             // &.keyboard_letter_tile_highlight {
