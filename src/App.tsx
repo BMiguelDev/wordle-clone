@@ -398,7 +398,8 @@ export default function App() {
         };
 
         const handleResize = () => {
-            const isSmartphoneLandscapeScreen = window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651;
+            //const isSmartphoneLandscapeScreen = window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651;
+            const isSmartphoneLandscapeScreen = window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 650;
 
             if(isSmartphoneLandscapeScreen) setScreenOrientation("landscape");
             else if((window.innerHeight > 500 && window.innerWidth < 500) || (window.innerHeight < 501 && window.innerWidth < 501)) setScreenOrientation("portrait");

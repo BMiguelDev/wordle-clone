@@ -244,254 +244,254 @@
 }
 
 
-// // Media query for very small screens (mobile)
-// @media screen and (max-width: 500px) and (max-height: 500px) {
-
-//     // Gameboard content
-//     .tile_row {
-//         display: flex;
-//         gap: .2rem;
-//         width: 100%;
-//         justify-content: center;
-
-//         .tile {
-
-//             @keyframes flipBoardTile {
-//                 0% {
-//                     rotate: x 0deg;
-//                 }
-
-//                 47.5% {
-//                     rotate: x 90deg;
-//                 }
-
-//                 52.5% {
-//                     rotate: x 90deg;
-//                 }
-
-//                 100% {
-//                     rotate: x 0deg;
-//                     border: .1rem solid transparent;
-//                     color: var(--tile-text-color);
-//                 }
-//             }
-
-//         }
-
-//         //     // background-color: var(--app-bg-color);
-//         //     // width: 3.85rem;
-//         //     // height: 3.85rem;
-//         //     // // display: flex;
-//         //     // align-items: center;
-//         //     // justify-content: center;
-//         //     // text-transform: uppercase;
-//         //     // font-size: 2rem;
-//         //     // border: .1rem solid var(--tile-border-color);
-//         //     // font-weight: bold;
-//         //     // transition: all .05s ease-in-out;
-//         //     // color: var(--keyboard-letter-text-color);
-
-//         //     // .letter {
-//         //     //     margin: 0;
-//         //     // }
-
-//         //     // &.border_highlight {
-//         //     //     border: .1rem solid var(--tile-hightlighted-border-color);
-//         //     // }
-
-//         //     // &.tick {
-//         //     //     @keyframes tick {
-//         //     //         0% {
-//         //     //             scale: 1;
-//         //     //         }
-
-//         //     //         50% {
-//         //     //             scale: 1.1;
-//         //     //         }
-
-//         //     //         100% {
-//         //     //             scale: 1;
-//         //     //         }
-//         //     //     }
-
-//         //     //     animation: tick .1s ease 0s;
-//         //     // }
-
-//         //     // &.shake {
-//         //     //     @keyframes shake {
-//         //     //         16% {
-//         //     //             scale: .95;
-//         //     //         }
-
-//         //     //         32% {
-//         //     //             rotate: z 4deg;
-//         //     //             scale: .95;
-//         //     //         }
-
-//         //     //         48% {
-//         //     //             rotate: z -8deg;
-//         //     //             scale: .9;
-//         //     //         }
-
-//         //     //         65% {
-//         //     //             rotate: z 4deg;
-//         //     //             scale: .95;
-//         //     //         }
-
-//         //     //         82% {
-//         //     //             rotate: z -8deg;
-//         //     //             scale: .925;
-//         //     //         }
-
-//         //     //         100% {
-//         //     //             rotate: z 4deg;
-//         //     //             scale: 1;
-//         //     //         }
-//         //     //     }
-
-//         //     //     animation: shake .5s linear alternate-reverse;
-//         //     // }
-
-//         //     // @keyframes flipBoardTile {
-//         //     //     0% {
-//         //     //         rotate: x 0deg;
-//         //     //     }
-
-//         //     //     47.5% {
-//         //     //         rotate: x 90deg;
-//         //     //     }
-
-//         //     //     52.5% {
-//         //     //         rotate: x 90deg;
-//         //     //     }
-
-//         //     //     100% {
-//         //     //         rotate: x 0deg;
-//         //     //         border: none;
-//         //     //         color: var(--tile-text-color);
-//         //     //     }
-//         //     // }
-
-//         //     // &.green_correct_animation {
-//         //     //     @keyframes translateBoardTile {
-//         //     //         0% {
-//         //     //             translate: 0 0;
-//         //     //         }
-
-//         //     //         33% {
-//         //     //             translate: 0 -12.5%;
-//         //     //         }
-
-//         //     //         66% {
-//         //     //             translate: 0 12.5%;
-//         //     //         }
-
-//         //     //         100% {
-//         //     //             translate: 0 0;
-//         //     //         }
-//         //     //     }
-
-//         //     //     @keyframes turnToGreen {
-//         //     //         0% {
-//         //     //             background-color: var(--app-bg-color);
-//         //     //         }
-
-//         //     //         25% {
-//         //     //             background-color: var(--app-bg-color);
-//         //     //         }
-
-//         //     //         50% {
-//         //     //             background-color: var(--tile-correct-color);
-//         //     //         }
-
-//         //     //         100% {
-//         //     //             background-color: var(--tile-correct-color);
-//         //     //         }
-//         //     //     }
-
-//         //     //     animation: flipBoardTile .6s ease-in-out,
-//         //     //     turnToGreen .85s ease-in-out, translateBoardTile .5s ease;
-//         //     //     animation-fill-mode: forwards;
-//         //     // }
-
-//         //     // &.green {
-//         //     //     @keyframes turnToGreen {
-//         //     //         0% {
-//         //     //             background-color: var(--app-bg-color);
-//         //     //         }
-
-//         //     //         25% {
-//         //     //             background-color: var(--app-bg-color);
-//         //     //         }
-
-//         //     //         50% {
-//         //     //             background-color: var(--tile-correct-color);
-//         //     //         }
-
-//         //     //         100% {
-//         //     //             background-color: var(--tile-correct-color);
-//         //     //         }
-//         //     //     }
-
-//         //     //     animation: flipBoardTile .6s ease-in-out,
-//         //     //     turnToGreen .85s ease-in-out;
-//         //     //     animation-fill-mode: forwards;
-//         //     // }
-
-//         //     // &.yellow {
-//         //     //     @keyframes turnToYellow {
-//         //     //         0% {
-//         //     //             background-color: var(--app-bg-color);
-//         //     //         }
-
-//         //     //         25% {
-//         //     //             background-color: var(--app-bg-color);
-//         //     //         }
-
-//         //     //         50% {
-//         //     //             background-color: var(--tile-present-color);
-//         //     //         }
-
-//         //     //         100% {
-//         //     //             background-color: var(--tile-present-color);
-//         //     //         }
-//         //     //     }
-
-//         //     //     animation: flipBoardTile .6s ease-in-out,
-//         //     //     turnToYellow .85s ease-in-out;
-//         //     //     animation-fill-mode: forwards;
-//         //     // }
-
-//         //     // &.grey {
-//         //     //     @keyframes turnToGrey {
-//         //     //         0% {
-//         //     //             background-color: var(--app-bg-color);
-//         //     //         }
-
-//         //     //         25% {
-//         //     //             background-color: var(--app-bg-color);
-//         //     //         }
-
-//         //     //         50% {
-//         //     //             background-color: var(--tile-wrong-color);
-//         //     //         }
-
-//         //     //         100% {
-//         //     //             background-color: var(--tile-wrong-color);
-//         //     //         }
-//         //     //     }
-
-//         //     //     animation: flipBoardTile .6s ease-in-out,
-//         //     //     turnToGrey .85s ease-in-out;
-//         //     //     animation-fill-mode: forwards;
-//         //     // }
-//         // }
-//     }
-// }
-
-// For 300px height
-// Media query for very small screens (mobile)
+// Media query for small screens (mobile)
 @media screen and (max-width: 500px) and (max-height: 500px) {
+
+    // Gameboard content
+    .tile_row {
+        display: flex;
+        gap: .2rem;
+        width: 100%;
+        justify-content: center;
+
+        .tile {
+
+            @keyframes flipBoardTile {
+                0% {
+                    rotate: x 0deg;
+                }
+
+                47.5% {
+                    rotate: x 90deg;
+                }
+
+                52.5% {
+                    rotate: x 90deg;
+                }
+
+                100% {
+                    rotate: x 0deg;
+                    border: .1rem solid transparent;
+                    color: var(--tile-text-color);
+                }
+            }
+
+        }
+
+        //     // background-color: var(--app-bg-color);
+        //     // width: 3.85rem;
+        //     // height: 3.85rem;
+        //     // // display: flex;
+        //     // align-items: center;
+        //     // justify-content: center;
+        //     // text-transform: uppercase;
+        //     // font-size: 2rem;
+        //     // border: .1rem solid var(--tile-border-color);
+        //     // font-weight: bold;
+        //     // transition: all .05s ease-in-out;
+        //     // color: var(--keyboard-letter-text-color);
+
+        //     // .letter {
+        //     //     margin: 0;
+        //     // }
+
+        //     // &.border_highlight {
+        //     //     border: .1rem solid var(--tile-hightlighted-border-color);
+        //     // }
+
+        //     // &.tick {
+        //     //     @keyframes tick {
+        //     //         0% {
+        //     //             scale: 1;
+        //     //         }
+
+        //     //         50% {
+        //     //             scale: 1.1;
+        //     //         }
+
+        //     //         100% {
+        //     //             scale: 1;
+        //     //         }
+        //     //     }
+
+        //     //     animation: tick .1s ease 0s;
+        //     // }
+
+        //     // &.shake {
+        //     //     @keyframes shake {
+        //     //         16% {
+        //     //             scale: .95;
+        //     //         }
+
+        //     //         32% {
+        //     //             rotate: z 4deg;
+        //     //             scale: .95;
+        //     //         }
+
+        //     //         48% {
+        //     //             rotate: z -8deg;
+        //     //             scale: .9;
+        //     //         }
+
+        //     //         65% {
+        //     //             rotate: z 4deg;
+        //     //             scale: .95;
+        //     //         }
+
+        //     //         82% {
+        //     //             rotate: z -8deg;
+        //     //             scale: .925;
+        //     //         }
+
+        //     //         100% {
+        //     //             rotate: z 4deg;
+        //     //             scale: 1;
+        //     //         }
+        //     //     }
+
+        //     //     animation: shake .5s linear alternate-reverse;
+        //     // }
+
+        //     // @keyframes flipBoardTile {
+        //     //     0% {
+        //     //         rotate: x 0deg;
+        //     //     }
+
+        //     //     47.5% {
+        //     //         rotate: x 90deg;
+        //     //     }
+
+        //     //     52.5% {
+        //     //         rotate: x 90deg;
+        //     //     }
+
+        //     //     100% {
+        //     //         rotate: x 0deg;
+        //     //         border: none;
+        //     //         color: var(--tile-text-color);
+        //     //     }
+        //     // }
+
+        //     // &.green_correct_animation {
+        //     //     @keyframes translateBoardTile {
+        //     //         0% {
+        //     //             translate: 0 0;
+        //     //         }
+
+        //     //         33% {
+        //     //             translate: 0 -12.5%;
+        //     //         }
+
+        //     //         66% {
+        //     //             translate: 0 12.5%;
+        //     //         }
+
+        //     //         100% {
+        //     //             translate: 0 0;
+        //     //         }
+        //     //     }
+
+        //     //     @keyframes turnToGreen {
+        //     //         0% {
+        //     //             background-color: var(--app-bg-color);
+        //     //         }
+
+        //     //         25% {
+        //     //             background-color: var(--app-bg-color);
+        //     //         }
+
+        //     //         50% {
+        //     //             background-color: var(--tile-correct-color);
+        //     //         }
+
+        //     //         100% {
+        //     //             background-color: var(--tile-correct-color);
+        //     //         }
+        //     //     }
+
+        //     //     animation: flipBoardTile .6s ease-in-out,
+        //     //     turnToGreen .85s ease-in-out, translateBoardTile .5s ease;
+        //     //     animation-fill-mode: forwards;
+        //     // }
+
+        //     // &.green {
+        //     //     @keyframes turnToGreen {
+        //     //         0% {
+        //     //             background-color: var(--app-bg-color);
+        //     //         }
+
+        //     //         25% {
+        //     //             background-color: var(--app-bg-color);
+        //     //         }
+
+        //     //         50% {
+        //     //             background-color: var(--tile-correct-color);
+        //     //         }
+
+        //     //         100% {
+        //     //             background-color: var(--tile-correct-color);
+        //     //         }
+        //     //     }
+
+        //     //     animation: flipBoardTile .6s ease-in-out,
+        //     //     turnToGreen .85s ease-in-out;
+        //     //     animation-fill-mode: forwards;
+        //     // }
+
+        //     // &.yellow {
+        //     //     @keyframes turnToYellow {
+        //     //         0% {
+        //     //             background-color: var(--app-bg-color);
+        //     //         }
+
+        //     //         25% {
+        //     //             background-color: var(--app-bg-color);
+        //     //         }
+
+        //     //         50% {
+        //     //             background-color: var(--tile-present-color);
+        //     //         }
+
+        //     //         100% {
+        //     //             background-color: var(--tile-present-color);
+        //     //         }
+        //     //     }
+
+        //     //     animation: flipBoardTile .6s ease-in-out,
+        //     //     turnToYellow .85s ease-in-out;
+        //     //     animation-fill-mode: forwards;
+        //     // }
+
+        //     // &.grey {
+        //     //     @keyframes turnToGrey {
+        //     //         0% {
+        //     //             background-color: var(--app-bg-color);
+        //     //         }
+
+        //     //         25% {
+        //     //             background-color: var(--app-bg-color);
+        //     //         }
+
+        //     //         50% {
+        //     //             background-color: var(--tile-wrong-color);
+        //     //         }
+
+        //     //         100% {
+        //     //             background-color: var(--tile-wrong-color);
+        //     //         }
+        //     //     }
+
+        //     //     animation: flipBoardTile .6s ease-in-out,
+        //     //     turnToGrey .85s ease-in-out;
+        //     //     animation-fill-mode: forwards;
+        //     // }
+        // }
+    }
+}
+
+
+// Media query for very small screens (mobile)
+@media screen and (max-width: 500px) and (max-height: 400px) {
 
     // Gameboard content
     .tile_row {

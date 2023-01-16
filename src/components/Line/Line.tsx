@@ -36,37 +36,8 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                 maxGameBoardWidth: 15,
                 maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 5 : 7,
             };
-        // // Mobile very small screens
-        // else if (window.innerWidth < 501 && window.innerHeight < 501) {
-        //     if (numberStages > 6) {
-        //         return numberStages < 9
-        //             ? {
-        //                   maxGameBoardHeight: 12,
-        //                   maxGameBoardWidth: 12,
-        //                   maxTileFontSize: 5,
-        //               }
-        //             : numberStages < 11
-        //             ? {
-        //                   maxGameBoardHeight: 12,
-        //                   maxGameBoardWidth: 12,
-        //                   maxTileFontSize: 5.5,
-        //               }
-        //             : {
-        //                   maxGameBoardHeight: 11.5,
-        //                   maxGameBoardWidth: 11.5,
-        //                   maxTileFontSize: 5.5,
-        //               };
-        //     } else
-        //         return {
-        //             maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 7 : 8,
-        //             maxGameBoardWidth: 8,
-        //             maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 3 : 3.5,
-        //         };
-        // }
-
-        // (For 300px height)
         // Mobile very small screens
-        else if (window.innerWidth < 501 && window.innerHeight < 501) {
+        else if (window.innerWidth < 501 && window.innerHeight < 401) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {
@@ -96,9 +67,34 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                     maxGameBoardWidth: 9,
                     maxTileFontSize: 3.75,
                 };
+        }    
+        // Mobile small screens
+        else if (window.innerWidth < 501 && window.innerHeight < 501) {
+            if (numberStages > 6) {
+                return numberStages < 9
+                    ? {
+                          maxGameBoardHeight: 12,
+                          maxGameBoardWidth: 12,
+                          maxTileFontSize: 5,
+                      }
+                    : numberStages < 11
+                    ? {
+                          maxGameBoardHeight: 12,
+                          maxGameBoardWidth: 12,
+                          maxTileFontSize: 5.5,
+                      }
+                    : {
+                          maxGameBoardHeight: 11.5,
+                          maxGameBoardWidth: 11.5,
+                          maxTileFontSize: 5.5,
+                      };
+            } else
+                return {
+                    maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 7 : 8,
+                    maxGameBoardWidth: 8,
+                    maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 3 : 3.5,
+                };
         }
-
-
         // Mobile landscape (low height) screens
         else if (window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 351) {
             if (numberStages > 6) {
