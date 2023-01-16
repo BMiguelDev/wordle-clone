@@ -783,7 +783,111 @@
 
 
 // Media queries for small tablet content (square)
-@media screen and (min-height: 651px) and (min-width: 501px) and (max-width: 700px) {}
+@media screen and (min-height: 650px) and (min-width: 501px) and (max-width: 700px) {
+
+    // Main content
+    .main_container {
+        // position: relative;
+        // width: 100%;
+        // height: 100%;
+
+        .game_container {
+            // height: 100%;
+            // display: flex;
+            // flex-direction: column;
+            // align-items: center;
+            // justify-content: space-between;
+            //gap: 2.75rem;
+            width: 100%;
+            padding: .2rem;
+
+            .gameboard_container {
+                // display: flex;
+                // flex-direction: column;
+                // align-items: center;
+                // justify-content: center;
+                gap: .25rem;
+                width: 100%;
+                //padding-top: 2.75rem;
+                padding: .25rem;
+
+                padding-top: 2rem;
+            }
+
+            .keyboard_container {
+                // display: flex;
+                // flex-direction: column;
+                // align-items: center;
+                gap: .35rem;
+                width: 100%;
+                // padding-bottom: .5rem;
+            }
+        }
+
+
+        .notification_container {
+            // position: absolute;
+            top: .5%;
+            // left: 50%;
+            // translate: -50% 0;
+            padding: .35rem .5rem;
+            // background-color: var(--notification-bg-color);
+            // color: var(--notification-color);
+            // box-shadow: 0 0 .5rem var(--notification-box-shadow-color);
+            // border-radius: .25rem;
+            //width: fit-content;
+            font-size: .8rem;
+            line-height: .8rem;
+            text-align: center;
+            letter-spacing: .005rem;
+            // z-index: 4;
+
+            // @keyframes popInAndOut {
+            //     0% {
+            //         opacity: .25;
+            //     }
+
+            //     25% {
+            //         opacity: 1;
+            //     }
+
+            //     75% {
+            //         opacity: 1;
+            //     }
+
+            //     100% {
+            //         opacity: 0;
+            //     }
+            // }
+
+            // animation: popInAndOut 3s ease 0s;
+            // animation-fill-mode: forwards;
+
+
+            // &.notification_container_invisible {
+            //     display: none;
+            // }
+        }
+
+        .reset_game_button {
+            // position: absolute;
+            //top: 67.5%;
+            //right: 50%;
+            top: 68.75%;
+            right: 12.5%;
+            //translate: 50% 0;
+            // opacity: 0;
+            // background-color: var(--tile-present-color);
+            // color: var(--popup-bg-color);
+            // border: 0.05rem solid var(--popup-text-description-color);
+            font-size: 0.775rem;
+            // border-radius: 0.25rem;
+            // font-weight: bold;
+            padding: 0.45rem 1.15rem;
+            // cursor: pointer;
+        }
+    }
+}
 
 
 // Media queries for tablet content (portrait)

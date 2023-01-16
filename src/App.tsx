@@ -193,13 +193,10 @@ export default function App() {
     });
 
     const [screenOrientation, setScreenOrientation] = useState<string>(() => {
-        if(window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651) return "landscape";
-        else if(window.innerHeight > 500 && window.innerWidth < 500) return "portrait";
+        if (window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651) return "landscape";
+        else if (window.innerHeight > 500 && window.innerWidth < 500) return "portrait";
         else return "normal";
     });
-
-    // TODO: remove this
-    const [smth, setSmth] = useState<number>(0);
 
     // useEffect hooks to store state variables in local storage whenever they update
     useEffect(() => {
@@ -399,20 +396,21 @@ export default function App() {
 
         const handleResize = () => {
             //const isSmartphoneLandscapeScreen = window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651;
-            const isSmartphoneLandscapeScreen = window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 650;
+            const isSmartphoneLandscapeScreen =
+                window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 650;
 
-            if(isSmartphoneLandscapeScreen) setScreenOrientation("landscape");
-            else if((window.innerHeight > 500 && window.innerWidth < 500) || (window.innerHeight < 501 && window.innerWidth < 501)) setScreenOrientation("portrait");
+            if (isSmartphoneLandscapeScreen) setScreenOrientation("landscape");
+            else if (
+                (window.innerHeight > 500 && window.innerWidth < 500) ||
+                (window.innerHeight < 501 && window.innerWidth < 501)
+            )
+                setScreenOrientation("portrait");
             else setScreenOrientation("normal");
 
             // Update height to prevent 100vh bug where page may be covered by the browser's UI (in mobile)
             if (appDivRef.current) appDivRef.current.style.height = `${window.innerHeight}px`;
 
             if (!isSmartphoneLandscapeScreen && document.fullscreenElement) toggleFullScreen();
-
-            //console.log(window.innerHeight);
-            // TODO: remove this
-            setSmth(window.innerHeight);
         };
 
         if (randomWordAndArray.randomWordArray.length === 0) fetchData();
@@ -1275,7 +1273,7 @@ export default function App() {
 
     useEffect(() => {
         console.log(screenOrientation);
-    }, [screenOrientation])
+    }, [screenOrientation]);
 
     return (
         <div
@@ -1302,9 +1300,10 @@ export default function App() {
                             // Change style specifically if device screen is mobile sized and in landscape mode
                             style={{
                                 flexDirection:
-                                    screenOrientation==="landscape" && gameSettings.currentGameSettings.numberStages > 6
-                                    ? "row"
-                                    : "column",
+                                    screenOrientation === "landscape" &&
+                                    gameSettings.currentGameSettings.numberStages > 6
+                                        ? "row"
+                                        : "column",
                             }}
                         >
                             {stageWordArray.map((line, index) => {
@@ -1381,12 +1380,7 @@ export default function App() {
                         }`}
                         onClick={resetGame}
                     >
-                        { screenOrientation==="portrait" ? <i className="fa-solid fa-rotate-right"></i> : 
-                       
-                        "Restart" + smth
-                        /* TODO:REMOVE THIS */
-                        //smth
-                    }
+                        {screenOrientation === "portrait" ? <i className="fa-solid fa-rotate-right"></i> : "Restart"}
                     </button>
                 </main>
             )}

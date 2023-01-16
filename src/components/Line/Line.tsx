@@ -23,14 +23,14 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
     // Function that returns the optimal game board sizes (in rem) based on window width and height
     const getMaxGameBoardSizes = useCallback(() => {
         // Mobile portrait (low height) screens
-        if (window.innerWidth < 500 && window.innerHeight > 500 && window.innerHeight < 626)
+        if (window.innerWidth < 501 && window.innerHeight > 500 && window.innerHeight < 625)
             return {
                 maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 5.5 : 9.5,
                 maxGameBoardWidth: 9.5,
                 maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 2 : 4,
             };
         // Mobile portrait screens
-        else if (window.innerWidth < 500 && window.innerHeight > 625)
+        else if (window.innerWidth < 501 && window.innerHeight > 625)
             return {
                 maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 11 : 15,
                 maxGameBoardWidth: 15,
@@ -123,7 +123,7 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                 };
         }
         // Mobile landscape screens
-        else if (window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651) {
+        else if (window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 650) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {
@@ -147,6 +147,33 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                     maxGameBoardHeight: 11.5,
                     maxGameBoardWidth: 11.5,
                     maxTileFontSize: 5.25,
+                };
+        }
+        // Mobile small tablet (square)
+        else if (window.innerWidth > 500 && window.innerWidth < 701 && window.innerHeight >= 650) {
+            if (numberStages > 6) {
+                return numberStages < 9
+                    ? {
+                          maxGameBoardHeight: 22,
+                          maxGameBoardWidth: 20,
+                          maxTileFontSize: 9,
+                      }
+                    : numberStages < 11
+                    ? {
+                          maxGameBoardHeight: 22,
+                          maxGameBoardWidth: 22,
+                          maxTileFontSize: 9.5,
+                      }
+                    : {
+                          maxGameBoardHeight: 22,
+                          maxGameBoardWidth: 24,
+                          maxTileFontSize: 10,
+                      };
+            } else
+                return {
+                    maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 16 : 18,
+                    maxGameBoardWidth: 14,
+                    maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 6.5 : 7.5,
                 };
         } else
         /* TODO */
