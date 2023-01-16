@@ -76,7 +76,7 @@ export default function StatsPopUp({
                         </div>
                         <div className={styles.singular_stat_container}>
                             <h4 className={styles.singular_stat_number}>{playerStatistics.currentStreak}</h4>
-                            <p className={styles.singular_stat_text}>Current Steak</p>
+                            <p className={styles.singular_stat_text}>Current Streak</p>
                         </div>
                         <div className={styles.singular_stat_container}>
                             <h4 className={styles.singular_stat_number}>{playerStatistics.maxStreak}</h4>

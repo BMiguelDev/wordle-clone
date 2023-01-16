@@ -401,7 +401,7 @@ export default function App() {
             const isSmartphoneLandscapeScreen = window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651;
 
             if(isSmartphoneLandscapeScreen) setScreenOrientation("landscape");
-            else if(window.innerHeight > 500 && window.innerWidth < 500) setScreenOrientation("portrait");
+            else if((window.innerHeight > 500 && window.innerWidth < 500) || (window.innerHeight < 501 && window.innerWidth < 501)) setScreenOrientation("portrait");
             else setScreenOrientation("normal");
 
             // Update height to prevent 100vh bug where page may be covered by the browser's UI (in mobile)
