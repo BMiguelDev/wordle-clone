@@ -571,7 +571,8 @@ export default function App() {
 
     const handleKeydown = useCallback(
         (event: KeyboardEvent | React.MouseEvent<HTMLDivElement, MouseEvent>, key: string = "") => {
-            event.preventDefault();
+            //event.preventDefault();
+            if(event.type === "click") event.preventDefault();
             const keyValue: string = key !== "" ? key : (event as KeyboardEvent).key;
             if (
                 currentGuess.length < gameSettings.currentGameSettings.wordLength &&
@@ -752,7 +753,7 @@ export default function App() {
                     if (prevCurrentGuess.length > 0) return prevCurrentGuess.slice(0, -1);
                     else return prevCurrentGuess;
                 });
-            } else if (keyValue === "F5") window.location.reload();
+            }
         },
         [
             currentStage,
