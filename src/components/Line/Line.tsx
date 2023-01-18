@@ -150,7 +150,7 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                 };
         }
         // Mobile small tablet (square)
-        else if (window.innerWidth > 500 && window.innerWidth < 701 && window.innerHeight >= 650) {
+        else if (window.innerWidth > 500 && window.innerWidth < 701 && window.innerHeight >= 650 && window.innerHeight <= 800) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {
@@ -177,30 +177,30 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                 };
         }
         // Mobile tablet (portrait)
-        else if (window.innerWidth > 500 && window.innerWidth < 701 && window.innerHeight >= 650) {
+        else if (window.innerWidth > 700 && window.innerWidth < 1001 && window.innerHeight >= 650 && window.innerHeight <= 800) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {
-                          maxGameBoardHeight: 22,
-                          maxGameBoardWidth: 20,
-                          maxTileFontSize: 9,
+                          maxGameBoardHeight: 23,
+                          maxGameBoardWidth: 21,
+                          maxTileFontSize: 9.5,
                       }
                     : numberStages < 11
                     ? {
-                          maxGameBoardHeight: 22,
-                          maxGameBoardWidth: 22,
-                          maxTileFontSize: 9.5,
+                          maxGameBoardHeight: 23,
+                          maxGameBoardWidth: 23,
+                          maxTileFontSize: 10,
                       }
                     : {
-                          maxGameBoardHeight: 22,
-                          maxGameBoardWidth: 24,
-                          maxTileFontSize: 10,
+                          maxGameBoardHeight: 23,
+                          maxGameBoardWidth: 25,
+                          maxTileFontSize: 10.5,
                       };
             } else
                 return {
-                    maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 16 : 18,
-                    maxGameBoardWidth: 14,
-                    maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 6.5 : 7.5,
+                    maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 17 : 19,
+                    maxGameBoardWidth: 15,
+                    maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 7 : 8,
                 };
         }
         else

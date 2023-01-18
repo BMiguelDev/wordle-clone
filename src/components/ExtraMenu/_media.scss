@@ -769,6 +769,36 @@
 }
 
 
+// Media queries for tablet content (portrait)
+@media screen and (min-height: 650px) and (max-height: 800px) and (min-width: 701px) and (max-width: 1000px) {
+
+    // Help Pop Up content
+    .extramenu_popup_container {
+        // position: absolute;
+        width: fit-content;
+        //height: 75%;
+        // height: fit-content;
+        // max-height: unset;
+        // top: 7%;
+        //left: 0%;
+        //width: 24.5%;
+        //height: 66%;
+        //height: fit-content;
+        //max-height: 66%;
+        // border: 1px solid var(--popup-border-color);
+        // background-color: var(--popup-bg-color);
+        // display: flex;
+        // align-items: center;
+        // flex-direction: column;
+        // justify-content: center;
+        // gap: 0rem;
+        // box-shadow: 3px 5px 5px var(--extra-menu-box-shadow-color);
+        // border-radius: .5rem;
+        // padding-top: 2rem;
+    }
+}
+
+
 // Media queries for mobile high height square-ish screens
 @media screen and (min-height: 801px) and (min-width: 501px) and (max-width: 1201px) {
 

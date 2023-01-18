@@ -1257,9 +1257,8 @@ export default function App() {
     }
 
     // TODO:
-    // - make app responsive (Fix tile size when word legnth bigger than number of stages. Maybe add to tsx file a conditional to decrease a bit the max height and max width when the device's screen is x pixels)
-    //      (make breakpoints account for situations where browser is covering page (in portrait the page is more square, in landscape the page is even more "esticada"))
-    //      (mobile landscape screens good at max:height >= 270px)
+    // - make app responsive
+    //      (change this breakpoint "@media screen and (min-height: 650px) and (max-height: 800px) and (min-width: 701px) and (max-width: 1000px)" to go until any width (remove "max-width:1000px)")
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
