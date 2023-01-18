@@ -175,7 +175,35 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                     maxGameBoardWidth: 14,
                     maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 6.5 : 7.5,
                 };
-        } else
+        }
+        // Mobile tablet (portrait)
+        else if (window.innerWidth > 500 && window.innerWidth < 701 && window.innerHeight >= 650) {
+            if (numberStages > 6) {
+                return numberStages < 9
+                    ? {
+                          maxGameBoardHeight: 22,
+                          maxGameBoardWidth: 20,
+                          maxTileFontSize: 9,
+                      }
+                    : numberStages < 11
+                    ? {
+                          maxGameBoardHeight: 22,
+                          maxGameBoardWidth: 22,
+                          maxTileFontSize: 9.5,
+                      }
+                    : {
+                          maxGameBoardHeight: 22,
+                          maxGameBoardWidth: 24,
+                          maxTileFontSize: 10,
+                      };
+            } else
+                return {
+                    maxGameBoardHeight: wordLength > 6 && wordLength >= numberStages * 2 ? 16 : 18,
+                    maxGameBoardWidth: 14,
+                    maxTileFontSize: wordLength > 6 && wordLength >= numberStages * 2 ? 6.5 : 7.5,
+                };
+        }
+        else
         /* TODO */
             return {
                 maxGameBoardHeight: 23,

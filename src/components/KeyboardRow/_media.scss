@@ -588,7 +588,7 @@
 
 
 // Media queries for small tablet content (square)
-@media screen and (min-height: 650px) and (min-width: 501px) and (max-width: 700px) {
+@media screen and (min-height: 650px) and (max-height: 800px) and (min-width: 501px) and (max-width: 700px) {
 
     // Keyboard content
     .keyboard_row {
