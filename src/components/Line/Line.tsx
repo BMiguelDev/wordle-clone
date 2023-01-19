@@ -96,7 +96,7 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                 };
         }
         // Mobile landscape (low height) screens
-        else if (window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 351) {
+        else if (window.innerWidth > 499 /* && window.innerWidth < 1001*/ && window.innerHeight < 351) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {
@@ -123,7 +123,7 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                 };
         }
         // Mobile landscape screens
-        else if (window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 650) {
+        else if (window.innerWidth > 499 /* && window.innerWidth < 1001*/ && window.innerHeight < 650) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {
@@ -177,7 +177,7 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
                 };
         }
         // Mobile tablet (portrait)
-        else if (window.innerWidth > 700 && window.innerWidth < 1001 && window.innerHeight >= 650 && window.innerHeight <= 800) {
+        else if (window.innerWidth > 700 /* && window.innerWidth < 1001*/ && window.innerHeight >= 650 && window.innerHeight <= 800) {
             if (numberStages > 6) {
                 return numberStages < 9
                     ? {

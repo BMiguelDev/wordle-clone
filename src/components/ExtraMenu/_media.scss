@@ -457,7 +457,7 @@
 
 
 // Media queries for mobile content (landscape)
-@media screen and (max-height: 650px) and (min-width: 500px) and (max-width: 1000px) {
+@media screen and (max-height: 650px) and (min-width: 500px)/* and (max-width: 1000px)*/ {
 
     // Help Pop Up content
     .extramenu_popup_container {
@@ -770,7 +770,7 @@
 
 
 // Media queries for tablet content (portrait)
-@media screen and (min-height: 650px) and (max-height: 800px) and (min-width: 701px) and (max-width: 1000px) {
+@media screen and (min-height: 650px) and (max-height: 800px) and (min-width: 701px) /* and (max-width: 1000px)*/ {
 
     // Help Pop Up content
     .extramenu_popup_container {

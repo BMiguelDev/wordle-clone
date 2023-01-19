@@ -174,8 +174,13 @@ body {
 
     .reset_game_button {
         position: absolute;
-        top: 40%;
-        right: 15%;
+        // top: 40%;
+        // right: 15%;
+
+        top: 65%;
+        right: 0%;
+        margin-right: 25%;
+
         opacity: 0;
         background-color: var(--tile-present-color);
         color: var(--popup-bg-color);

@@ -397,7 +397,7 @@ export default function App() {
         const handleResize = () => {
             //const isSmartphoneLandscapeScreen = window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651;
             const isSmartphoneLandscapeScreen =
-                window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 650;
+                window.innerWidth > 500 /* && window.innerWidth < 1001 */ && window.innerHeight < 650;
 
             if (isSmartphoneLandscapeScreen) setScreenOrientation("landscape");
             else if (
@@ -1259,6 +1259,7 @@ export default function App() {
     // TODO:
     // - make app responsive
     //      (change this breakpoint "@media screen and (min-height: 650px) and (max-height: 800px) and (min-width: 701px) and (max-width: 1000px)" to go until any width (remove "max-width:1000px)")
+    //      (change some breakpoints to include higher widths (styles work for longer widths anyway) on very wide screens)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
