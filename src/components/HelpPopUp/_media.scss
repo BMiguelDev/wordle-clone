@@ -1070,7 +1070,7 @@
 
 
 // Media queries for mobile content (landscape)
-@media screen and (max-height: 650px) and (min-width: 500px)/* and (max-width: 1000px)*/ {
+@media screen and (max-height: 650px) and (min-width: 501px)/* and (max-width: 1000px)*/ {
 
     // Help Pop Up content
     .help_popup_container {
@@ -1092,7 +1092,6 @@
         justify-content: center;
         gap: .35rem;
         padding: 1rem 1rem .75rem 1rem;
-
 
         //height: fit-content;
         // border: 1px solid var(--popup-border-color);
@@ -1185,17 +1184,17 @@
                         // display: flex;
                         // align-items: flex-start;
                         // justify-content: flex-start;
-                        gap: .15rem;
+                        gap: .1rem;
 
                         .popup_example_tile {
                             // background-color: var(--app-bg-color);
-                            width: 1.3rem;
-                            height: 1.3rem;
+                            width: 1.1rem;
+                            height: 1.1rem;
                             // display: flex;
                             // align-items: center;
                             // justify-content: center;
                             // text-transform: uppercase;
-                            font-size: .875rem;
+                            font-size: .825rem;
                             // border: .1rem solid var(--tile-hightlighted-border-color);
                             // font-weight: bold;
                             // transition: all .05s ease-in-out;
@@ -1303,11 +1302,11 @@
 
                     &>p {
                         span {
-                            font-size: .725rem;
+                            font-size: .675rem;
                             // font-weight: bold;
                         }
 
-                        font-size: .675rem;
+                        font-size: .625rem;
                         // margin: 0;
                         // color: var(--keyboard-letter-text-color);
                     }

@@ -395,9 +395,8 @@ export default function App() {
         };
 
         const handleResize = () => {
-            //const isSmartphoneLandscapeScreen = window.innerWidth > 499 && window.innerWidth < 1001 && window.innerHeight < 651;
             const isSmartphoneLandscapeScreen =
-                window.innerWidth > 500 /* && window.innerWidth < 1001 */ && window.innerHeight < 650;
+                window.innerWidth > 500 && window.innerHeight <= 650;
 
             if (isSmartphoneLandscapeScreen) setScreenOrientation("landscape");
             else if (
@@ -429,7 +428,7 @@ export default function App() {
 
     const handleStageChange = useCallback(() => {
         if (currentStage < gameSettings.currentGameSettings.numberStages) {
-            //If current guess is correct, skip color checks and give every tile the class "green_correct_animation"
+            // If current guess is correct, skip color checks and give every tile the class "green_correct_animation"
             if (currentGuess === randomWordAndArray.randomWord) {
                 const colorArray: string[] = Array(gameSettings.currentGameSettings.wordLength).fill(
                     "tile green_correct_animation"
@@ -440,7 +439,7 @@ export default function App() {
                     return newLineClassNames;
                 });
             } else {
-                //Make checks
+                // Make checks
                 let colorArray: string[] = [];
                 currentGuess
                     .toLowerCase()
@@ -571,7 +570,7 @@ export default function App() {
 
     const handleKeydown = useCallback(
         (event: KeyboardEvent | React.MouseEvent<HTMLDivElement, MouseEvent>, key: string = "") => {
-            //event.preventDefault();
+            // Prevent browser from giving search/translate tips when clicking the keyboard buttons
             if(event.type === "click") event.preventDefault();
             const keyValue: string = key !== "" ? key : (event as KeyboardEvent).key;
             if (
@@ -689,7 +688,7 @@ export default function App() {
                                         handleStageChange();
                                     });
                             } else {
-                                // if dictionary Api is not available, don't check if word exists and allow any word
+                                // If dictionary Api is not available, don't check if word exists and allow any word
                                 handleStageChange();
                             }
                         }
@@ -744,7 +743,7 @@ export default function App() {
                                 handleStageChange();
                             });
                     } else {
-                        // if dictionary Api is not available or lazy mode is on, don't check if word exists and allow any word
+                        // If dictionary Api is not available or lazy mode is on, don't check if word exists and allow any word
                         handleStageChange();
                     }
                 }
@@ -779,7 +778,6 @@ export default function App() {
                     !isPopUpOpen.isExtraMenuOpen
                 ) {
                     window.addEventListener("keydown", handleKeydown);
-                    //console.log("I created new event listener");
                 }
             } else if (currentStage === gameSettings.currentGameSettings.numberStages) {
                 // Update player statistics with 1 more loss
@@ -820,7 +818,6 @@ export default function App() {
 
         return () => {
             window.removeEventListener("keydown", handleKeydown);
-            //console.log("I removed event listener");
         };
     }, [
         currentGuess,
@@ -1085,7 +1082,6 @@ export default function App() {
                     setgameSettings((prevgameSettings) => ({
                         ...prevgameSettings,
                         currentGameSettings: {
-                            //...prevgameSettings.futureGameSettings,
                             ...prevgameSettings.currentGameSettings,
                             lazyMode: true,
                         },
@@ -1101,7 +1097,6 @@ export default function App() {
                 setgameSettings((prevgameSettings) => ({
                     ...prevgameSettings,
                     currentGameSettings: {
-                        //...prevgameSettings.futureGameSettings,
                         ...prevgameSettings.currentGameSettings,
                         lazyMode: true,
                     },
@@ -1110,14 +1105,6 @@ export default function App() {
 
         setCurrentGuess("");
         setCurrentStage(0);
-        // setgameSettings((prevgameSettings) => ({
-        //     ...prevgameSettings,
-        //     currentGameSettings: {
-        //         ...prevgameSettings.futureGameSettings,
-        //         hardMode: prevgameSettings.currentGameSettings.hardMode,
-        //         lazyMode: prevgameSettings.currentGameSettings.lazyMode,
-        //     },
-        // }));
         setGameDescription({
             attemptedGuesses: [],
             isGameFinished: false,
@@ -1257,9 +1244,6 @@ export default function App() {
     }
 
     // TODO:
-    // - make app responsive
-    //      (change this breakpoint "@media screen and (min-height: 650px) and (max-height: 800px) and (min-width: 701px) and (max-width: 1000px)" to go until any width (remove "max-width:1000px)")
-    //      (change some breakpoints to include higher widths (styles work for longer widths anyway) on very wide screens)
 
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
@@ -1271,10 +1255,6 @@ export default function App() {
     // console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
     // console.log("------random Word", randomWordAndArray.randomWord);
     // console.log("--------------------------------------");
-
-    useEffect(() => {
-        console.log(screenOrientation);
-    }, [screenOrientation]);
 
     return (
         <div
