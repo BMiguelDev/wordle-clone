@@ -175,9 +175,11 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
         }
         // Mobile tablet (portrait)
         else if (
-            window.innerWidth > 700 &&
+            (window.innerWidth > 700 && 
+            window.innerWidth < 1001 &&
             window.innerHeight >= 650 &&
-            window.innerHeight <= 800
+            window.innerHeight <= 725) ||
+            window.innerWidth < 850
         ) {
             if (numberStages > 6) {
                 return numberStages < 9
