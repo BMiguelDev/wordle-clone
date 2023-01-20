@@ -329,12 +329,7 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
             }
         } else dynamicDivisor = maxWidthHeightMultiplier + 1;
 
-        // const widthStyle: string = `${MAX_GAME_BOARD_WIDTH / dynamicDivisor}rem`;
-        // const heightStyle: string = `${MAX_GAME_BOARD_HEIGHT / dynamicDivisor}rem`;
-        // const fontSizeStyle: string = `${MAX_TILE_FONT_SIZE / dynamicDivisor}rem`;
-
         if (window.innerWidth < 501 && window.innerHeight > 500) dynamicDivisor = dynamicDivisor * 0.725;
-        //else if (window.innerWidth > 500 && window.innerWidth < 1001 && window.innerHeight < 651) dynamicDivisor = dynamicDivisor * 0.725;
 
         const widthStyle: string = `${gameBoardMaxSizes.maxGameBoardWidth / dynamicDivisor}rem`;
         const heightStyle: string = `${gameBoardMaxSizes.maxGameBoardHeight / dynamicDivisor}rem`;

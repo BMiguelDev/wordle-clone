@@ -3,42 +3,27 @@
 
     // Navbar content
     .navbar_container {
-        // color: var(--header-color);
-        // display: flex;
         justify-content: flex-start;
-        // align-items: center;
-        // width: 100%;
-        // border-bottom: .01rem solid var(--header-border-color);
         padding: .25rem 1rem;
 
         .navbar_menu_container {
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            font-size: 1.15rem;
-            // cursor: pointer;
+            font-size: 1.05rem;
         }
 
         .navbar_title {
             margin: 0;
-            font-size: 1.6rem;
-            // font-weight: bolder;
-            // font-family: 'Volkhov', serif;
-            // letter-spacing: -.15rem;
+            font-size: 1.5rem;
             margin-left: 1rem;
         }
 
         .navbar_icons_container {
-            // display: flex;
-            // align-items: center;
             justify-content: flex-end;
             width: inherit;
             gap: .5rem;
-            font-size: 1.5rem;
-
-            // .navbar_icon_container {
-            //     cursor: pointer;
-            // }
+            font-size: 1.4rem;
         }
     }
 }
@@ -49,12 +34,7 @@
 
     // Navbar content
     .navbar_container {
-        // color: var(--header-color);
-        // display: flex;
         justify-content: flex-start;
-        // align-items: center;
-        // width: 100%;
-        // border-bottom: .01rem solid var(--header-border-color);
         padding: .25rem .5rem;
 
         .navbar_menu_container {
@@ -62,29 +42,19 @@
             align-items: center;
             justify-content: flex-start;
             font-size: .85rem;
-            // cursor: pointer;
         }
 
         .navbar_title {
             margin: 0;
             font-size: 1.3rem;
-            // font-weight: bolder;
-            // font-family: 'Volkhov', serif;
-            // letter-spacing: -.15rem;
             margin-left: .75rem;
         }
 
         .navbar_icons_container {
-            // display: flex;
-            // align-items: center;
             justify-content: flex-end;
             width: inherit;
             gap: .4rem;
             font-size: 1.05rem;
-
-            // .navbar_icon_container {
-            //     cursor: pointer;
-            // }
         }
     }
 }
@@ -95,12 +65,7 @@
 
     // Navbar content
     .navbar_container {
-        // color: var(--header-color);
-        // display: flex;
         justify-content: flex-start;
-        // align-items: center;
-        // width: 100%;
-        // border-bottom: .01rem solid var(--header-border-color);
         padding: .25rem .5rem;
 
         .navbar_menu_container {
@@ -108,29 +73,19 @@
             align-items: center;
             justify-content: flex-start;
             font-size: .8rem;
-            // cursor: pointer;
         }
 
         .navbar_title {
             margin: 0;
             font-size: 1.25rem;
-            // font-weight: bolder;
-            // font-family: 'Volkhov', serif;
-            // letter-spacing: -.15rem;
             margin-left: .7rem;
         }
 
         .navbar_icons_container {
-            // display: flex;
-            // align-items: center;
             justify-content: flex-end;
             width: inherit;
             gap: .4rem;
             font-size: 1rem;
-
-            // .navbar_icon_container {
-            //     cursor: pointer;
-            // }
         }
     }
 }
@@ -141,33 +96,19 @@
 
     // Navbar content
     .navbar_container {
-        // color: var(--header-color);
-        // display: flex;
-        // justify-content: space-between;
-        // align-items: center;
-        // width: 100%;
-        // border-bottom: .01rem solid var(--header-border-color);
         padding: .15rem .75rem;
 
         .navbar_menu_container {
             font-size: 1.05rem;
-            // cursor: pointer;
         }
 
         .navbar_title {
-            // margin: 0;
             font-size: 1.55rem;
-            // font-weight: bolder;
-            // font-family: 'Volkhov', serif;
             letter-spacing: -.1rem;
             margin-left: 5.5rem;
         }
 
         .navbar_icons_container {
-            // display: flex;
-            // align-items: center;
-            // width: fit-content;
-            // gap: 1rem;
             font-size: 1.05rem;
 
             .navbar_icon_container {
@@ -270,12 +211,6 @@
 
     // Navbar content
     .navbar_container {
-        // color: var(--header-color);
-        // display: flex;
-        //justify-content: space-between;
-        // align-items: center;
-        // width: 100%;
-        // border-bottom: .01rem solid var(--header-border-color);
         padding: .4rem 1rem;
 
         .navbar_menu_container {
@@ -283,29 +218,19 @@
             align-items: center;
             justify-content: flex-start;
             font-size: 1.15rem;
-            // cursor: pointer;
         }
 
         .navbar_title {
             margin: 0;
             font-size: 1.65rem;
-            // font-weight: bolder;
-            // font-family: 'Volkhov', serif;
-            // letter-spacing: -.15rem;
             margin-left: 4.4rem;
         }
 
         .navbar_icons_container {
-            // display: flex;
-            // align-items: center;
             justify-content: flex-end;
             width: fit-content;
             gap: .85rem;
             font-size: 1.5rem;
-
-            // .navbar_icon_container {
-            //     cursor: pointer;
-            // }
         }
     }
 }
@@ -316,12 +241,6 @@
 
     // Navbar content
     .navbar_container {
-        // color: var(--header-color);
-        // display: flex;
-        //justify-content: space-between;
-        // align-items: center;
-        // width: 100%;
-        // border-bottom: .01rem solid var(--header-border-color);
         padding: .45rem 1.1rem;
 
         .navbar_menu_container {
@@ -329,29 +248,19 @@
             align-items: center;
             justify-content: flex-start;
             font-size: 1.25rem;
-            // cursor: pointer;
         }
 
         .navbar_title {
             margin: 0;
             font-size: 1.75rem;
-            // font-weight: bolder;
-            // font-family: 'Volkhov', serif;
-            // letter-spacing: -.15rem;
             margin-left: 4.4rem;
         }
 
         .navbar_icons_container {
-            // display: flex;
-            // align-items: center;
             justify-content: flex-end;
             width: fit-content;
             gap: 1rem;
             font-size: 1.55rem;
-
-            // .navbar_icon_container {
-            //     cursor: pointer;
-            // }
         }
     }
 }

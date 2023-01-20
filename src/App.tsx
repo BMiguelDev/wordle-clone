@@ -931,10 +931,6 @@ export default function App() {
             fetch("https://api.datamuse.com/words?sp=?????", { cache: "no-store" })
                 .then((response) => {
                     if (response.ok) {
-                        // setIsApiAvailable((prevIsApiAvailable) => ({
-                        //     ...prevIsApiAvailable,
-                        //     isWordApiAvailable: true,
-                        // }));
                         fetchNewData();
                         const newLineClassNames: string[][] = Array(gameSettings.futureGameSettings.numberStages).fill(
                             Array(gameSettings.futureGameSettings.wordLength).fill("tile")
@@ -1021,7 +1017,7 @@ export default function App() {
 
             setIsLoading(false);
         } else {
-            // check if words api is available first (in order to set state correctly and prevent user from changing settings from here forward if api is unavailable)
+            // Check if words api is available first (in order to set state correctly and prevent user from changing settings from here forward if api is unavailable),
             // then simply get another random word from the randomArray variable.
             fetch("https://api.datamuse.com/words?sp=?????", { cache: "no-store" })
                 .then((response) => {
@@ -1066,7 +1062,7 @@ export default function App() {
             setStageWordArray(newStageWordArray);
         }
 
-        // check if dictionary api is available (to set state correctly and prevent user from changing settings if api is unavailable)
+        // Check if dictionary api is available (to set state correctly and prevent user from changing settings if api is unavailable)
         fetch("https://api.dictionaryapi.dev/api/v2/entries/en/hello", { cache: "no-store" })
             .then((response) => {
                 if (response.ok)
@@ -1243,18 +1239,11 @@ export default function App() {
         }
     }
 
-    // TODO:
-
     const keyboardLetterRowsArray: string[] = [
         ALPHABET_LETTERS.split("a")[0],
         ALPHABET_LETTERS.split("p")[1].split("z")[0],
         ALPHABET_LETTERS.split("l")[1],
     ];
-
-    // console.log("------dictionary API", isApiAvailable.isDictionaryApiAvailable ? "available" : "not available");
-    // console.log("------words API", isApiAvailable.isWordApiAvailable ? "available" : "not available");
-    // console.log("------random Word", randomWordAndArray.randomWord);
-    // console.log("--------------------------------------");
 
     return (
         <div
