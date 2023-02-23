@@ -10,6 +10,7 @@ import {
     playerStatisticsType,
     randomWordAndArrayType,
     gameDescriptionType,
+    isWordLoadingType,
 } from "./models/model";
 import Line from "./components/Line/Line";
 import Navbar from "./components/Navbar/Navbar";
@@ -113,6 +114,8 @@ export default function App() {
     });
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    const [isWordLoading, setIsWordLoading] = useState<isWordLoadingType>({ isLoading: false, startWaitingDate: 0 });
 
     const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
         const localStorageItem = localStorage.getItem(LOCAL_STORAGE_KEY_IS_DARK_MODE);
@@ -395,8 +398,7 @@ export default function App() {
         };
 
         const handleResize = () => {
-            const isSmartphoneLandscapeScreen =
-                window.innerWidth > 500 && window.innerHeight <= 650;
+            const isSmartphoneLandscapeScreen = window.innerWidth > 500 && window.innerHeight <= 650;
 
             if (isSmartphoneLandscapeScreen) setScreenOrientation("landscape");
             else if (
@@ -425,6 +427,21 @@ export default function App() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        console.log("isWordLoading was changed", isWordLoading.startWaitingDate);
+        // If isWordLoading.startWaitingDate was set to a specific date before an API call, set timeout to handle it
+        if (isWordLoading.startWaitingDate !== 0) {
+            // If API calls take more than 100ms to get a result, show loading spinner on "Enter key"
+            setTimeout(() => {
+                console.log("inside timeout, startWaitingDate is:", isWordLoading.startWaitingDate);
+                setIsWordLoading((prevIsWordLoading) => {
+                    if (prevIsWordLoading.startWaitingDate !== 0) return { ...prevIsWordLoading, isLoading: true };
+                    else return { startWaitingDate: 0, isLoading: false };
+                });
+            }, 100);
+        }
+    }, [isWordLoading.startWaitingDate]);
 
     const handleStageChange = useCallback(() => {
         if (currentStage < gameSettings.currentGameSettings.numberStages) {
@@ -571,7 +588,7 @@ export default function App() {
     const handleKeydown = useCallback(
         (event: KeyboardEvent | React.MouseEvent<HTMLDivElement, MouseEvent>, key: string = "") => {
             // Prevent browser from giving search/translate tips when clicking the keyboard buttons
-            if(event.type === "click") event.preventDefault();
+            if (event.type === "click") event.preventDefault();
             const keyValue: string = key !== "" ? key : (event as KeyboardEvent).key;
             if (
                 currentGuess.length < gameSettings.currentGameSettings.wordLength &&
@@ -589,7 +606,14 @@ export default function App() {
                 setCurrentGuess((prevCurrentGuess) => prevCurrentGuess + keyValue);
             } else if (keyValue === "Enter") {
                 if (currentGuess.length === gameSettings.currentGameSettings.wordLength) {
-                    if (currentGuess === randomWordAndArray.randomWord) handleStageChange();
+                    // Store current date in state to toggle loading spinner if API calls take too long to return
+                    setIsWordLoading((prevIsWordLoading) => ({ ...prevIsWordLoading, startWaitingDate: Date.now() }));
+                    
+                    if (currentGuess === randomWordAndArray.randomWord) {
+                        setIsWordLoading({ isLoading: false, startWaitingDate: 0 });
+                        handleStageChange();
+                    }
+
                     // Hard mode logic
                     else if (gameSettings.currentGameSettings.hardMode && currentStage !== 0) {
                         let arrayOfHintedLetters: string[] = []; // Array that will hold all the hinted letters of previous stages
@@ -612,6 +636,7 @@ export default function App() {
                         });
 
                         if (!isHintedLettersInCurrentGuess) {
+                            setIsWordLoading({ isLoading: false, startWaitingDate: 0 });  // Remove loading spinner from "Enter" key
                             let classArray: string[] = "tile shake,"
                                 .repeat(gameSettings.currentGameSettings.wordLength)
                                 .split(",");
@@ -640,6 +665,7 @@ export default function App() {
                             if (isApiAvailable.isDictionaryApiAvailable) {
                                 fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                                     .then((response) => {
+                                        setIsWordLoading({ isLoading: false, startWaitingDate: 0 });  // Remove loading spinner from "Enter" key
                                         if (response.ok) handleStageChange();
                                         else {
                                             let classArray: string[] = "tile shake,"
@@ -670,6 +696,7 @@ export default function App() {
                                     })
                                     .catch((error) => {
                                         console.log("Error: Dictionary API Unavailable");
+                                        setIsWordLoading({ isLoading: false, startWaitingDate: 0 });  // Remove loading spinner from "Enter" key
                                         setIsApiAvailable((prevIsApiAvailable) => ({
                                             ...prevIsApiAvailable,
                                             isDictionaryApiAvailable: false,
@@ -688,6 +715,7 @@ export default function App() {
                                         handleStageChange();
                                     });
                             } else {
+                                setIsWordLoading({ isLoading: false, startWaitingDate: 0 });  // Remove loading spinner from "Enter" key
                                 // If dictionary Api is not available, don't check if word exists and allow any word
                                 handleStageChange();
                             }
@@ -695,6 +723,7 @@ export default function App() {
                     } else if (isApiAvailable.isDictionaryApiAvailable && !gameSettings.currentGameSettings.lazyMode) {
                         fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                             .then((response) => {
+                                setIsWordLoading({ isLoading: false, startWaitingDate: 0 });  // Remove loading spinner from "Enter" key
                                 if (response.ok) handleStageChange();
                                 else {
                                     let classArray: string[] = "tile shake,"
@@ -725,6 +754,7 @@ export default function App() {
                             })
                             .catch((error) => {
                                 console.log("Error: Dictionary API Unavailable");
+                                setIsWordLoading({ isLoading: false, startWaitingDate: 0 });  // Remove loading spinner from "Enter" key
                                 setIsApiAvailable((prevIsApiAvailable) => ({
                                     ...prevIsApiAvailable,
                                     isDictionaryApiAvailable: false,
@@ -743,6 +773,7 @@ export default function App() {
                                 handleStageChange();
                             });
                     } else {
+                        setIsWordLoading({ isLoading: false, startWaitingDate: 0 });  // Remove loading spinner from "Enter" key
                         // If dictionary Api is not available or lazy mode is on, don't check if word exists and allow any word
                         handleStageChange();
                     }
@@ -763,7 +794,7 @@ export default function App() {
             lineClassNames,
             stageWordArray,
             gameNotification.isGameNotification,
-            isApiAvailable.isDictionaryApiAvailable,
+            isApiAvailable.isDictionaryApiAvailable
         ]
     );
 
@@ -1302,6 +1333,7 @@ export default function App() {
                                     handleKeyClick={handleKeyClick}
                                     currentGuess={currentGuess}
                                     gameDescription={gameDescription}
+                                    isWordLoading={isWordLoading}
                                 />
                             ))}
                         </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { gameDescriptionType } from "../../models/model";
+import { gameDescriptionType, isWordLoadingType } from "../../models/model";
 import styles from "./KeyboardRow.module.scss";
 
 interface PropTypes {
@@ -11,6 +11,7 @@ interface PropTypes {
     currentGuess: string;
     gameDescription: gameDescriptionType;
     wordLength: number;
+    isWordLoading: isWordLoadingType;
 }
 
 export default function KeyboardRow({
@@ -21,19 +22,23 @@ export default function KeyboardRow({
     currentGuess,
     gameDescription,
     wordLength,
+    isWordLoading,
 }: PropTypes) {
     return (
         <div className={styles.keyboard_row}>
             {keyboardRowString[0] === "z" && (
                 <div
                     className={
-                        currentGuess.length === wordLength && gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length-1]!==currentGuess && !stageWordArray.includes(currentGuess)
+                        currentGuess.length === wordLength &&
+                        gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length - 1] !==
+                            currentGuess &&
+                        !stageWordArray.includes(currentGuess)
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_enter}`
                     }
                     onClick={(e) => handleKeyClick(e, "Enter")}
                 >
-                    Enter
+                    {isWordLoading.isLoading ? <i className="fas fa-spinner fa-spin"></i> : "Enter"}
                 </div>
             )}
             {keyboardRowString.split("").map((letter, index) => {
@@ -69,7 +74,10 @@ export default function KeyboardRow({
             {keyboardRowString[0] === "z" && (
                 <div
                     className={
-                        currentGuess.length === wordLength && gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length-1]===currentGuess && !stageWordArray.includes(currentGuess)
+                        currentGuess.length === wordLength &&
+                        gameDescription.attemptedGuesses[gameDescription.attemptedGuesses.length - 1] ===
+                            currentGuess &&
+                        !stageWordArray.includes(currentGuess)
                             ? `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace} ${styles.keyboard_letter_tile_highlight}`
                             : `${styles.keyboard_letter_tile} ${styles.keyboard_letter_tile_backspace}`
                     }

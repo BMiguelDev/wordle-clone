@@ -57,3 +57,9 @@ export interface gameDescriptionType {
     attemptedGuesses: string[];
     numberGuessesNeededToWin: number
 }
+
+// Type definition of the <isWordLoading> state variable
+export interface isWordLoadingType {
+    isLoading: boolean;
+    startWaitingDate: number;
+}

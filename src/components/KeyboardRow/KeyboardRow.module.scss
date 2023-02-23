@@ -78,6 +78,10 @@
             color: var(--keyboard-letter-text-color);
             letter-spacing: .05rem;
             font-size: .8rem;
+
+            i {
+                font-size: 1.5rem;
+            }
         }
 
         &.keyboard_letter_tile_backspace {
