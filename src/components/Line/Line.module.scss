@@ -25,6 +25,11 @@
             border: .1rem solid var(--tile-hightlighted-border-color);
         }
 
+        &.current_stage {
+            transition: box-shadow .75s ease-in-out;
+            box-shadow: inset 0px 0px 90px -80px var(--header-color);
+        }
+
         &.tick {
             @keyframes tick {
                 0% {
@@ -138,6 +143,7 @@
             animation: flipBoardTile .6s ease-in-out,
             turnToGreen .85s ease-in-out, translateBoardTile .5s ease;
             animation-fill-mode: forwards;
+            box-shadow: unset;
         }
 
         &.green {
@@ -162,6 +168,7 @@
             animation: flipBoardTile .6s ease-in-out,
             turnToGreen .85s ease-in-out;
             animation-fill-mode: forwards;
+            box-shadow: unset;
         }
 
         &.yellow {
@@ -186,6 +193,7 @@
             animation: flipBoardTile .6s ease-in-out,
             turnToYellow .85s ease-in-out;
             animation-fill-mode: forwards;
+            box-shadow: unset;
         }
 
         &.grey {
@@ -210,6 +218,7 @@
             animation: flipBoardTile .6s ease-in-out,
             turnToGrey .85s ease-in-out;
             animation-fill-mode: forwards;
+            box-shadow: unset;
         }
     }
 }

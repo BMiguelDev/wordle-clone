@@ -9,9 +9,11 @@ interface PropTypes {
     wordLength: number;
     numberStages: number;
     setLineClassNames: React.Dispatch<React.SetStateAction<string[][]>>;
+    currentStage: number;
+    isGameFinished: boolean;
 }
 
-export default function Line({ line, lineClassNames, index, wordLength, numberStages, setLineClassNames }: PropTypes) {
+export default function Line({ line, lineClassNames, index, wordLength, numberStages, setLineClassNames, currentStage, isGameFinished }: PropTypes) {
     // Function that returns the optimal game board sizes (in rem) based on window width and height
     const getMaxGameBoardSizes = useCallback(() => {
         // Mobile portrait (low height) screens
@@ -247,12 +249,13 @@ export default function Line({ line, lineClassNames, index, wordLength, numberSt
 
     function getClassName(i: number) {
         // For each class in lineClassNames[index][i] string, we need a singular `styles.thatString`, hence the confusing code below
-        // Also we are adding a "border_highlight" className to all tiles that currently have a letter
+        // Also we are adding a "border_highlight" className to all tiles that currently have a letter, and "current_stage" classname
+        // to the line corresponding to the current stage
         return `${lineClassNames[index][i]
             .split(" ")
             .map((eachClass) => styles[eachClass])
             .toString()
-            .replaceAll(",", " ")} ${line[i] ? styles.border_highlight : ""}`;
+            .replaceAll(",", " ")} ${line[i] ? styles.border_highlight : ""} ${(index<=currentStage && !isGameFinished) ? styles.current_stage : ""}`;
     }
 
     function getStyle(i: number) {

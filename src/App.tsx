@@ -1318,6 +1318,8 @@ export default function App() {
                                         wordLength={gameSettings.currentGameSettings.wordLength}
                                         numberStages={gameSettings.currentGameSettings.numberStages}
                                         setLineClassNames={setLineClassNames}
+                                        currentStage={currentStage}
+                                        isGameFinished ={gameDescription.isGameFinished}
                                     />
                                 );
                             })}
