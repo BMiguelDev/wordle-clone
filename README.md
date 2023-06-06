@@ -1,6 +1,6 @@
 # Wordle Clone App
 
-#### This is an app for the popular game "Wordle". The design and functionality were developed to be as close as possible to the implementation seen in https://www.nytimes.com/games/wordle/index.html. Furthermore, it allows you to play using a dynamic word length and number of stages, along with other improvements such as "Lazy Mode".
+#### This is an app for the popular game "Wordle". The design and functionality were developed to be as close as possible to the implementation seen in https://www.nytimes.com/games/wordle/index.html (as of January 2023, as seen [here](https://github.com/BMiguelDev/wordle-clone/tree/main/src/assets/images/wordle-official-website.png). Furthermore, it allows you to play using a dynamic word length and number of stages, along with other improvements such as "Lazy Mode".
 #### Developed using React, Typescript and Sass
 
 #### Check the app: https://bmigueldev.github.io/wordle-clone/
