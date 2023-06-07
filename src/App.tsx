@@ -429,12 +429,12 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        console.log("isWordLoading was changed", isWordLoading.startWaitingDate);
+        //console.log("isWordLoading was changed", isWordLoading.startWaitingDate);
         // If isWordLoading.startWaitingDate was set to a specific date before an API call, set timeout to handle it
         if (isWordLoading.startWaitingDate !== 0) {
             // If API calls take more than 100ms to get a result, show loading spinner on "Enter key"
             setTimeout(() => {
-                console.log("inside timeout, startWaitingDate is:", isWordLoading.startWaitingDate);
+                //console.log("inside timeout, startWaitingDate is:", isWordLoading.startWaitingDate);
                 setIsWordLoading((prevIsWordLoading) => {
                     if (prevIsWordLoading.startWaitingDate !== 0) return { ...prevIsWordLoading, isLoading: true };
                     else return { startWaitingDate: 0, isLoading: false };
